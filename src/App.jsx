@@ -1,11 +1,3 @@
-import CustomButton from './components/UI/Button'
-
-const App = () => (
-   <>
-      <CustomButton variant="third" icon={true} width={'95px'}>
-         hello
-      </CustomButton>
-   </>
-)
+const App = () => <h1>Airbnb Front js-16</h1>
 
 export default App
