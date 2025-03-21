@@ -1,20 +1,3 @@
-import { showToast } from './utils/helpers/showToast'
-
-const App = () => (
-   <>
-      <button
-         onClick={() =>
-            showToast({
-               title: 'hello',
-               message: 'hi',
-               type: 'error',
-               autoClose: 2000,
-            })
-         }
-      >
-         click
-      </button>
-   </>
-)
+const App = () => <h1>Airbnb Front js-16</h1>
 
 export default App
