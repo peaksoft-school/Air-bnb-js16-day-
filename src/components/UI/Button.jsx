@@ -1,7 +1,7 @@
-import { ButtonBase, styled } from '@mui/material'
+import { colors, ButtonBase as MuiButtonBase, styled } from '@mui/material'
 import GoogleLogo from '../../assets/icons/google-logo.svg'
 
-const CustomButton = ({
+const Button = ({
    children,
    onClick,
    type = 'button',
@@ -15,7 +15,9 @@ const CustomButton = ({
          ? SecondButton
          : variant === 'third'
            ? ThirdButton
-           : FirstButton
+           : variant === 'fourth'
+             ? FourthButton
+             : FirstButton
 
    return (
       <ButtonComponent
@@ -30,9 +32,9 @@ const CustomButton = ({
    )
 }
 
-export default CustomButton
+export default Button
 
-const FirstButton = styled(ButtonBase)(({ width }) => ({
+const FirstButton = styled(MuiButtonBase)(({ width }) => ({
    width: width,
    height: '37px',
    borderRadius: '2px',
@@ -53,7 +55,7 @@ const FirstButton = styled(ButtonBase)(({ width }) => ({
    '&:disabled': { backgroundColor: '#C4C4C4' },
 }))
 
-const SecondButton = styled(ButtonBase)(({ width }) => ({
+const SecondButton = styled(MuiButtonBase)(({ width }) => ({
    width: width,
    height: '35px',
    border: '1px solid grey',
@@ -69,12 +71,12 @@ const SecondButton = styled(ButtonBase)(({ width }) => ({
    fontWeight: '500',
    fontSize: '16px',
    color: '#737272',
-   '&:hover': { border: '1.6px solid black' },
+   '&:hover': { border: '1.5px solid black' },
    '&:active': { backgroundColor: '#DD8A08', color: '#FFF' },
    '&:disabled': { backgroundColor: '#C4C4C4' },
 }))
 
-const ThirdButton = styled(ButtonBase)(({ width }) => ({
+const ThirdButton = styled(MuiButtonBase)(({ width }) => ({
    width: width || '424px',
    height: '50px',
    borderRadius: '8px',
@@ -92,5 +94,28 @@ const ThirdButton = styled(ButtonBase)(({ width }) => ({
 
    '&:hover': { border: '1px solid grey', backgroundColor: '#fff' },
    '&:active': { backgroundColor: '#C4C4C433', border: '1px solid grey' },
+   '&:disabled': { backgroundColor: '#C4C4C4' },
+}))
+
+const FourthButton = styled(MuiButtonBase)(({ width }) => ({
+   width: width,
+   height: '33px',
+   padding: '8px 16px 8px 16px',
+
+   fontFamily: 'Arial',
+   fontWeight: '400',
+   fontSize: '14px',
+   lineHeight: '100%',
+   textTransform: 'uppercase',
+
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
+   gap: '10px',
+
+   color: '#828282',
+
+   gap: '10px',
+   '&:active': { background: '#F3F3F3', color: '#363636' },
    '&:disabled': { backgroundColor: '#C4C4C4' },
 }))
