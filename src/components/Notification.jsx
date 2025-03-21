@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const Notification = () => {
    return (
       <StyledToastContainer
-         position="top-center"
+         position="top-right"
          closeOnClick
          draggable
          hideProgressBar
