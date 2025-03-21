@@ -1,3 +1,6 @@
-const App = () => <h1>Airbnb Front js-16</h1>
-
-export default App
+function App(){
+    return <div>
+        <h1>Air-bnb-js 16-day</h1>
+    </div>
+}
+export default App;
