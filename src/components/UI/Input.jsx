@@ -1,5 +1,6 @@
-import { TextField } from '@mui/material'
+import { InputAdornment, TextField } from '@mui/material'
 import { styled } from '@mui/system'
+import { Search } from '@mui/icons-material'
 
 const Input = ({
    width,
@@ -8,7 +9,7 @@ const Input = ({
    placeholder,
    onChange,
    onClick,
-   icon,
+   icon = false,
    value,
    ...rest
 }) => {
@@ -20,7 +21,13 @@ const Input = ({
          value={value}
          onChange={onChange}
          onClick={onClick}
-         icon={icon}
+         InputProps={{
+            startAdornment: icon ? (
+               <InputAdornment position="start">
+                  <Search sx={{ color: '#828282' }} />
+               </InputAdornment>
+            ) : null,
+         }}
          sx={{ width }}
          {...rest}
       />
