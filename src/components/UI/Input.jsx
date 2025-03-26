@@ -1,38 +1,57 @@
-import { styled } from '@mui/material'
+import { TextField } from '@mui/material'
+import { styled } from '@mui/system'
 
-const Input = ({ width }) => {
+const Input = ({
+   width,
+   type,
+   label,
+   placeholder,
+   onChange,
+   onClick,
+   icon,
+   value,
+   ...rest
+}) => {
    return (
-      <>
-         <StyledInput placeholder="Введите текст..." width={width} />
-      </>
+      <StyledTextField
+         type={type}
+         label={label}
+         placeholder={placeholder}
+         value={value}
+         onChange={onChange}
+         onClick={onClick}
+         icon={icon}
+         sx={{ width }}
+         {...rest}
+      />
    )
 }
 
 export default Input
 
-const StyledInput = styled('input')(({ width }) => ({
-   width: width || '414px',
-   height: '39px',
+const StyledTextField = styled(TextField)(() => ({
+   '& .MuiOutlinedInput-root': {
+      borderRadius: '2px',
+      border: '1px solid #C4C4C4',
 
-   border: '1px',
-   borderRadius: '2px',
-   paddingTop: '10px',
-   paddingRight: '8px',
-   paddingBottom: '10px',
-   paddingLeft: '16px',
-   gap: '10px',
-   border: '1.6px solid #C4C4C4',
+      '&:hover fieldset': {
+         borderColor: '#828282',
+      },
 
-   fontFamily: 'Arial',
-   fontWeight: '400',
-   fontSize: '16px',
-   lineHeight: '100%',
-
-   '&:hover': {
-      border: '1.6px solid #828282',
+      '&.Mui-focused fieldset': {
+         borderColor: '#828282',
+      },
    },
 
-   '&:active': {
-      border: '1.6px solid #828282',
+   '& .MuiInputLabel-root': {
+      color: '#828282',
+   },
+   '& .MuiInputLabel-root.Mui-focused': {
+      color: '#555',
+   },
+   '& .MuiInputBase-input': {
+      color: '#333',
+      fontSize: '16px',
+      padding: '12px',
    },
 }))
