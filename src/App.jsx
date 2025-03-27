@@ -1,3 +1,7 @@
-const App = () => <h1>Airbnb Front js-16</h1>
+import React from 'react'
 
-export default App
+export default function App() {
+  return (
+    <div>App</div>
+  )
+}
