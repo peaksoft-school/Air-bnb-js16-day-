@@ -154,7 +154,6 @@ const CustomCard = ({ imageUrls, price, rating, title, location, guests }) => {
             pb={2}
          >
             <Box display="flex" alignItems="center" gap={1}>
-               <LocationOnIcon fontSize="small" color="action" />
                <Typography fontSize={14} variant="body2" color="text.secondary">
                   {guests} guests
                </Typography>
