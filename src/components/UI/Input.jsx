@@ -1,9 +1,9 @@
 import { InputAdornment, TextField } from '@mui/material'
 import { styled } from '@mui/system'
-import { Search } from '@mui/icons-material'
+import  Search  from '../../assets/icons/Search.svg'
+
 
 const Input = ({
-   width,
    type,
    label,
    placeholder,
@@ -24,11 +24,10 @@ const Input = ({
          InputProps={{
             startAdornment: icon ? (
                <InputAdornment position="start">
-                  <Search sx={{ color: '#828282' }} />
+                  {icon && <img src={Search} alt='Search'/>}
                </InputAdornment>
             ) : null,
          }}
-         sx={{ width }}
          {...rest}
       />
    )
@@ -39,7 +38,7 @@ export default Input
 const StyledTextField = styled(TextField)(() => ({
    '& .MuiOutlinedInput-root': {
       borderRadius: '2px',
-      border: '1px solid #C4C4C4',
+      width: "414px",
 
       '&:hover fieldset': {
          borderColor: '#828282',
