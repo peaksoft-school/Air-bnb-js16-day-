@@ -1,33 +1,33 @@
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import { styled } from '@mui/material/styles'
-const CustomRadio = ({ options, value, onChange, ...rest }) => {
+import { Radio as MuiRadio, RadioGroup, FormControlLabel } from '@mui/material'
+import styled from 'styled-components'
+
+const Radio = ({ options, value, onChange, ...rest }) => {
+   const changeHandler = (e) => onChange(e.target.value)
+
    return (
-      <RadioGroup value={value} onChange={onChange}>
+      <RadioGroup value={value} onChange={changeHandler} {...rest}>
          {options.map((option) => (
             <FormControlLabel
                key={option.value}
                value={option.value}
                control={<StyledRadio />}
                label={option.label}
-               {...rest}
             />
          ))}
       </RadioGroup>
    )
 }
 
-export default CustomRadio
+export default Radio
 
-const StyledRadio = styled(Radio)({
-   '&.MuiRadio-root': {
-      color: '#B0B0B0',
-   },
-   '&.Mui-checked': {
+const StyledRadio = styled(MuiRadio)({
+   color: '#B0B0B0',
+
+   '&.MuiRadio-root.Mui-checked': {
       color: '#D9830D',
       backgroundColor: '#rgba(196, 196, 196, 1)',
    },
+
    '& .MuiSvgIcon-root': {
       width: 32,
       height: 32,
