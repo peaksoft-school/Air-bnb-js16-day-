@@ -1,6 +1,6 @@
 import { Chip as MuiChip } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear'
-import styled from 'styled-components'
+import { styled } from '@mui/material/styles'
 
 const Chip = ({ icon = false, onClick, onDelete, label }) => {
    return (
@@ -9,19 +9,17 @@ const Chip = ({ icon = false, onClick, onDelete, label }) => {
          onDelete={onDelete}
          onClick={onClick}
          label={label}
-         sx={{ borderRadius: '1px' }}
-         className="custom-chip"
       />
    )
 }
 
 export default Chip
 
-const StyledMuiChip = styled(MuiChip)(() => ({
+const StyledMuiChip = styled(MuiChip)({
    width: '95px',
    height: '35px',
+   borderRadius: '1px',
    backgroundColor: '#F3F3F3',
-
    fontSize: '16px',
    display: 'flex',
    justifyContent: 'center',
@@ -36,21 +34,20 @@ const StyledMuiChip = styled(MuiChip)(() => ({
       backgroundColor: '#A1A1A1',
    },
 
-   '&.custom-chip .MuiChip-label': {
+   '& .MuiChip-label, & .MuiChip-icon': {
       fontFamily: 'Arial',
       fontWeight: 400,
       fontSize: '16px',
       lineHeight: '100%',
       color: '#828282',
-      '&:hover': {
-         color: '#F7F7F7',
-      },
+      transition: 'color 0.3s ease',
    },
 
-   '&.custom-chip .MuiChip-icon': {
-      fontSize: '16px',
-      '&:hover': {
-         color: '#F7F7F7',
-      },
+   '&:hover .MuiChip-label, &:hover .MuiChip-icon': {
+      color: '#F7F7F7',
    },
-}))
+
+   '&:active .MuiChip-label, &:active .MuiChip-icon': {
+      color: '#F7F7F7',
+   },
+})
