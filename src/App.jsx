@@ -1,7 +1,3 @@
-import React from 'react'
+const App = () => <h1>Airbnb Front js-16</h1>
 
-export default function App() {
-  return (
-    <div>App</div>
-  )
-}
+export default App
