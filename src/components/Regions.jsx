@@ -1,6 +1,5 @@
 import { Box, styled } from '@mui/material'
-import { color, motion } from 'framer-motion'
-// import styled from 'styled-components'
+import { motion } from 'framer-motion'
 import React from 'react'
 
 import chui from '../assets/images/Chui.png'
