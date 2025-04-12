@@ -5,9 +5,9 @@ import {
    Typography,
    Box,
    Avatar,
+   styled,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import styled from 'styled-components'
 import Button from '../../components/UI/Button'
 import Meatballs from '../../components/UI/Meatballs'
 import Air from '../../assets/icons/BlackAir.svg'
@@ -15,150 +15,151 @@ import Checkbox from '../../components/UI/Checkbox'
 import Input from '../../components/UI/Input'
 
 const UserHeader = ({
-   isAuthenticated = false,
-   onLoginClick,
+   isAuthenticated = true,
+   onJoinUs,
    onProfileClick,
    onAddLeave,
-   JoinTitle = 'JOIN US',
-   Profile = 'A',
    favoriteCount = 9,
    handleLeaveAddClick,
 }) => {
    const menuOptions = [
-      { label: 'Edit', action: 'edit' },
-      { label: 'Delete', action: 'delete' },
-      { label: 'Share', action: 'share' },
+      { label: 'My profile', action: 'my-profile' },
+      { label: 'Log out', action: 'log-out' },
    ]
 
    return (
       <StyledAppBar position="static">
-         <StyledToolbar>
-            <LeftBox>
-               <LogoBox>
+         <Toolbar className="toolbar-container">
+            <Box className="left-box">
+               <Box className="logo-box">
                   <IconButton edge="start">
-                     <img
-                        src={Air}
-                        alt="Company Logo"
-                        width="74"
-                        height="auto"
-                     />
+                     <img src={Air} alt="Company Logo" width="74" />
                   </IconButton>
-               </LogoBox>
+               </Box>
+
                {!isAuthenticated && (
-                  <AdText onClick={handleLeaveAddClick}>leave an ad</AdText>
+                  <Typography className="leave" onClick={handleLeaveAddClick}>
+                     leave an ad
+                  </Typography>
                )}
-            </LeftBox>
-            <RightBox>
-               <SearchBox>
-                  <CheckboxBox>
+            </Box>
+
+            <Box className="right-box">
+               <Box className="search-container">
+                  <Box className="checkbox-container">
                      <Checkbox />
-                     <Typography
-                        variant="body2"
-                        color="rgba(82, 82, 82, 1)"
-                        fontSize={16}
-                     >
+
+                     <Typography className="search-text">
                         Search nearby
                      </Typography>
-                  </CheckboxBox>
+                  </Box>
 
                   <Input placeholder="Search" icon={true} />
-               </SearchBox>
+               </Box>
 
-               <FavoritesBox>
+               <Box className="favorites-container">
                   <Button
-                     onClick={isAuthenticated ? onAddLeave : onLoginClick}
+                     onClick={isAuthenticated ? onAddLeave : onJoinUs}
                      width={196}
                   >
-                     {isAuthenticated ? 'SUBMIT AN AD' : JoinTitle}
+                     {isAuthenticated ? 'SUBMIT AN AD' : 'JOIN US'}
                   </Button>
 
                   {isAuthenticated && (
                      <>
-                        <Typography variant="body2">
-                           FAVORITE({favoriteCount})
-                        </Typography>
+                        <Typography>FAVORITE({favoriteCount})</Typography>
 
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box className="avatar-container">
                            <Avatar
-                              sx={{
-                                 backgroundColor: 'blue',
-                                 cursor: 'pointer',
-                              }}
+                              className="avatar"
                               onClick={onProfileClick}
                               aria-label="Open profile"
-                           >
-                              {Profile}
-                           </Avatar>
+                           />
                            <Meatballs
-                              icon={
-                                 <ExpandMoreIcon
-                                    sx={{ color: 'tertiary.lightGrey' }}
-                                 />
-                              }
+                              icon={<ExpandMoreIcon className="expend-icon" />}
                               options={menuOptions}
                            />
                         </Box>
                      </>
                   )}
-               </FavoritesBox>
-            </RightBox>
-         </StyledToolbar>
+               </Box>
+            </Box>
+         </Toolbar>
       </StyledAppBar>
    )
 }
 
 export default UserHeader
-const StyledAppBar = styled(AppBar)(() => ({
+
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
    backgroundColor: '#ffffff',
    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
-   padding: '0px 100px',
+   padding: '25px 100px',
    height: '88px',
-   justifyContent: 'center',
-}))
 
-const StyledToolbar = styled(Toolbar)(() => ({
-   justifyContent: 'space-between',
-}))
+   '& .toolbar-container': {
+      justifyContent: 'space-between',
 
-const LeftBox = styled(Box)(() => ({
-   display: 'flex',
-   alignItems: 'center',
-   gap: '60px',
-}))
+      '& .left-box': {
+         display: 'flex',
+         alignItems: 'center',
+         gap: '60px',
 
-const LogoBox = styled(Box)(() => ({
-   display: 'flex',
-   alignItems: 'center',
-   gap: '8px',
-}))
+         '& .logo-box': {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+         },
 
-const AdText = styled(Typography)(() => ({
-   fontSize: '18px',
-   color: 'rgba(255, 190, 88, 1)',
-   cursor: 'pointer',
-}))
+         '& .leave': {
+            fontSize: '18px',
+            color: 'rgba(255, 190, 88, 1)',
+            cursor: 'pointer',
+         },
+      },
 
-const RightBox = styled(Box)(() => ({
-   display: 'flex',
-   alignItems: 'center',
-   justifyContent: 'center',
-   gap: '30px',
-}))
+      '& .right-box': {
+         display: 'flex',
+         alignItems: 'center',
+         justifyContent: 'center',
+         gap: '30px',
 
-const SearchBox = styled(Box)(() => ({
-   display: 'flex',
-   alignItems: 'center',
-   justifyContent: 'center',
-   gap: '30px',
-}))
+         '& .search-container': {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '30px',
 
-const CheckboxBox = styled(Box)(() => ({
-   display: 'flex',
-   alignItems: 'center',
-}))
+            '& .checkbox-container': {
+               display: 'flex',
+               alignItems: 'center',
 
-const FavoritesBox = styled(Box)(() => ({
-   display: 'flex',
-   alignItems: 'center',
-   gap: '16px',
+               '& .search-text': {
+                  color: 'rgba(82, 82, 82, 1)',
+               },
+            },
+         },
+
+         '& .favorites-container': {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+
+            '& .avatar-container': {
+               display: 'flex',
+               alignItems: 'center',
+
+               '& .avatar': {
+                  backgroundColor: 'blue',
+                  width: 30,
+                  height: 30,
+               },
+
+               '& .expend-icon': {
+                  color: `${theme.palette.tertiary.lightGrey}`,
+               },
+            },
+         },
+      },
+   },
 }))

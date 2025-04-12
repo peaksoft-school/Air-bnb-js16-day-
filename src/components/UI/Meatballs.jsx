@@ -1,18 +1,17 @@
-import { IconButton, Menu, MenuItem } from '@mui/material'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { useState } from 'react'
-import styled from 'styled-components'
+import { IconButton, Menu, MenuItem, styled } from '@mui/material'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 function Meatballs({ options = [], onSelect, icon = <MoreVertIcon /> }) {
    const [anchorEl, setAnchorEl] = useState(null)
+
    const open = Boolean(anchorEl)
 
-   const handleClick = (event) => {
-      setAnchorEl(event.currentTarget)
-   }
+   const handleClick = (e) => setAnchorEl(e.currentTarget)
 
    const handleClose = (option) => {
       setAnchorEl(null)
+
       if (option && onSelect) {
          onSelect(option)
       }
@@ -27,8 +26,8 @@ function Meatballs({ options = [], onSelect, icon = <MoreVertIcon /> }) {
             open={open}
             onClose={() => handleClose(null)}
          >
-            {options.map((option, index) => (
-               <MenuItem key={index} onClick={() => handleClose(option)}>
+            {options.map((option, i) => (
+               <MenuItem key={i} onClick={() => handleClose(option)}>
                   {option.label}
                </MenuItem>
             ))}
