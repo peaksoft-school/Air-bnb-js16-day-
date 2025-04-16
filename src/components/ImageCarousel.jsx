@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
-import { Box, IconButton, Typography } from '@mui/material'
+import { Box, IconButton, styled, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
-import styled from 'styled-components'
 import Arrow from '../assets/icons/Arrow.svg'
 import BlackArrow from '../assets/icons/BlackArrow.svg'
+import { useState } from 'react'
 
 const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
    const [currentImages, setCurrentImages] = useState([images[0], images[1]])
@@ -31,6 +30,9 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
       })
    }
 
+   const isPrevDisabled = currentIndex === 0
+   const isNextDisabled = currentIndex >= images.length - 2
+
    return (
       <Wrapper>
          <MotionCarousel layout>
@@ -47,7 +49,11 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
          </MotionCarousel>
 
          <Controls Paddingleft={Left}>
-            <ButtonLeft isBlack={isButtonBlack} onClick={handlePrev}>
+            <ButtonLeft
+               isBlack={isButtonBlack}
+               onClick={handlePrev}
+               disabled={isPrevDisabled}
+            >
                <img src={isButtonBlack ? BlackArrow : Arrow} alt="left" />
             </ButtonLeft>
 
@@ -58,7 +64,11 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
                / {images.length < 10 ? `0${images.length}` : images.length}
             </StyledCountText>
 
-            <ButtonRight isBlack={isButtonBlack} onClick={handleNext}>
+            <ButtonRight
+               isBlack={isButtonBlack}
+               onClick={handleNext}
+               disabled={isNextDisabled}
+            >
                <img src={isButtonBlack ? BlackArrow : Arrow} alt="right" />
             </ButtonRight>
          </Controls>
@@ -67,6 +77,8 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
 }
 
 export default ImageCarousel
+
+// Styled Components
 
 const Wrapper = styled(Box)(() => ({
    display: 'flex',
@@ -83,7 +95,7 @@ const MotionCarousel = styled(motion.div)`
 
 const MotionImage = styled(motion.img)`
    width: ${(props) => (props.isSecond ? '12rem' : '14rem')};
-   height: ${(props) => (props.isSecond ? '19.81rem' : '19.81rem')};
+   height: 19.81rem;
    object-fit: cover;
 `
 
@@ -102,8 +114,13 @@ const StyledCountText = styled(Typography)(({ isBlackCoun }) => ({
    lineHeight: '130%',
 }))
 
-const ButtonLeft = styled(IconButton)(() => ({
+const ButtonLeft = styled(IconButton)(({ disabled }) => ({
    transform: 'scaleX(-1)',
+   opacity: disabled ? 0.3 : 1,
+   cursor: disabled ? 'default' : 'pointer',
 }))
 
-const ButtonRight = styled(IconButton)(() => ({}))
+const ButtonRight = styled(IconButton)(({ disabled }) => ({
+   opacity: disabled ? 0.3 : 1,
+   cursor: disabled ? 'default' : 'pointer',
+}))

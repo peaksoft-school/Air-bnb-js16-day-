@@ -1,5 +1,4 @@
-import { Box, Typography } from '@mui/material'
-import styled from 'styled-components'
+import { Box, styled, Typography } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import Rectangle from '../assets/images/Rectangle.png'
 import ImageCarousel from '../components/ImageCarousel'
