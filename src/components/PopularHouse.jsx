@@ -1,11 +1,34 @@
-import AsmanHouse1 from '../assets/images/AsmanHouse1.png'
-import AsmanHouse2 from '../assets/images/AsmanHouse2.png'
-import AsmanHouse3 from '../assets/images/AsmanHouse3.png'
+import { Box, styled, Typography } from '@mui/material'
 
-import { Box } from '@mui/material'
-import styled from 'styled-components'
+import GeoIcon from '../assets/icons/Geo.svg'
 
 const PopularHouse = () => {
+   const houses = [
+      {
+         id: 1,
+         title: 'Asman guest house',
+         address: '723510 Osh Muzurbek Alimbekov 9/7',
+         image: 'https://apartment.kg/Files/catalog/nrdhf2plki.jpg',
+         price: 26,
+         rating: 3.5,
+      },
+      {
+         id: 2,
+         title: 'Asman guest house',
+         address: '723510 Osh Muzurbek Alimbekov 9/7',
+         image: 'https://www.artsandcollections.com/wp-content/uploads/2018/08/PatelWEB.jpg',
+         price: 26,
+         rating: 4.8,
+      },
+      {
+         id: 3,
+         title: 'Asman guest house',
+         address: '723510 Osh Muzurbek Alimbekov 9/7',
+         image: 'https://lirp.cdn-website.com/a23a3fdf/dms3rep/multi/opt/home-hero1-960-600-960x600-960w.jpg',
+         price: 26,
+         rating: 4.8,
+      },
+   ]
    return (
       <StyledMainBox>
          <StyledSecondBox>
@@ -17,43 +40,28 @@ const PopularHouse = () => {
                      renting your last minute locations.
                   </p>
                </div>
-
-               <div>
-                  <a href="#">View all</a>
-               </div>
+               <Box>
+                  <StyledTypography>View all</StyledTypography>
+               </Box>
             </StyledDiv>
 
             <StyledBox>
-               <StyledCardBox>
-                  <img src={AsmanHouse1} alt="" />
-                  <div>
-                     <h3>Asman guest house</h3>
-                     <p>723510 Osh Muzurbek Alimbekov 9/7</p>
-                  </div>
-                  <p>
-                     <span>$26</span> / day
-                  </p>
-               </StyledCardBox>
-               <StyledCardBox>
-                  <img src={AsmanHouse2} alt="" />
-                  <div>
-                     <h3>Asman guest house</h3>
-                     <p>723510 Osh Muzurbek Alimbekov 9/7</p>
-                  </div>
-                  <p>
-                     <span>$26</span> / day
-                  </p>
-               </StyledCardBox>
-               <StyledCardBox>
-                  <img src={AsmanHouse3} alt="" />
-                  <div>
-                     <h3>Asman guest house</h3>
-                     <p>723510 Osh Muzurbek Alimbekov 9/7</p>
-                  </div>
-                  <p>
-                     <span>$26</span> / day
-                  </p>
-               </StyledCardBox>
+               {houses.map((house) => (
+                  <StyledCardBox key={house.id}>
+                     <p>⭐ {house.rating}</p>
+                     <StyledImg src={house.image} alt={house.title} />
+                     <div>
+                        <h3>{house.title}</h3>
+                        <p>
+                           <StyledSecondImg src={GeoIcon} alt="GeoIcon" />
+                           {house.address}
+                        </p>
+                     </div>
+                     <p>
+                        <span>${house.price}</span> / day
+                     </p>
+                  </StyledCardBox>
+               ))}
             </StyledBox>
          </StyledSecondBox>
       </StyledMainBox>
@@ -63,18 +71,18 @@ const PopularHouse = () => {
 export default PopularHouse
 
 const StyledMainBox = styled(Box)(() => ({
-   width: '100%',
    display: 'flex',
+   flexDirection: 'column',
    justifyContent: 'center',
    alignItems: 'center',
 }))
 
-const StyledBox = styled(Box)(() => ({
+const StyledSecondBox = styled(Box)(() => ({
+   height: '880px',
    display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
-   flexWrap: 'wrap',
-   gap: '20px',
+   flexDirection: 'column',
+
+   gap: '60px',
 }))
 
 const StyledDiv = styled(Box)(() => ({
@@ -99,7 +107,8 @@ const StyledDiv = styled(Box)(() => ({
       lineHeight: '100%',
       color: '#363636',
    },
-   '& a': {
+
+   '& Typography': {
       fontFamily: 'Arial',
       fontWeight: 400,
       fontSize: '18px',
@@ -109,7 +118,17 @@ const StyledDiv = styled(Box)(() => ({
    },
 }))
 
+const StyledBox = styled(Box)(() => ({
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
+   flexWrap: 'wrap',
+   gap: '20px',
+}))
+
 const StyledCardBox = styled(Box)(() => ({
+   width: '400px',
+   height: '582px',
    display: 'flex',
    flexDirection: 'column',
    gap: '16px',
@@ -120,6 +139,7 @@ const StyledCardBox = styled(Box)(() => ({
       flexDirection: 'column',
       gap: '10px',
    },
+
    '& h3': {
       fontWeight: 400,
       fontSize: '18px',
@@ -131,13 +151,31 @@ const StyledCardBox = styled(Box)(() => ({
       fontSize: '14px',
       lineHeight: '100%',
       color: '#757575',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+
       '& span': {
          color: '#000',
       },
    },
 }))
-const StyledSecondBox = styled(Box)(() => ({
-   display: 'flex',
-   flexDirection: 'column',
-   gap: '60px',
+const StyledImg = styled('img')(() => ({
+   width: '400px',
+   height: '484px',
+   borderRadius: '2px',
+   objectFit: 'cover',
+}))
+
+const StyledSecondImg = styled('img')(() => ({
+   width: '12px',
+   height: '16px',
+}))
+const StyledTypography = styled(Typography)(() => ({
+   fontFamily: 'Arial',
+   fontWeight: 400,
+   fontSize: '18px',
+   lineHeight: '100%',
+   textDecoration: 'underline',
+   color: '#363636',
 }))
