@@ -78,7 +78,6 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
 
 export default ImageCarousel
 
-// Styled Components
 
 const Wrapper = styled(Box)(() => ({
    display: 'flex',
