@@ -8,11 +8,11 @@ import {
    styled,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import Button from '../../components/UI/Button'
-import Meatballs from '../../components/UI/Meatballs'
+import Button from '../../../components/UI/Button'
+import Meatballs from '../../../components/UI/Meatballs'
 import Air from '../../assets/icons/BlackAir.svg'
-import Checkbox from '../../components/UI/Checkbox'
-import Input from '../../components/UI/Input'
+import Checkbox from '../../../components/UI/Checkbox'
+import Input from '../../../components/UI/Input'
 
 const UserHeader = ({
    isAuthenticated = true,
