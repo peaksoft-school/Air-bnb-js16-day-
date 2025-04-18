@@ -2,16 +2,14 @@ import { Chip as MuiChip } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear'
 import styled from 'styled-components'
 
-const Chip = ({ onClick, onDelete, label }) => {
-   return (
-      <StyledMuiChip
-         deleteIcon={<ClearIcon />}
-         onDelete={onDelete}
-         onClick={onClick}
-         label={label}
-      />
-   )
-}
+const Chip = ({ onClick, onDelete, label }) => (
+   <StyledMuiChip
+      deleteIcon={<ClearIcon />}
+      onDelete={onDelete}
+      onClick={onClick}
+      label={label}
+   />
+)
 
 export default Chip
 
