@@ -1,5 +1,4 @@
 import { Box, styled, Typography } from '@mui/material'
-
 import GeoIcon from '../assets/icons/Geo.svg'
 
 const PopularHouse = () => {
