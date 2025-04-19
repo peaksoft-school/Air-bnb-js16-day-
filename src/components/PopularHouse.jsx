@@ -1,33 +1,8 @@
 import { Box, styled, Typography } from '@mui/material'
 import GeoIcon from '../assets/icons/Geo.svg'
+import { HOUSES } from '../utils/constants/index'
 
 const PopularHouse = () => {
-   const houses = [
-      {
-         id: 1,
-         title: 'Asman guest house',
-         address: '723510 Osh Muzurbek Alimbekov 9/7',
-         image: 'https://apartment.kg/Files/catalog/nrdhf2plki.jpg',
-         price: 26,
-         rating: 3.5,
-      },
-      {
-         id: 2,
-         title: 'Asman guest house',
-         address: '723510 Osh Muzurbek Alimbekov 9/7',
-         image: 'https://www.artsandcollections.com/wp-content/uploads/2018/08/PatelWEB.jpg',
-         price: 26,
-         rating: 4.8,
-      },
-      {
-         id: 3,
-         title: 'Asman guest house',
-         address: '723510 Osh Muzurbek Alimbekov 9/7',
-         image: 'https://lirp.cdn-website.com/a23a3fdf/dms3rep/multi/opt/home-hero1-960-600-960x600-960w.jpg',
-         price: 26,
-         rating: 4.8,
-      },
-   ]
    return (
       <StyledMainBox>
          <StyledSecondBox>
@@ -45,10 +20,13 @@ const PopularHouse = () => {
             </StyledDiv>
 
             <StyledBox>
-               {houses.map((house) => (
+               {HOUSES.map((house) => (
                   <StyledCardBox key={house.id}>
-                     <p>⭐ {house.rating}</p>
-                     <StyledImg src={house.image} alt={house.title} />
+                     <ImageWrapper>
+                        <StyledImg src={house.image} alt={house.title} />
+                        <RatingTag>⭐ {house.rating}</RatingTag>
+                     </ImageWrapper>
+
                      <div>
                         <h3>{house.title}</h3>
                         <p>
@@ -177,4 +155,23 @@ const StyledTypography = styled(Typography)(() => ({
    lineHeight: '100%',
    textDecoration: 'underline',
    color: '#363636',
+}))
+
+const ImageWrapper = styled(Box)(() => ({
+   position: 'relative',
+   width: '400px',
+   height: '484px',
+}))
+
+const RatingTag = styled('p')(() => ({
+   position: 'absolute',
+   top: '12px',
+   right: '12px',
+   backgroundColor: 'white',
+   padding: '4px 8px',
+   borderRadius: '4px',
+   fontSize: '14px',
+   fontWeight: 500,
+   color: '#000',
+   boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
 }))
