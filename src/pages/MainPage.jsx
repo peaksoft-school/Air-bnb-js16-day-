@@ -22,7 +22,7 @@ const MainPage = () => {
                      <Input
                         placeholder={'Region, city, apartment, house...'}
                         icon={true}
-                        width={725}
+                        sizeVariant="large"
                      />
                   </>
                ) : (
@@ -33,7 +33,7 @@ const MainPage = () => {
                      <Input
                         placeholder={'Region, city, apartment, house...'}
                         icon={true}
-                        width={725}
+                        sizeVariant="large"
                      />
                      <StyledCheckbox>
                         <Checkbox />
