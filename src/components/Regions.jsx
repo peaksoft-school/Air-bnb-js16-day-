@@ -1,6 +1,5 @@
 import { Box, styled } from '@mui/material'
 import { motion } from 'framer-motion'
-import React from 'react'
 
 import chui from '../assets/images/Chui.png'
 import batken from '../assets/images/Batken.png'
@@ -13,76 +12,92 @@ import bishkek from '../assets/images/Bishkek.png'
 
 const Regions = () => {
    return (
-      <StyledMainBox sx={{ p: 8, bgcolor: '#f9fafb', minHeight: '100vh' }}>
-         <h2 className="title">REGIONS IN KYRGYZSTAN</h2>
-         <p className="text">
-            You can visit the site any day and be sure that you will find
-            everything for a great vacation.
-         </p>
+      <StyledMainBox>
+         <Box className="Box">
+            <Box sx={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+               <h2 className="title">REGIONS IN KYRGYZSTAN</h2>
 
-         <StyledBox>
-            <StyledDiv>
-               <StyledImage
-                  src={chui}
-                  alt="Chui"
-                  whileHover={{ scale: 1.03 }}
-                  transition={{ duration: 0.5 }}
-               />
-               <StyledSecondDiv>
-                  <StyledThirdDiv>
-                     <StyledImage
-                        src={batken}
-                        alt="Batken"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.5 }}
-                     />
-                     <StyledImage
-                        src={jalalabad}
-                        alt="JalalAbad"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.5 }}
-                     />
-                  </StyledThirdDiv>
-                  <StyledImage
-                     src={naryn}
-                     alt="Naryn"
-                     whileHover={{ scale: 1.02 }}
-                     transition={{ duration: 0.5 }}
-                  />
-               </StyledSecondDiv>
-            </StyledDiv>
+               <p className="text">
+                  You can visit the site any day and be sure that you will find
+                  everything for a great vacation.
+               </p>
+            </Box>
 
-            <StyledDiv>
-               <StyledSecondDiv>
-                  <StyledThirdDiv>
-                     <StyledImage
-                        src={yssykkul}
-                        alt="YssykKul"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.5 }}
-                     />
-                     <StyledImage
-                        src={talas}
-                        alt="Talas"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.5 }}
-                     />
-                  </StyledThirdDiv>
-                  <StyledImage
-                     src={bishkek}
-                     alt="Bishkek"
-                     whileHover={{ scale: 1.02 }}
+            <StyledBox>
+               <StyledDiv>
+                  <ImageWrapper
+                     whileHover={{ scale: 1.03 }}
                      transition={{ duration: 0.5 }}
-                  />
-               </StyledSecondDiv>
-               <StyledImage
-                  src={osh}
-                  alt="Osh"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.5 }}
-               />
-            </StyledDiv>
-         </StyledBox>
+                  >
+                     <StyledImage src={chui} alt="Chui" />
+                     <TextOverlay>Chui</TextOverlay>
+                  </ImageWrapper>
+
+                  <StyledSecondDiv>
+                     <StyledThirdDiv>
+                        <ImageWrapper
+                           whileHover={{ scale: 1.05 }}
+                           transition={{ duration: 0.5 }}
+                        >
+                           <StyledImage src={batken} alt="Batken" />
+                           <TextOverlay>Batken</TextOverlay>
+                        </ImageWrapper>
+
+                        <ImageWrapper
+                           whileHover={{ scale: 1.05 }}
+                           transition={{ duration: 0.5 }}
+                        >
+                           <StyledImage src={jalalabad} alt="Jalal-Abad" />
+                           <TextOverlay>Jalal-Abad</TextOverlay>
+                        </ImageWrapper>
+                     </StyledThirdDiv>
+
+                     <ImageWrapper
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.5 }}
+                     >
+                        <StyledImage src={naryn} alt="Naryn" />
+                        <TextOverlay>Naryn</TextOverlay>
+                     </ImageWrapper>
+                  </StyledSecondDiv>
+               </StyledDiv>
+
+               <StyledDiv>
+                  <StyledSecondDiv>
+                     <StyledThirdDiv>
+                        <ImageWrapper
+                           whileHover={{ scale: 1.05 }}
+                           transition={{ duration: 0.5 }}
+                        >
+                           <StyledImage src={yssykkul} alt="YssykKul" />
+                           <TextOverlay>Yssyk-Kul</TextOverlay>
+                        </ImageWrapper>
+                        <ImageWrapper
+                           whileHover={{ scale: 1.05 }}
+                           transition={{ duration: 0.5 }}
+                        >
+                           <StyledImage src={talas} alt="Talas" />
+                           <TextOverlay>Talas</TextOverlay>
+                        </ImageWrapper>
+                     </StyledThirdDiv>
+                     <ImageWrapper
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.5 }}
+                     >
+                        <StyledImage src={bishkek} alt="Bishkek" />
+                        <TextOverlay>Bishkek</TextOverlay>
+                     </ImageWrapper>
+                  </StyledSecondDiv>
+                  <ImageWrapper
+                     whileHover={{ scale: 1.05 }}
+                     transition={{ duration: 0.5 }}
+                  >
+                     <StyledImage src={osh} alt="Osh" />
+                     <TextOverlay>Osh</TextOverlay>
+                  </ImageWrapper>
+               </StyledDiv>
+            </StyledBox>
+         </Box>
       </StyledMainBox>
    )
 }
@@ -93,24 +108,26 @@ const StyledMainBox = styled(Box)(() => ({
    display: 'flex',
    flexDirection: 'column',
    justifyContent: 'center',
-   alignItems: 'start',
+   alignItems: 'center',
+   
    '.title': {
       fontSize: '20px',
       fontWeight: 500,
-      textAlign: 'center',
-      marginBottom: '1rem',
       lineHeight: ' 100%',
       textTransform: 'uppercase',
       color: '#363636',
-      marginLeft: '100px',
    },
    '.text': {
       fontWeight: 400,
       fontSize: '16px',
       lineHeight: '100%',
-      marginLeft: '100px',
       color: '#363636',
       marginBottom: '60px',
+   },
+   '.Box': {
+      display:"flex",
+      flexDirection:"column",
+      gap:"60px"
    },
 }))
 
@@ -118,10 +135,6 @@ const StyledBox = styled(Box)(() => ({
    display: 'flex',
    flexDirection: 'column',
    gap: '20px',
-
-   width: '1240px',
-   height: '1379px',
-   margin: '100px',
 }))
 
 const StyledDiv = styled('div')(() => ({
@@ -150,4 +163,21 @@ const StyledImage = styled(motion.img)(() => ({
    height: 'auto',
    borderRadius: '2px',
    cursor: 'pointer',
+}))
+
+const ImageWrapper = styled(motion.div)(() => ({
+   position: 'relative',
+   display: 'inline-block',
+   width: '100%',
+}))
+
+const TextOverlay = styled('div')(() => ({
+   position: 'absolute',
+   bottom: '10px',
+   left: '55px',
+   transform: 'translate(-50%, -50%)',
+   color: '#FFFFFF',
+   fontSize: '16px',
+   fontWeight: 500,
+   pointerEvents: 'none',
 }))
