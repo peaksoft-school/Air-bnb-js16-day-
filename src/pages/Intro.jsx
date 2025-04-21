@@ -5,7 +5,7 @@ import MainPagePhoto from '../assets/images/Image-main-page.png'
 import Input from '../components/UI/Input'
 import Checkbox from '../components/UI/Checkbox'
 
-const MainPage = () => {
+const Intro = () => {
    const isAuthenticated = false
    return (
       <StyledMain>
@@ -49,7 +49,7 @@ const MainPage = () => {
    )
 }
 
-export default MainPage
+export default Intro
 
 const StyledMain = styled(Box)(() => ({
    width: '100%',
