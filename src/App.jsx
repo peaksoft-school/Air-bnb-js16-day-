@@ -1,3 +1,5 @@
-const App = () => <h1>Airbnb Front js-16</h1>
+import AllHousing from './continers/admin/AllHousing'
+
+const App = () => <AllHousing />
 
 export default App
