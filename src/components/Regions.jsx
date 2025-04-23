@@ -109,7 +109,7 @@ const StyledMainBox = styled(Box)(() => ({
    flexDirection: 'column',
    justifyContent: 'center',
    alignItems: 'center',
-   
+
    '.title': {
       fontSize: '20px',
       fontWeight: 500,
@@ -117,6 +117,7 @@ const StyledMainBox = styled(Box)(() => ({
       textTransform: 'uppercase',
       color: '#363636',
    },
+
    '.text': {
       fontWeight: 400,
       fontSize: '16px',
@@ -124,10 +125,11 @@ const StyledMainBox = styled(Box)(() => ({
       color: '#363636',
       marginBottom: '60px',
    },
+
    '.Box': {
-      display:"flex",
-      flexDirection:"column",
-      gap:"60px"
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '60px',
    },
 }))
 
