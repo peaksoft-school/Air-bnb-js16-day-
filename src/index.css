@@ -1,14 +1,8 @@
-@font-face {
-   font-family: 'Jenriv Titling';
-   src: url('./assets/fonts/jenriv-titling.regular.otf') format('truetype');
-   font-weight: normal;
-   font-style: normal;
-}
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 * {
    margin: 0;
    padding: 0;
    box-sizing: border-box;
-   font-family: 'Jenriv Titling', sans-serif;
+   font-family: 'Inter', sans-serif;
 }
