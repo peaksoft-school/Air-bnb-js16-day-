@@ -1,6 +1,6 @@
 import { Box, styled, Typography } from '@mui/material'
 import GeoIcon from '../assets/icons/Geo.svg'
-import { HOUSES } from '../utils/constants/index'
+import { HOUSES } from '../utils/constants/Index'
 
 const PopularHouse = () => {
    return (
@@ -52,13 +52,13 @@ const StyledMainBox = styled(Box)(() => ({
    flexDirection: 'column',
    justifyContent: 'center',
    alignItems: 'center',
+   padding: '170px 0 170px 0',
 }))
 
 const StyledSecondBox = styled(Box)(() => ({
    height: '880px',
    display: 'flex',
    flexDirection: 'column',
-
    gap: '60px',
 }))
 

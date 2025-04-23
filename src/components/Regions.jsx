@@ -109,7 +109,7 @@ const StyledMainBox = styled(Box)(() => ({
    flexDirection: 'column',
    justifyContent: 'center',
    alignItems: 'center',
-
+   padding: '170px 0 170px 0',
    '.title': {
       fontSize: '20px',
       fontWeight: 500,

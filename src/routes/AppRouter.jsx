@@ -1,13 +1,16 @@
 import { Routes, Route } from 'react-router'
+import { lazy, Suspense } from 'react'
 
-import Intro from '../pages/Intro'
+const UserLayout = lazy(() => import('../layout/user/UserLayout'))
+const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
 
-import UserLayout from '../layout/user/UserLayout'
-import AdminLayout from '../layout/admin/AdminLayout'
+const SignUp = lazy(() => import('../pages/sing-up/SignUp'))
+const NotFound = lazy(() => import('../pages/NotFound'))
+const LandingPage = lazy(() => import('../pages/LandingPage'))
 
-import SignUp from '../pages/sing-up/SignUp'
-import NotFound from '../pages/NotFound'
 import PrivateRoute from './PrivateRoute'
+import SuspenseLoader from '../pages/SuspenseLoader'
+import { ROLES, royteBreadCrumbs } from '../utils/constants/routeBreadCrumbs'
 
 const AppRoutes = () => {
    return (
@@ -16,33 +19,45 @@ const AppRoutes = () => {
             path="/"
             element={
                <PrivateRoute
-                  roles={['GUEST', 'USER']}
-                  Component={<Intro />}
-                  fallbackPath={'/admin'}
+                  roles={[ROLES.GUEST, ROLES.USER]}
+                  Component={
+                     <Suspense fallback={<SuspenseLoader />}>
+                        <LandingPage />
+                     </Suspense>
+                  }
+                  fallbackPath={royteBreadCrumbs.ADMIN.INDEX}
                />
             }
          />
          <Route path="/sign-up" element={<SignUp />} />
 
          <Route
-            path="/user"
+            path={royteBreadCrumbs.USER.INDEX}
             element={
                <PrivateRoute
-                  roles={['USER']}
-                  Component={<UserLayout />}
+                  roles={[ROLES.USER]}
+                  Component={
+                     <Suspense fallback={<SuspenseLoader />}>
+                        <UserLayout />
+                     </Suspense>
+                  }
                   fallbackPath={'/'}
                />
             }
          >
             <Route index element={<div>Welcome to User Page</div>} />
          </Route>
-        
+
          <Route
-            path="/admin"
+            path={royteBreadCrumbs.ADMIN.INDEX}
             element={
                <PrivateRoute
-                  roles={['ADMIN']}
-                  Component={<AdminLayout />}
+                  roles={[ROLES.ADMIN]}
+                  Component={
+                     <Suspense fallback={<SuspenseLoader />}>
+                        <AdminLayout />
+                     </Suspense>
+                  }
                   fallbackPath={'/'}
                />
             }
