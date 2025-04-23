@@ -8,19 +8,11 @@ import {
    styled,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import Button from '../../components/UI/Button'
-import Meatballs from '../../components/UI/Meatballs'
-import Air from '../../assets/icons/BlackAir.svg'
-import { useAuth } from '../../context/AuthContext'
+import Button from '../components/UI/Button'
+import Meatballs from '../components/UI/Meatballs'
+import Air from '../assets/icons/air.svg'
 
-const Header = ({
-   onJoinUs,
-   onProfileClick,
-   onAddLeave,
-}) => {
-   const { user } = useAuth()
-   const isAuthenticated = user.isAuthenticated
-
+const Header = ({ onJoinUs, onProfileClick, onAddLeave, isAuthenticated }) => {
    const menuOptions = [
       { label: 'My profile', action: 'my-profile' },
       { label: 'Log out', action: 'log-out' },

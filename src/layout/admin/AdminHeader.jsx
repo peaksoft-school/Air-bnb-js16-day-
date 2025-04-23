@@ -1,8 +1,9 @@
 import { AppBar, Toolbar, Typography, Box, IconButton } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import Meatballs from '../../../components/UI/Meatballs'
+import Meatballs from '../../components/UI/Meatballs'
 import Air from '../../assets/icons/air.svg'
 import styled from 'styled-components'
+import { NavLink } from 'react-router'
 
 const AdminHeader = () => {
    const menuOptions = [{ label: 'Log out', action: 'log-out' }]
@@ -18,9 +19,17 @@ const AdminHeader = () => {
                </Box>
 
                <Box className="navigation-container">
-                  <Typography>Application</Typography>
-                  <Typography>Users</Typography>
-                  <Typography>AllHousing</Typography>
+                  <NavLink to={'application'} className="nav-text">
+                     {' '}
+                     Application
+                  </NavLink>
+                  <NavLink to={'users'} className="nav-text">
+                     Users{' '}
+                  </NavLink>
+                  <NavLink to={'allhousing'} className="nav-text">
+                     {' '}
+                     AllHousing
+                  </NavLink>
                </Box>
             </Box>
 
@@ -65,6 +74,18 @@ const StyledAppBar = styled(AppBar)(() => ({
             justifyContent: 'space-between',
             gap: '36px',
             color: 'white',
+            '& .nav-text': {
+               color: '#E5E5E5',
+               fontFamily: " 'Inter', sans-serif",
+               textDecoration: 'none',
+               fontWeight: '400',
+               fontSize: '18px',
+               lineHeight: '100%',
+               letterSpacing: '0%',
+               '&.active': {
+                  color: '#FF4B4B',
+               },
+            },
          },
       },
 

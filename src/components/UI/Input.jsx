@@ -10,6 +10,7 @@ const Input = ({
    onClick,
    icon = false,
    value,
+   sizeVariant = 'default',
    ...rest
 }) => {
    return (
@@ -20,10 +21,11 @@ const Input = ({
          value={value}
          onChange={onChange}
          onClick={onClick}
+         sizevariant={sizeVariant}
          InputProps={{
             startAdornment: icon ? (
                <InputAdornment position="start">
-                  {icon && <img src={Search} alt="Search" />}
+                  <img src={Search} alt="Search" />
                </InputAdornment>
             ) : null,
          }}
@@ -33,16 +35,15 @@ const Input = ({
 }
 
 export default Input
-
-const StyledTextField = styled(TextField)(() => ({
+const StyledTextField = styled(TextField)(({ sizevariant }) => ({
    '& .MuiOutlinedInput-root': {
       borderRadius: '2px',
-      width: '414px',
-
+      width: sizevariant === 'large' ? '725px' : '414px',
+      backgroundColor: sizevariant === 'large' ? '#F7F7F7' : '#C4C4C4',
+      height: sizevariant === 'large' ? '42px' : '37px',
       '&:hover fieldset': {
          borderColor: '#828282',
       },
-
       '&.Mui-focused fieldset': {
          borderColor: '#828282',
       },

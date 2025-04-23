@@ -2,14 +2,13 @@
 
 // export default App
 // src/App.jsx
-import { AuthProvider } from './context/AuthContext'
-import AppRoutes from './routes/Router'
+import AppRoutes from './routes/AppRouter'
 
 function App() {
    return (
-      <AuthProvider>
+      <>
          <AppRoutes />
-      </AuthProvider>
+      </>
    )
 }
 

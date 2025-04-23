@@ -1,11 +1,14 @@
-import { Navigate, Outlet } from 'react-router'
+import { Navigate } from 'react-router'
 
-const PrivateRoute = ({ isAuthenticated, allowedRoles = [], userRole }) => {
-   if (!isAuthenticated) return <Navigate to="/login" />
-   if (allowedRoles.length && !allowedRoles.includes(userRole)) {
-      return <Navigate to="/unauthorized" />
+const PrivateRoute = ({ roles, Component, fallbackPath }) => {
+   const role = 'USER'
+
+   const allowedRole = roles.includes(role)
+
+   if (!allowedRole) {
+      return <Navigate to={fallbackPath} />
    }
-   return <Outlet />
-}
 
+   return Component
+}
 export default PrivateRoute
