@@ -28,7 +28,7 @@ const StyledBox = styled(Box)(() => ({
    transform: 'translate(-50%, -50%)',
    borderRadius: '8px',
    backgroundColor: '#fff',
-   padding: '20px',
+   padding: '25px',
    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
    zIndex: 1300,
 }))
