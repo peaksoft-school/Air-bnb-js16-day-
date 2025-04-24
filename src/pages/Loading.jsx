@@ -1,6 +1,20 @@
 import { styled } from '@mui/material/styles'
 import { Box } from '@mui/material'
 
+const Loading = () => {
+   return (
+      <StyledLoaderWrapper>
+         <LoaderDots>
+            <span></span>
+            <span></span>
+            <span></span>
+         </LoaderDots>
+      </StyledLoaderWrapper>
+   )
+}
+
+export default Loading
+
 const StyledLoaderWrapper = styled(Box)(() => ({
    height: '100vh',
    width: '100vw',
@@ -45,17 +59,3 @@ const LoaderDots = styled('div')(() => ({
       },
    },
 }))
-
-const SuspenseLoader = () => {
-   return (
-      <StyledLoaderWrapper>
-         <LoaderDots>
-            <span></span>
-            <span></span>
-            <span></span>
-         </LoaderDots>
-      </StyledLoaderWrapper>
-   )
-}
-
-export default SuspenseLoader

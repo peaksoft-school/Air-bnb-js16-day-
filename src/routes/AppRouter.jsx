@@ -9,7 +9,7 @@ const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/LandingPage'))
 
 import PrivateRoute from './PrivateRoute'
-import SuspenseLoader from '../pages/SuspenseLoader'
+import SuspenseLoader from '../pages/Loading'
 import { ROLES, royteBreadCrumbs } from '../utils/constants/routeBreadCrumbs'
 
 const AppRoutes = () => {
