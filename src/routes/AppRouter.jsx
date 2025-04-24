@@ -4,9 +4,8 @@ import { lazy, Suspense } from 'react'
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
 
-const SignUp = lazy(() => import('../pages/sing-up/SignUp'))
 const NotFound = lazy(() => import('../pages/NotFound'))
-const LandingPage = lazy(() => import('../pages/LandingPage'))
+const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 
 import PrivateRoute from './PrivateRoute'
 import SuspenseLoader from '../pages/Loading'
@@ -29,7 +28,6 @@ const AppRoutes = () => {
                />
             }
          />
-         <Route path="/sign-up" element={<SignUp />} />
 
          <Route
             path={royteBreadCrumbs.USER.INDEX}

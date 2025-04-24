@@ -21,7 +21,6 @@ const HouseBackground = styled.img`
    width: 90%;
    max-width: 100%;
    bottom: 0;
-
    z-index: 0;
 `
 
