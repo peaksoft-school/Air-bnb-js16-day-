@@ -1,4 +1,4 @@
-export const royteBreadCrumbs = {
+export const ROUTES = {
    ADMIN: {
       INDEX: '/admin',
    },

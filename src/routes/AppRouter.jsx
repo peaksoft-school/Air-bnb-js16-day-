@@ -8,87 +8,87 @@ const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 
 import PrivateRoute from './PrivateRoute'
-import SuspenseLoader from '../pages/Loading'
-import { ROLES, royteBreadCrumbs } from '../utils/constants/routeBreadCrumbs'
+import Loading from '../pages/Loading'
+import { ROLES, ROUTES } from './routes'
 
-const AppRoutes = () => {
-   return (
-      <Routes>
+const AppRoutes = () => (
+   <Routes>
+      <Route
+         path="/"
+         element={
+            <PrivateRoute
+               roles={[ROLES.GUEST, ROLES.USER]}
+               Component={
+                  <Suspense fallback={<Loading />}>
+                     <LandingPage />
+                  </Suspense>
+               }
+               fallbackPath={ROUTES.ADMIN.INDEX}
+            />
+         }
+      />
+
+      <Route
+         path={ROUTES.USER.INDEX}
+         element={
+            <PrivateRoute
+               roles={[ROLES.USER]}
+               Component={
+                  <Suspense fallback={<Loading />}>
+                     <UserLayout />
+                  </Suspense>
+               }
+               fallbackPath={'/'}
+            />
+         }
+      >
+         <Route index element={<div>Welcome to User Page</div>} />
+      </Route>
+
+      <Route
+         path={ROUTES.ADMIN.INDEX}
+         element={
+            <PrivateRoute
+               roles={[ROLES.ADMIN]}
+               Component={
+                  <Suspense fallback={<Loading />}>
+                     <AdminLayout />
+                  </Suspense>
+               }
+               fallbackPath={'/'}
+            />
+         }
+      >
          <Route
-            path="/"
+            path="application"
             element={
-               <PrivateRoute
-                  roles={[ROLES.GUEST, ROLES.USER]}
-                  Component={
-                     <Suspense fallback={<SuspenseLoader />}>
-                        <LandingPage />
-                     </Suspense>
-                  }
-                  fallbackPath={royteBreadCrumbs.ADMIN.INDEX}
-               />
+               <div>
+                  <h1>application</h1>
+               </div>
             }
          />
 
          <Route
-            path={royteBreadCrumbs.USER.INDEX}
+            path="users"
             element={
-               <PrivateRoute
-                  roles={[ROLES.USER]}
-                  Component={
-                     <Suspense fallback={<SuspenseLoader />}>
-                        <UserLayout />
-                     </Suspense>
-                  }
-                  fallbackPath={'/'}
-               />
+               <div>
+                  <h1>User Profile</h1>
+               </div>
             }
-         >
-            <Route index element={<div>Welcome to User Page</div>} />
-         </Route>
+         />
 
          <Route
-            path={royteBreadCrumbs.ADMIN.INDEX}
+            path="allhousing"
             element={
-               <PrivateRoute
-                  roles={[ROLES.ADMIN]}
-                  Component={
-                     <Suspense fallback={<SuspenseLoader />}>
-                        <AdminLayout />
-                     </Suspense>
-                  }
-                  fallbackPath={'/'}
-               />
+               <div>
+                  <h1>allhousing</h1>
+               </div>
             }
-         >
-            <Route
-               path="application"
-               element={
-                  <div>
-                     <h1>application</h1>
-                  </div>
-               }
-            />
-            <Route
-               path="users"
-               element={
-                  <div>
-                     <h1>User Profile</h1>
-                  </div>
-               }
-            />
-            <Route
-               path="allhousing"
-               element={
-                  <div>
-                     <h1>allhousing</h1>
-                  </div>
-               }
-            />
-         </Route>
+         />
+      </Route>
 
-         <Route path="*" element={<NotFound />} />
-      </Routes>
-   )
-}
+      <Route path="*" element={<NotFound />} />
+   </Routes>
+)
 
 export default AppRoutes

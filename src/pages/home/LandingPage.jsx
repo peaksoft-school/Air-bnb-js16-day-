@@ -5,17 +5,15 @@ import Footer from '../../layout/Footer'
 import PopularApartments from '../../components/Landing/PopularApartments'
 import TheLastest from '../../components/Landing/TheLastest'
 
-const LandingPage = () => {
-   return (
-      <>
-         <Intro />
-         <Regions />
-         <PopularApartments />
-         <PopularHouse />
-         <TheLastest />
-         <Footer />
-      </>
-   )
-}
+const LandingPage = () => (
+   <>
+      <Intro />
+      <Regions />
+      <PopularApartments />
+      <PopularHouse />
+      <TheLastest />
+      <Footer />
+   </>
+)
 
 export default LandingPage
