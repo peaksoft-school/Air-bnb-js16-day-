@@ -39,7 +39,7 @@ const StyledTextField = styled(TextField)(({ sizevariant }) => ({
    '& .MuiOutlinedInput-root': {
       borderRadius: '2px',
       width: sizevariant === 'large' ? '725px' : '414px',
-      backgroundColor: sizevariant === 'large' ? '#F7F7F7' : '#C4C4C4',
+      backgroundColor: sizevariant === 'large' ? '#F7F7F7' : '#c4c4c40',
 
       '&:hover fieldset': {
          borderColor: '#828282',

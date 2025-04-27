@@ -4,14 +4,23 @@ import styled from '@emotion/styled'
 import MainPagePhoto from '../assets/images/Image-main-page.png'
 import Input from '../components/UI/Input'
 import Checkbox from '../components/UI/Checkbox'
+import SignUpModal from './SignUpModal'
+import { useState } from 'react'
+import SignInModal from './SignInModal'
 
 const Intro = () => {
+   const [open, setOpen] = useState(false)
+   const handleOpen = () => setOpen(true)
+
    const isAuthenticated = false
    return (
       <StyledMain>
          <StyledImage>
             <div>
-               <Header isAuthenticated={isAuthenticated} />
+               <Header
+                  isAuthenticated={isAuthenticated}
+                  onJoinUs={handleOpen}
+               />
             </div>
             <StyledSearch>
                {isAuthenticated ? (
@@ -44,6 +53,7 @@ const Intro = () => {
                   </>
                )}
             </StyledSearch>
+            <SignInModal open={open} setOpen={setOpen} />
          </StyledImage>
       </StyledMain>
    )

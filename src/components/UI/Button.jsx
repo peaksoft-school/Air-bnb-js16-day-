@@ -87,7 +87,7 @@ const ThirdButton = styled(MuiButtonBase)(({ width }) => ({
    alignItems: 'center',
    gap: '10px',
 
-   fontFamily: 'Arial',
+   fontFamily: 'Inter, sans-serif',
    fontWeight: '550',
    fontSize: '18px',
    lineHeight: '100%',
