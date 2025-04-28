@@ -1,9 +1,24 @@
 import { Typography, Box, styled } from '@mui/material'
 import Modal from '../components/UI/Modal'
 import Button from '../components/UI/Button'
+import { useGoogleLogin } from '@react-oauth/google'
 
-const SignUpModal = ({ open, setOpen }) => {
+const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
    const handleClose = () => setOpen(false)
+
+//    const login = useGoogleLogin({
+//       onSuccess: (tokenResponse) =>
+//          console.log('TOKEN RESPONSE:', tokenResponse),
+//       onError: (errorResponse) => console.error('ERROR:', errorResponse),
+//       ux_mode: 'popup',
+//    })
+
+const login = ()=>{
+    
+}
+
+
+
 
    return (
       <div>
@@ -17,10 +32,14 @@ const SignUpModal = ({ open, setOpen }) => {
                </Box>
 
                <Box className="second-block">
-                  <Button variant={'third'} icon={true}>
+                  <Button variant={'third'} icon={true} onClick={() => login()}>
                      Google
                   </Button>
-                  <Typography className="log-admin-text">
+
+                  <Typography
+                     className="log-admin-text"
+                     onClick={onAdminLoginClick}
+                  >
                      log in as admin
                   </Typography>
                </Box>

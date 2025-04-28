@@ -8,18 +8,21 @@ import { injectStore } from './configs/axiosInstance.js'
 import { persistor, store } from './store/store.js'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 injectStore(store)
 
 createRoot(document.getElementById('root')).render(
    <StrictMode>
-      <Provider store={store}>
-         <PersistGate persistor={persistor}>
-            <Themes>
-               <App />
-               <Notification />
-            </Themes>
-         </PersistGate>
-      </Provider>
+      <GoogleOAuthProvider clientId="1048779211212-gk9cbg4p3jv6s6smv8mc8i7s7vdu3lvi.apps.googleusercontent.com">
+         <Provider store={store}>
+            <PersistGate persistor={persistor}>
+               <Themes>
+                  <App />
+                  <Notification />
+               </Themes>
+            </PersistGate>
+         </Provider>
+      </GoogleOAuthProvider>
    </StrictMode>
 )

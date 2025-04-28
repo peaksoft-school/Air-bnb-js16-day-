@@ -16,7 +16,7 @@ const SignInModal = ({ open, setOpen }) => {
                </Box>
 
                <Box className="second-block">
-                  <Input placeholder={'Password'}/>
+                  <Input placeholder={'Password'} />
                   <Button width={414}>SIGN IN</Button>
                </Box>
             </JoinUsBox>
@@ -27,7 +27,7 @@ const SignInModal = ({ open, setOpen }) => {
 
 export default SignInModal
 
-const JoinUsBox = styled(Box)(({ theme }) => ({
+const JoinUsBox = styled(Box)(() => ({
    display: 'flex',
    flexDirection: 'column',
    gap: '16px',

@@ -9,8 +9,12 @@ import { useState } from 'react'
 import SignInModal from './SignInModal'
 
 const Intro = () => {
-   const [open, setOpen] = useState(false)
-   const handleOpen = () => setOpen(true)
+   const [openSignIn, setOpenSignIn] = useState(false)
+   const [openSignUp, setOpenSignUp] = useState(false)
+
+   const handleOpenSignUp = () => {
+      setOpenSignUp(true)
+   }
 
    const isAuthenticated = false
    return (
@@ -19,7 +23,7 @@ const Intro = () => {
             <div>
                <Header
                   isAuthenticated={isAuthenticated}
-                  onJoinUs={handleOpen}
+                  onJoinUs={handleOpenSignUp}
                />
             </div>
             <StyledSearch>
@@ -53,7 +57,16 @@ const Intro = () => {
                   </>
                )}
             </StyledSearch>
-            <SignInModal open={open} setOpen={setOpen} />
+            <SignUpModal
+               open={openSignUp}
+               setOpen={setOpenSignUp}
+               onAdminLoginClick={() => {
+                  setOpenSignUp(false)
+                  setOpenSignIn(true)
+               }}
+            />
+
+            <SignInModal open={openSignIn} setOpen={setOpenSignIn} />
          </StyledImage>
       </StyledMain>
    )
