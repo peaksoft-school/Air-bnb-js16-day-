@@ -41,6 +41,7 @@ const StyledTextField = styled(TextField)(({ sizevariant }) => ({
       width: sizevariant === 'large' ? '725px' : '414px',
       backgroundColor: sizevariant === 'large' ? '#F7F7F7' : '#c4c4c40',
 
+      height: sizevariant === 'large' ? '42px' : '37px',
       '&:hover fieldset': {
          borderColor: '#828282',
       },

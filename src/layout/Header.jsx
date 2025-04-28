@@ -12,12 +12,7 @@ import Button from '../components/UI/Button'
 import Meatballs from '../components/UI/Meatballs'
 import Air from '../assets/icons/air.svg'
 
-const Header = ({
-   isAuthenticated = true,
-   onJoinUs,
-   onProfileClick,
-   onAddLeave,
-}) => {
+const Header = ({ onJoinUs, onProfileClick, onAddLeave, isAuthenticated }) => {
    const menuOptions = [
       { label: 'My profile', action: 'my-profile' },
       { label: 'Log out', action: 'log-out' },

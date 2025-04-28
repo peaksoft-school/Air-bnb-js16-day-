@@ -78,7 +78,6 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
 
 export default ImageCarousel
 
-
 const Wrapper = styled(Box)(() => ({
    display: 'flex',
    flexDirection: 'column',

@@ -1,8 +1,8 @@
 import { Box, styled, Typography } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
-import Rectangle from '../assets/images/Rectangle.png'
-import ImageCarousel from '../components/ImageCarousel'
-import { IMAGES_POPULARS } from '../utils/constants/Index'
+import Rectangle from '../../assets/images/Rectangle.png'
+import ImageCarousel from '../ImageCarousel'
+import { IMAGES_POPULARS } from '../../utils/constants/Index'
 
 const TheLastest = ({ handleAllClick, handleMoreClick }) => {
    return (
@@ -65,7 +65,7 @@ const TheLastest = ({ handleAllClick, handleMoreClick }) => {
 
 const StyledMainContainer = styled(Box)(() => ({
    width: '100%',
-   height: '880px',
+   padding: '0 0 170px 0',
    backgroundColor: 'initial',
    display: 'flex',
    justifyContent: 'center',

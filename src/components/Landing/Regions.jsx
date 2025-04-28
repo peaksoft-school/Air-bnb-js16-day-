@@ -1,14 +1,14 @@
 import { Box, styled } from '@mui/material'
 import { motion } from 'framer-motion'
 
-import chui from '../assets/images/Chui.png'
-import batken from '../assets/images/Batken.png'
-import jalalabad from '../assets/images/Jalal-Abad.png'
-import naryn from '../assets/images/Naryn.png'
-import yssykkul from '../assets/images/Yssyk-Kul.png'
-import talas from '../assets/images/Talas.png'
-import osh from '../assets/images/Osh.png'
-import bishkek from '../assets/images/Bishkek.png'
+import chui from '../../assets/images/Chui.png'
+import batken from '../../assets/images/Batken.png'
+import jalalabad from '../../assets/images/Jalal-Abad.png'
+import naryn from '../../assets/images/Naryn.png'
+import yssykkul from '../../assets/images/Yssyk-Kul.png'
+import talas from '../../assets/images/Talas.png'
+import osh from '../../assets/images/Osh.png'
+import bishkek from '../../assets/images/Bishkek.png'
 
 const Regions = () => {
    return (
@@ -109,7 +109,7 @@ const StyledMainBox = styled(Box)(() => ({
    flexDirection: 'column',
    justifyContent: 'center',
    alignItems: 'center',
-
+   padding: '170px 0 170px 0',
    '.title': {
       fontSize: '20px',
       fontWeight: 500,
