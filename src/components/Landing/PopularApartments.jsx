@@ -1,8 +1,8 @@
 import { Box, styled, Typography } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
-import Rectangle from '../assets/images/Rectangle.png'
-import ImageCarousel from '../components/ImageCarousel'
-import { IMAGES_POPULARS } from '../utils/constants/Index'
+import Rectangle from '../../assets/images/Rectangle.png'
+import ImageCarousel from '../ImageCarousel'
+import { IMAGES_POPULARS } from '../../utils/constants/Index'
 
 const PopularApartments = ({ handleAllClick, handleMoreClick }) => {
    return (

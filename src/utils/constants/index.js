@@ -10,7 +10,7 @@ const IMAGES_POPULARS = [
 
 export { IMAGES_POPULARS }
 
-const HOUSES = [
+export const HOUSES = [
    {
       id: 1,
       title: 'Asman guest house',
@@ -36,5 +36,3 @@ const HOUSES = [
       rating: 4.5,
    },
 ]
-
-export { HOUSES }

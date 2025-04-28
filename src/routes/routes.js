@@ -1,10 +1,10 @@
-export const royteBreadCrumbs = {
+export const ROUTES = {
    ADMIN: {
-      index: '/admin',
+      INDEX: '/admin',
    },
 
    USER: {
-      index: '/user',
+      INDEX: '/user',
    },
 }
 

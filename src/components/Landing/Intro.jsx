@@ -1,12 +1,13 @@
 import { Box, Typography } from '@mui/material'
-import Header from '../layout/Header'
+import Header from '../../layout/Header'
 import styled from '@emotion/styled'
-import MainPagePhoto from '../assets/images/Image-main-page.png'
-import Input from '../components/UI/Input'
-import Checkbox from '../components/UI/Checkbox'
+import MainPagePhoto from '../../assets/images/Image-main-page.png'
+import Input from '../UI/Input'
+import Checkbox from '../UI/Checkbox'
 
 const Intro = () => {
    const isAuthenticated = false
+
    return (
       <StyledMain>
          <StyledImage>
