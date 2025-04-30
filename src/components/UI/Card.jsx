@@ -49,7 +49,7 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
    }
 
    return (
-      <MuiCard sx={{ maxWidth: 300, margin: 2 }}>
+      <MuiCard sx={{ maxWidth: 210, margin: 2 }}>
          <Box
             sx={{ position: 'relative' }}
             onMouseEnter={() => setHovered(true)}
@@ -142,45 +142,45 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
 export default Card
 
 const StyledIconButtonBack = styled(IconButton)(() => ({
-   position: 'absolute',
-   top: '50%',
+   position: 'absolute !important',
+   top: '50% !important',
    left: 10,
-   transform: 'translateY(-50%)',
-   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-   color: '#fff',
+   transform: 'translateY(-50%) !important',
+   backgroundColor: 'rgba(0, 0, 0, 0.5) !important',
+   color: '#fff !important',
    zIndex: 1,
 
    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      backgroundColor: 'rgba(0, 0, 0, 0.7) !important',
    },
 }))
 
 const StyledIconButtonForward = styled(IconButton)(() => ({
-   position: 'absolute',
-   top: '50%',
+   position: 'absolute !important',
+   top: '50% !important',
    right: 10,
-   transform: 'translateY(-50%)',
-   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-   color: '#fff',
+   transform: 'translateY(-50%) !important',
+   backgroundColor: 'rgba(0, 0, 0, 0.5) !important',
+   color: '#fff !important',
    zIndex: 1,
 
    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      backgroundColor: 'rgba(0, 0, 0, 0.7) !important',
    },
 }))
 
 const StyledRating = styled(Box)(() => ({
-   width: '3em',
-   height: '25px',
-   backgroundColor: '#828282',
-   display: 'flex',
-   alignItems: 'center',
-   justifyContent: 'center',
-   borderRadius: '2px',
+   width: '3em !important',
+   height: '25px !important',
+   backgroundColor: '#828282 !important',
+   display: 'flex !important',
+   alignItems: 'center !important',
+   justifyContent: 'center !important',
+   borderRadius: '2px !important',
 }))
 
 const StyledTitle = styled(Typography)(() => ({
-   whiteSpace: 'nowrap',
-   overflow: 'hidden',
-   textOverflow: 'ellipsis',
+   whiteSpace: 'nowrap !important',
+   overflow: 'hidden !important',
+   textOverflow: 'ellipsis !important',
 }))

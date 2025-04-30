@@ -1,4 +1,4 @@
-export const BOOKIING_FILTER_OPTIONS = [
+export const BOOKING_FILTER_OPTIONS = [
    { id: 1, value: 'All', label: 'All' },
    { id: 2, value: 'true', label: 'Booked' },
    { id: 3, value: 'false', label: 'Not booked' },
