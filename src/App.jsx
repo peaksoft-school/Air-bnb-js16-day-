@@ -1,5 +1,5 @@
-import AllHousing from './continers/admin/AllHousing'
+import AppRoutes from './routes/AppRouter'
 
-const App = () => <AllHousing />
+const App = () => <AppRoutes />
 
 export default App
