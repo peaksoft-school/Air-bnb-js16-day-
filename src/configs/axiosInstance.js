@@ -17,14 +17,11 @@ export const injectStore = (store) => {
 
 axiosInstance.interceptors.request.use(
    (config) => {
-      const updateConfig = { ...config }
-
-      const { token } = customStore.getState().auth
-
+      const { token } = customStore?.getState()?.auth || {}
       if (token) {
-         updateConfig.headers.Authorization = 'Bearer ${token}'
+         config.headers.Authorization = `Bearer ${token}`
       }
-      return updateConfig
+      return config
    },
    (error) => {
       return Promise.reject(error)
@@ -32,10 +29,10 @@ axiosInstance.interceptors.request.use(
 )
 
 axiosInstance.interceptors.response.use(
-   (respons) => {
-      return Promise.resolve(respons)
-   },
+   (response) => response,
    (error) => {
+      if (error.response?.status === 401) {
+      }
       return Promise.reject(error)
    }
 )

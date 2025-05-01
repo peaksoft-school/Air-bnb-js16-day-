@@ -13,15 +13,32 @@ import Meatballs from '../../components/UI/Meatballs'
 import Air from '../../assets/icons/BlackAir.svg'
 import Checkbox from '../../components/UI/Checkbox'
 import Input from '../../components/UI/Input'
+import { useDispatch } from 'react-redux'
+import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
+import { useNavigate } from 'react-router'
 
 const UserHeader = ({
-   isAuthenticated = true,
+   isAuthenticated,
    onJoinUs,
    onProfileClick,
    onAddLeave,
    favoriteCount = 9,
    handleLeaveAddClick,
 }) => {
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+
+   const handleLogout = () => {
+      dispatch(AUTH_ACTIONS.logOut())
+      navigate('/')
+   }
+
+   const handleMenuSelect = (option) => {
+      if (option.action === 'log-out') {
+         handleLogout()
+      }
+   }
+
    const menuOptions = [
       { label: 'My profile', action: 'my-profile' },
       { label: 'Log out', action: 'log-out' },
@@ -48,7 +65,6 @@ const UserHeader = ({
                <Box className="search-container">
                   <Box className="checkbox-container">
                      <Checkbox />
-
                      <Typography className="search-text">
                         Search nearby
                      </Typography>
@@ -78,6 +94,7 @@ const UserHeader = ({
                            <Meatballs
                               icon={<ExpandMoreIcon className="expend-icon" />}
                               options={menuOptions}
+                              onSelect={handleMenuSelect}
                            />
                         </Box>
                      </>

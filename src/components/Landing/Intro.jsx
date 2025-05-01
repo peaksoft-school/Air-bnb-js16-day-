@@ -1,22 +1,22 @@
+import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import Header from '../../layout/Header'
 import styled from '@emotion/styled'
-import SignUpModal from './SignUpModal'
-import { useState } from 'react'
-import SignInModal from './SignInModal'
+import SignUpModal from '../../pages/sing-up/SignUpModal'
+import SignInModal from '../../pages/sign-in/SignInModal'
 import MainPagePhoto from '../../assets/images/Image-main-page.png'
 import Input from '../UI/Input'
 import Checkbox from '../UI/Checkbox'
+import { useSelector } from 'react-redux'
 
 const Intro = () => {
    const [openSignIn, setOpenSignIn] = useState(false)
    const [openSignUp, setOpenSignUp] = useState(false)
+   const isAuthenticated = useSelector((state) => state.auth.isAuth)
 
    const handleOpenSignUp = () => {
       setOpenSignUp(true)
    }
-
-   const isAuthenticated = false
 
    return (
       <StyledMain>

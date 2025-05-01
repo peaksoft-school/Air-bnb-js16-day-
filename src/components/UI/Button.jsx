@@ -38,6 +38,7 @@ const FirstButton = styled(MuiButtonBase)(({ width }) => ({
    width: width,
    height: '37px',
    borderRadius: '2px',
+   cursor:"pointer",
 
    display: 'flex',
    justifyContent: 'center',
@@ -60,6 +61,7 @@ const SecondButton = styled(MuiButtonBase)(({ width }) => ({
    height: '35px',
    border: '1px solid grey',
    borderRadius: '2px',
+   cursor: 'pointer',
 
    display: 'flex',
    justifyContent: 'center',
@@ -81,6 +83,7 @@ const ThirdButton = styled(MuiButtonBase)(({ width }) => ({
    height: '50px',
    borderRadius: '8px',
    border: '1px solid lightgrey',
+   cursor: 'pointer',
 
    display: 'flex',
    justifyContent: 'center',
@@ -101,6 +104,7 @@ const FourthButton = styled(MuiButtonBase)(({ width }) => ({
    width: width,
    height: '33px',
    padding: '8px 16px 8px 16px',
+   cursor: 'pointer',
 
    fontFamily: 'Arial',
    fontWeight: '400',

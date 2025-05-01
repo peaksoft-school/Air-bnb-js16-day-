@@ -1,18 +1,76 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosInstance'
 
-const singUp = createAsyncThunk(
-   'auth/signUp',
-
-   async ({ values }, { rejectWithValue }) => {
+const login = createAsyncThunk(
+   'auth/login',
+   async (formData, { rejectWithValue }) => {
       try {
-         const { data } = await axiosInstance.post('/api/auth/register', values)
+         const { data } = await axiosInstance.post('/api/auth/login', formData)
          return data
       } catch (error) {
-         return rejectWithValue({ message: error.respons.data.message })
+         return rejectWithValue({
+            message: error.response?.data?.message || 'Login failed',
+         })
       }
    }
 )
 
-export const AUTH_THUNK = { singUp }
+const googleSignIn = createAsyncThunk(
+   'auth/googleSignIn',
+   async ({ idToken, navigate }, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.post(
+            `/api/auth/google?idToken=${idToken}`
+         )
+         navigate('/user')
+         return data
+      } catch (error) {
+         return rejectWithValue({
+            message: error.response?.data?.message || 'Google sign in failed',
+         })
+      }
+   }
+)
 
+const forgotPassword = createAsyncThunk(
+   'auth/forgotPassword',
+   async (email, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.post(
+            '/api/auth/forgot-password',
+            { email, link: window.location.origin + '/reset-password' }
+         )
+         return data
+      } catch (error) {
+         return rejectWithValue({
+            message:
+               error.response?.data?.message ||
+               'Ошибка при запросе сброса пароля',
+         })
+      }
+   }
+)
+const resetPassword = createAsyncThunk(
+   'auth/resetPassword',
+   async ({ token, password }, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.post('/api/auth/reset-password', {
+            token,
+            newPassword: password,
+         })
+         return data
+      } catch (error) {
+         return rejectWithValue({
+            message:
+               error.response?.data?.message || 'Ошибка при сбросе пароля',
+         })
+      }
+   }
+)
+
+export const AUTH_THUNK = {
+   login,
+   googleSignIn,
+   forgotPassword,
+   resetPassword,
+}

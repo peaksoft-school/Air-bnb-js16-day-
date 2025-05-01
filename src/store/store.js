@@ -1,16 +1,17 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { authSlice } from './slices/auth/authSlice'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
+import { authReducer } from './slices/auth/authSlice'
+
 import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
-import storage from 'redux-persist/lib/storage' // <-- Добавлено
+import storage from 'redux-persist/lib/storage'
 
 const rootReducer = combineReducers({
-   [authSlice.name]: authSlice.reducer,
+   auth: authReducer,
 })
 
 const persistConfig = {
    key: 'AIR-BNB',
-   storage, // <-- Указали хранилище
+   storage,
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
