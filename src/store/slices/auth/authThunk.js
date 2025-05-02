@@ -36,9 +36,13 @@ const forgotPassword = createAsyncThunk(
    'auth/forgotPassword',
    async (email, { rejectWithValue }) => {
       try {
+         const resetLinkBase = `${window.location.origin}/reset-password/`
          const { data } = await axiosInstance.post(
             '/api/auth/forgot-password',
-            { email, link: window.location.origin + '/reset-password' }
+            {
+               email,
+               link: resetLinkBase,
+            }
          )
          return data
       } catch (error) {
@@ -50,6 +54,7 @@ const forgotPassword = createAsyncThunk(
       }
    }
 )
+
 const resetPassword = createAsyncThunk(
    'auth/resetPassword',
    async ({ token, password }, { rejectWithValue }) => {
@@ -60,6 +65,8 @@ const resetPassword = createAsyncThunk(
          })
          return data
       } catch (error) {
+         console.log(token)
+
          return rejectWithValue({
             message:
                error.response?.data?.message || 'Ошибка при сбросе пароля',

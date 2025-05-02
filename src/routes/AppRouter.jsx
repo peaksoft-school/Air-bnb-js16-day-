@@ -7,9 +7,6 @@ const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
 const ResetPassword = lazy(
    () => import('../pages/forgotPassword/ResetPassword')
 )
-const ForgotPassword = lazy(
-   () => import('../pages/forgotPassword/ForgotPassword')
-)
 
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
@@ -93,16 +90,9 @@ const AppRoutes = () => (
             }
          />
       </Route>
+
       <Route
-         path="/forgot-password"
-         element={
-            <Suspense fallback={<Loading />}>
-               <ForgotPassword />
-            </Suspense>
-         }
-      />
-      <Route
-         path="/reset-password/:token"
+         path="/reset-password"
          element={
             <Suspense fallback={<Loading />}>
                <ResetPassword />

@@ -1,10 +1,12 @@
+import { Typography, Box, styled } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { Button, Input, Card } from 'antd'
+import { Input, Card } from 'antd'
 import { toast } from 'react-toastify'
+import Modal from '../../components/UI/Modal'
+import Button from '../../components/UI/Button'
 
 const ForgotPasswordSchema = Yup.object().shape({
    email: Yup.string()
@@ -12,9 +14,8 @@ const ForgotPasswordSchema = Yup.object().shape({
       .required('Обязательное поле'),
 })
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ open, handleClose }) => {
    const dispatch = useDispatch()
-   const navigate = useNavigate()
    const { forgotPasswordStatus } = useSelector((state) => state.auth)
 
    const handleSubmit = (values) => {
@@ -22,54 +23,83 @@ const ForgotPassword = () => {
          .unwrap()
          .then(() => {
             toast.success('Ссылка для сброса пароля отправлена на ваш email')
-            navigate('/')
+            handleClose()
          })
    }
 
    return (
-      <Card
-         title="Восстановление пароля"
-         style={{ width: 400, margin: '24px auto' }}
-      >
-         <Formik
-            initialValues={{ email: '' }}
-            validationSchema={ForgotPasswordSchema}
-            onSubmit={handleSubmit}
-         >
-            {({ errors, touched }) => (
-               <Form>
-                  <div style={{ marginBottom: 16 }}>
-                     <Field name="email">
-                        {({ field }) => (
-                           <Input
-                              {...field}
-                              placeholder="Ваш email"
-                              status={
-                                 touched.email && errors.email ? 'error' : ''
-                              }
-                           />
+      <Modal open={open} handleClose={handleClose}>
+         <AuthCard title="FORGOT PASSWORD">
+            <Formik
+               initialValues={{ email: '' }}
+               validationSchema={ForgotPasswordSchema}
+               onSubmit={handleSubmit}
+            >
+               {({ errors, touched }) => (
+                  <Form>
+                     <FormBlock>
+                        <Field name="email">
+                           {({ field }) => (
+                              <Input
+                                 {...field}
+                                 placeholder="Your email"
+                                 status={
+                                    touched.email && errors.email ? 'error' : ''
+                                 }
+                                 className="forgot-password-change"
+                              />
+                           )}
+                        </Field>
+                        {errors.email && touched.email && (
+                           <ErrorText>{errors.email}</ErrorText>
                         )}
-                     </Field>
-                     {errors.email && touched.email && (
-                        <div style={{ color: 'red', marginTop: 4 }}>
-                           {errors.email}
-                        </div>
-                     )}
-                  </div>
+                     </FormBlock>
 
-                  <Button
-                     type="primary"
-                     htmlType="submit"
-                     loading={forgotPasswordStatus === 'loading'}
-                     block
-                  >
-                     Отправить
-                  </Button>
-               </Form>
-            )}
-         </Formik>
-      </Card>
+                     <Button
+                        width={414}
+                        type="submit"
+                        loading={forgotPasswordStatus === 'loading'}
+                        block
+                     >
+                        Send by mail
+                     </Button>
+                  </Form>
+               )}
+            </Formik>
+         </AuthCard>
+      </Modal>
    )
 }
 
 export default ForgotPassword
+
+export const AuthCard = styled(Card)(() => ({
+   display: 'flex',
+   flexDirection: 'column',
+   alignItems: 'center',
+   justifyContent: 'center',
+   border: 'none',
+   '& .forgot-password-change': {
+      width: '414px',
+      height: '39px',
+      borderRadius: '2px',
+      borderColor: '#828282',
+      border: '1px solid #828282',
+   },
+   '& .ant-card-head-title': {
+      fontSize: '18px',
+      fontWeight: 500,
+      textAlign: 'center',
+      fontFamily: 'Inter, sans-serif',
+   },
+}))
+
+export const FormBlock = styled(Box)(({ gap = 16 }) => ({
+   marginBottom: `${gap}px`,
+}))
+
+export const ErrorText = styled(Typography)(({ theme }) => ({
+   color: theme.palette.error.main,
+   marginTop: 4,
+   fontSize: 13,
+}))

@@ -8,10 +8,13 @@ import MainPagePhoto from '../../assets/images/Image-main-page.png'
 import Input from '../UI/Input'
 import Checkbox from '../UI/Checkbox'
 import { useSelector } from 'react-redux'
+import ForgotPassword from '../../pages/forgotPassword/ForgotPassword'
 
 const Intro = () => {
    const [openSignIn, setOpenSignIn] = useState(false)
    const [openSignUp, setOpenSignUp] = useState(false)
+   const [openForgotPassword, setOpenForgotPassword] = useState(false)
+
    const isAuthenticated = useSelector((state) => state.auth.isAuth)
 
    const handleOpenSignUp = () => {
@@ -67,7 +70,19 @@ const Intro = () => {
                }}
             />
 
-            <SignInModal open={openSignIn} setOpen={setOpenSignIn} />
+            <SignInModal
+               open={openSignIn}
+               setOpen={setOpenSignIn}
+               onForgotPasswordClick={() => {
+                  setOpenSignIn(false)
+                  setOpenForgotPassword(true)
+               }}
+            />
+
+            <ForgotPassword
+               open={openForgotPassword}
+               handleClose={() => setOpenForgotPassword(false)}
+            />
          </StyledImage>
       </StyledMain>
    )

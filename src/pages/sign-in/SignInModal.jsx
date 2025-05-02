@@ -5,10 +5,9 @@ import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
 import Input from '../../components/UI/Input'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
-import { Link, useNavigate } from 'react-router'
-import { ROUTES } from '../../routes/routes'
+import { useNavigate } from 'react-router'
 
-const SignInModal = ({ open, setOpen }) => {
+const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { isLoading } = useSelector((state) => state.auth)
@@ -54,9 +53,13 @@ const SignInModal = ({ open, setOpen }) => {
                   onChange={handleChange}
                   type="password"
                />
-               <Link to={ROUTES.AUTH.FORGOT_PASSWORD} className="forgot-pass">
+
+               <Typography
+                  className="forgot-pass"
+                  onClick={onForgotPasswordClick}
+               >
                   Forgot Password
-               </Link>
+               </Typography>
 
                <Button width={414} onClick={handleSubmit} disabled={isLoading}>
                   {isLoading ? 'Loading...' : 'SIGN IN'}

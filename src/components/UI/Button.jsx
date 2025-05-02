@@ -1,5 +1,6 @@
-import { colors, ButtonBase as MuiButtonBase, styled } from '@mui/material'
+import { ButtonBase as MuiButtonBase, styled } from '@mui/material'
 import GoogleLogo from '../../assets/icons/google-logo.svg'
+import { CircularProgress } from '@mui/material'
 
 const Button = ({
    children,
@@ -9,6 +10,7 @@ const Button = ({
    variant = 'first',
    icon = false,
    width,
+   loading = false,
 }) => {
    const ButtonComponent =
       variant === 'second'
@@ -22,12 +24,18 @@ const Button = ({
    return (
       <ButtonComponent
          type={type}
-         onClick={onClick}
-         disabled={disabled}
+         onClick={loading ? undefined : onClick}
+         disabled={disabled || loading}
          width={width}
       >
-         {icon && <img src={GoogleLogo} alt="Google-Logo" />}
-         {children}
+         {loading ? (
+            <CircularProgress size={20} sx={{ color: 'white' }} />
+         ) : (
+            <>
+               {icon && <img src={GoogleLogo} alt="Google-Logo" />}
+               {children}
+            </>
+         )}
       </ButtonComponent>
    )
 }
@@ -38,7 +46,7 @@ const FirstButton = styled(MuiButtonBase)(({ width }) => ({
    width: width,
    height: '37px',
    borderRadius: '2px',
-   cursor:"pointer",
+   cursor: 'pointer',
 
    display: 'flex',
    justifyContent: 'center',
