@@ -10,6 +10,8 @@ const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
+import Users from '../pages/admin/Users'
+import UserDetail from '../pages/admin/UserDetail'
 
 const AppRoutes = () => (
    <Routes>
@@ -71,9 +73,18 @@ const AppRoutes = () => (
          <Route
             path="users"
             element={
-               <div>
-                  <h1>User Profile</h1>
-               </div>
+               <Suspense fallback={<Loading />}>
+                  <Users />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path="users/:id"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserDetail />
+               </Suspense>
             }
          />
 
