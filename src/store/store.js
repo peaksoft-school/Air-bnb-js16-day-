@@ -1,10 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import allHousingSlice from './slice/admin/allHousing/allHousingSlice'
+import allHousingReducer from './slice/admin/allHousing/allHousingSlice'
+import { injectStore } from './slice/axiosInstance'
 
 const store = configureStore({
    reducer: {
-      [allHousingSlice.name]: allHousingSlice.reducer,
+      housing: allHousingReducer,
    },
 })
+
+injectStore(store)
 
 export default store

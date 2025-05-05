@@ -8,14 +8,12 @@ export const getFilteredHousingRequest = createAsyncThunk(
       { rejectWithValue }
    ) => {
       try {
-         const response = await axiosInstance.get(
+         const { data } = await axiosInstance.get(
             `/api/house/all-for-admin?bookingStatus=${bookingStatus}&popularity=${popularity}&houseType=${houseType}&priceSort=${priceSort}`
          )
 
-         console.log(4)
-         return response.data
+         return data
       } catch (error) {
-         console.log(5)
          const message =
             error.response?.data?.message || 'Failed to fetch housing list'
          return rejectWithValue(message)

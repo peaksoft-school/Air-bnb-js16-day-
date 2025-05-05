@@ -13,25 +13,21 @@ const allHousingSlice = createSlice({
    reducers: {},
    extraReducers: (builder) => {
       builder
-
          .addCase(getFilteredHousingRequest.pending, (state) => {
-            console.log(6)
             state.loading = true
             state.error = null
          })
 
-         .addCase(getFilteredHousingRequest.fulfilled, (state, action) => {
-            console.log(7)
+         .addCase(getFilteredHousingRequest.fulfilled, (state, { payload }) => {
             state.loading = false
-            state.data = action.payload
+            state.data = payload
          })
 
-         .addCase(getFilteredHousingRequest.rejected, (state, action) => {
-            console.log(8)
+         .addCase(getFilteredHousingRequest.rejected, (state, { payload }) => {
             state.loading = false
-            state.error = action.payload || 'Something went wrong'
+            state.error = payload || 'Something went wrong'
          })
    },
 })
 
-export default allHousingSlice
+export default allHousingSlice.reducer

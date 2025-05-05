@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, styled } from '@mui/material'
 
 import { getFilteredHousingRequest } from '../../store/slice/admin/allHousing/allHousingThunk'
-import Card from '../../components/UI/Card'
+import Card from '../../components/admin/AdminCard'
 import DropDown from '../../components/UI/DropDown'
 
 import {
@@ -50,12 +50,12 @@ const AllHousing = () => {
    }
 
    return (
-      <Box>
+      <>
          <StyledFirstBox>
-            <Box sx={{ paddingLeft: '40px' }}>
+            <StyledBox>
                <h2 onClick={handleSubmit}>All housing</h2>
-            </Box>
-            <StyledSelectBox sx={{ paddingRight: '40px' }}>
+            </StyledBox>
+            <StyledSelectBox>
                <DropDown
                   label="Filter by:"
                   value={filterOption}
@@ -88,7 +88,9 @@ const AllHousing = () => {
             {error && (
                <Typography sx={{ color: 'error.main' }}>{error}</Typography>
             )}
-            {!loading && !error && data.length > 0 &&
+            {!loading &&
+               !error &&
+               data.length > 0 &&
                data.map((housing) => (
                   <Card
                      key={housing.id}
@@ -104,7 +106,7 @@ const AllHousing = () => {
                <Typography>Not found.</Typography>
             )}
          </StyledCardBox>
-      </Box>
+      </>
    )
 }
 
@@ -119,11 +121,14 @@ const StyledFirstBox = styled(Box)(() => ({
    justifyContent: 'space-between',
 }))
 
+const StyledBox = styled(Box)(({}) => ({ paddingLeft: '40px' }))
+
 const StyledSelectBox = styled(Box)(() => ({
    display: 'flex',
    flexWrap: 'wrap',
    gap: '16px',
    padding: '3px',
+   paddingRight: '40px',
 }))
 
 const StyledCardBox = styled(Box)(() => ({

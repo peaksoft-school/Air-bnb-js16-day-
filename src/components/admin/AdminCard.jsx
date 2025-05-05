@@ -12,12 +12,10 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import StarIcon from '@mui/icons-material/Star'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import Button from './Button'
+import Meatballs from '../UI/Meatballs'
 
 const Card = ({ imageUrls, price, rating, title, location, guests }) => {
    const [isLiked, setIsLiked] = useState(false)
@@ -112,17 +110,7 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
             <Typography fontSize={14} variant="body2" color="text.secondary">
                {guests} guests
             </Typography>
-
-            <Row gap={1.5}>
-               <Button width={100}>BOOK</Button>
-               <IconButton onClick={handleLike}>
-                  {isLiked ? (
-                     <FavoriteIcon color="warning" />
-                  ) : (
-                     <FavoriteBorderIcon color="warning" />
-                  )}
-               </IconButton>
-            </Row>
+            <Meatballs />
          </ActionRow>
       </StyledCard>
    )
@@ -130,10 +118,9 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
 
 export default Card
 
-
-
 const StyledCard = styled(MuiCard)(({ theme }) => ({
-   maxWidth: 210,
+   maxWidth: 200,
+   minWidth: 200,
    margin: theme.spacing(2),
    display: 'flex',
    flexDirection: 'column',
@@ -189,7 +176,7 @@ const Row = styled(Box)(({ theme }) => ({
 
 const ActionRow = styled(Box)(({ theme }) => ({
    display: 'flex',
-   justifyContent: 'space-around',
+  justifyContent: "space-between",
    alignItems: 'center',
    paddingBottom: theme.spacing(2),
    paddingInline: theme.spacing(1),
