@@ -6,6 +6,7 @@ import Button from '../../components/UI/Button'
 import Input from '../../components/UI/Input'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useNavigate } from 'react-router'
+import { ROUTES } from '../../routes/routes'
 
 const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
    const dispatch = useDispatch()
@@ -26,9 +27,9 @@ const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
       if (result.meta.requestStatus === 'fulfilled') {
          handleClose()
          if (result.payload.role === 'ADMIN') {
-            navigate('/admin')
+            navigate(ROUTES.ADMIN.INDEX)
          } else {
-            navigate('/user')
+            navigate(ROUTES.USER.INDEX)
          }
       } else {
          alert(result.payload.message || 'Login failed')

@@ -92,7 +92,7 @@ const AppRoutes = () => (
       </Route>
 
       <Route
-         path="/reset-password"
+         path={ROUTES.AUTH.RESET_PASSWORD}
          element={
             <Suspense fallback={<Loading />}>
                <ResetPassword />
