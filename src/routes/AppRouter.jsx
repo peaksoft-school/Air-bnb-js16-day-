@@ -64,7 +64,7 @@ const AppRoutes = () => (
          }
       >
          <Route
-            path="application"
+            path={ROUTES.ADMIN.APPLICATION}
             element={
                <div>
                   <h1>application</h1>
@@ -73,7 +73,7 @@ const AppRoutes = () => (
          />
 
          <Route
-            path="users"
+            path={ROUTES.ADMIN.USERS}
             element={
                <div>
                   <h1>User Profile</h1>
@@ -82,7 +82,7 @@ const AppRoutes = () => (
          />
 
          <Route
-            path="allhousing"
+            path={ROUTES.ADMIN.ALLHOUSING}
             element={
                <div>
                   <h1>allhousing</h1>

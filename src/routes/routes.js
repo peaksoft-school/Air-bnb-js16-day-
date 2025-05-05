@@ -10,13 +10,8 @@ export const ROUTES = {
    ADMIN: {
       INDEX: '/admin',
       USERS: '/admin/users',
-      PRODCTS: '/admin/products',
-      ORDERS: '/admin/orders',
-      CATEGORIES: '/admin/categories',
-      BRANDS: '/admin/brands',
-      COUPONS: '/admin/coupons',
-      SETTINGS: '/admin/settings',
-      PROFILE: '/admin/profile',
+      ALLHOUSING: '/admin/allhousing',
+      APPLICATION: '/admin/application',
    },
 
    USER: {

@@ -1,72 +1,94 @@
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { Formik } from 'formik'
 import { Typography, Box, styled } from '@mui/material'
 import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
 import Input from '../../components/UI/Input'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { ROUTES } from '../../routes/routes'
+import { toast } from 'react-toastify'
 
 const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { isLoading } = useSelector((state) => state.auth)
 
-   const [formData, setFormData] = useState({ email: '', password: '' })
-
    const handleClose = () => setOpen(false)
-
-   const handleChange = (e) => {
-      setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-   }
-
-   const handleSubmit = async () => {
-      const result = dispatch(AUTH_THUNK.login(formData))
-
-      if (result.meta.requestStatus === 'fulfilled') {
-         handleClose()
-         if (result.payload.role === 'ADMIN') {
-            navigate(ROUTES.ADMIN.INDEX)
-         } else {
-            navigate(ROUTES.USER.INDEX)
-         }
-      } else {
-         alert(result.payload.message || 'Login failed')
-      }
-   }
 
    return (
       <Modal open={open} handleClose={handleClose}>
-         <JoinUsBox>
-            <Box className="first-block">
-               <Typography className="signin-text">Sign in</Typography>
-               <Input
-                  placeholder="Email"
-                  name="email"
-                  onChange={handleChange}
-               />
-            </Box>
-            <Box className="second-block">
-               <Input
-                  placeholder="Password"
-                  name="password"
-                  onChange={handleChange}
-                  type="password"
-               />
+         <Formik
+            initialValues={{ email: '', password: '' }}
+            validate={(values) => {
+               const errors = {}
+               if (!values.email) errors.email = 'Email is required'
+               if (!values.password) errors.password = 'Password is required'
+               return errors
+            }}
+            onSubmit={(values, { setSubmitting }) => {
+               dispatch(AUTH_THUNK.login(values))
+                  .unwrap()
+                  .then((result) => {
+                     toast.success('Вы успешно вошли в систему!')
+                     if (result.role === 'ADMIN') {
+                        navigate(ROUTES.ADMIN.INDEX)
+                     } else {
+                        navigate(ROUTES.USER.INDEX)
+                     }
+                     handleClose()
+                  })
+                  .catch(() => {
+                     toast.error(
+                        'Неверный адрес электронной почты или пароль. Пожалуйста, проверьте введённые данные.'
+                     )
+                  })
+                  .finally(() => {
+                     setSubmitting(false)
+                  })
+            }}
+         >
+            {({ values, handleChange, handleSubmit, isSubmitting }) => (
+               <form onSubmit={handleSubmit}>
+                  <JoinUsBox>
+                     <Box className="first-block">
+                        <Typography className="signin-text">Sign in</Typography>
+                        <Input
+                           placeholder="Email"
+                           name="email"
+                           onChange={handleChange}
+                           value={values.email}
+                        />
+                        <Input
+                           placeholder="Password"
+                           name="password"
+                           onChange={handleChange}
+                           type="password"
+                           value={values.password}
+                        />
+                        <Box className="forgot-box">
+                           <Typography
+                              className="forgot-pass"
+                              onClick={onForgotPasswordClick}
+                           >
+                              Forgot Password
+                           </Typography>
+                        </Box>
+                     </Box>
 
-               <Typography
-                  className="forgot-pass"
-                  onClick={onForgotPasswordClick}
-               >
-                  Forgot Password
-               </Typography>
-
-               <Button width={414} onClick={handleSubmit} disabled={isLoading}>
-                  {isLoading ? 'Loading...' : 'SIGN IN'}
-               </Button>
-            </Box>
-         </JoinUsBox>
+                     <Box className="second-block">
+                        <Button
+                           width={414}
+                           type="submit"
+                           disabled={isSubmitting || isLoading}
+                        >
+                           {isLoading ? 'Loading...' : 'SIGN IN'}
+                        </Button>
+                     </Box>
+                  </JoinUsBox>
+               </form>
+            )}
+         </Formik>
       </Modal>
    )
 }
@@ -83,7 +105,7 @@ const JoinUsBox = styled(Box)(() => ({
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      gap: '24px',
+      gap: '17px',
 
       '& .signin-text': {
          fontFamily: 'Inter, sans-serif',
@@ -92,6 +114,9 @@ const JoinUsBox = styled(Box)(() => ({
          color: '#000',
          textTransform: 'uppercase',
       },
+      '& .forgot-box': {
+         marginLeft: '18em',
+      },
    },
    '& .second-block': {
       display: 'flex',
@@ -99,12 +124,12 @@ const JoinUsBox = styled(Box)(() => ({
       justifyContent: 'center',
       alignItems: 'center',
       gap: '10px',
-      '& .forgot-pass': {
-         color: '#828282',
-         fontSize: '14px',
-         padding: '0 0 0 20em',
-         cursor: 'pointer',
-         textDecoration: 'none',
-      },
+   },
+   '& .forgot-pass': {
+      color: '#828282',
+      fontSize: '14px',
+      textAlign: 'end',
+      cursor: 'pointer',
+      textDecoration: 'none',
    },
 }))
