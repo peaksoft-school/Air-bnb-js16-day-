@@ -1,8 +1,14 @@
-import { AppBar, Toolbar, Typography, Box, IconButton } from '@mui/material'
+import {
+   AppBar,
+   Toolbar,
+   Typography,
+   Box,
+   IconButton,
+   styled,
+} from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Meatballs from '../../components/UI/Meatballs'
 import Air from '../../assets/icons/air.svg'
-import styled from 'styled-components'
 import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
 import { NavLink, useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'

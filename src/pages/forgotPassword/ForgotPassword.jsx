@@ -2,17 +2,11 @@ import { Typography, Box, styled } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { Formik, Form, Field } from 'formik'
-import * as Yup from 'yup'
 import { Input, Card } from 'antd'
 import { toast } from 'react-toastify'
 import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
-
-const ForgotPasswordSchema = Yup.object().shape({
-   email: Yup.string()
-      .email('Некорректный email')
-      .required('Обязательное поле'),
-})
+import { ForgotPasswordSchema } from '../../utils/helpers/validation'
 
 const ForgotPassword = ({ open, handleClose }) => {
    const dispatch = useDispatch()

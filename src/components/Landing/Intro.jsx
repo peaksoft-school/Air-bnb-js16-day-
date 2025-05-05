@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, styled } from '@mui/material'
 import Header from '../../layout/Header'
-import styled from '@emotion/styled'
 import SignUpModal from '../../pages/sing-up/SignUpModal'
 import SignInModal from '../../pages/sign-in/SignInModal'
 import MainPagePhoto from '../../assets/images/Image-main-page.png'
@@ -17,74 +16,74 @@ const Intro = () => {
 
    const isAuthenticated = useSelector((state) => state.auth.isAuth)
 
-   const handleOpenSignUp = () => {
-      setOpenSignUp(true)
-   }
+   const handleOpenSignUp = () => setOpenSignUp(true)
 
    return (
-      <StyledMain>
-         <StyledImage>
-            <div>
-               <Header
-                  isAuthenticated={isAuthenticated}
-                  onJoinUs={handleOpenSignUp}
+      <>
+         <StyledMain>
+            <StyledImage>
+               <div>
+                  <Header
+                     isAuthenticated={isAuthenticated}
+                     onJoinUs={handleOpenSignUp}
+                  />
+               </div>
+               <StyledSearch>
+                  {isAuthenticated ? (
+                     <>
+                        <StyledText>
+                           Find a place you'll love to stay at
+                        </StyledText>
+                        <Input
+                           placeholder={'Region, city, apartment, house...'}
+                           icon={true}
+                           sizeVariant="large"
+                        />
+                     </>
+                  ) : (
+                     <>
+                        <StyledText>
+                           Find a place you'll love to stay at
+                        </StyledText>
+                        <Input
+                           placeholder={'Region, city, apartment, house...'}
+                           icon={true}
+                           sizeVariant="large"
+                        />
+                        <StyledCheckbox>
+                           <Checkbox />
+                           <Typography className="SearchText">
+                              Искать поблизости
+                           </Typography>
+                        </StyledCheckbox>
+                     </>
+                  )}
+               </StyledSearch>
+               <SignUpModal
+                  open={openSignUp}
+                  setOpen={setOpenSignUp}
+                  onAdminLoginClick={() => {
+                     setOpenSignUp(false)
+                     setOpenSignIn(true)
+                  }}
                />
-            </div>
-            <StyledSearch>
-               {isAuthenticated ? (
-                  <>
-                     <StyledText>
-                        Find a place you'll love to stay at
-                     </StyledText>
-                     <Input
-                        placeholder={'Region, city, apartment, house...'}
-                        icon={true}
-                        sizeVariant="large"
-                     />
-                  </>
-               ) : (
-                  <>
-                     <StyledText>
-                        Find a place you'll love to stay at
-                     </StyledText>
-                     <Input
-                        placeholder={'Region, city, apartment, house...'}
-                        icon={true}
-                        sizeVariant="large"
-                     />
-                     <StyledCheckbox>
-                        <Checkbox />
-                        <Typography className="SearchText">
-                           Искать поблизости
-                        </Typography>
-                     </StyledCheckbox>
-                  </>
-               )}
-            </StyledSearch>
-            <SignUpModal
-               open={openSignUp}
-               setOpen={setOpenSignUp}
-               onAdminLoginClick={() => {
-                  setOpenSignUp(false)
-                  setOpenSignIn(true)
-               }}
-            />
 
-            <SignInModal
-               open={openSignIn}
-               setOpen={setOpenSignIn}
-               onForgotPasswordClick={() => {
-                  setOpenSignIn(false)
-                  setOpenForgotPassword(true)
-               }}
-            />
+               <SignInModal
+                  open={openSignIn}
+                  setOpen={setOpenSignIn}
+                  onForgotPasswordClick={() => {
+                     setOpenSignIn(false)
+                     setOpenForgotPassword(true)
+                  }}
+               />
 
-            <ForgotPassword
-               open={openForgotPassword}
-               handleClose={() => setOpenForgotPassword(false)}
-            />
-         </StyledImage>
-      </StyledMain>
+               <ForgotPassword
+                  open={openForgotPassword}
+                  handleClose={() => setOpenForgotPassword(false)}
+               />
+            </StyledImage>
+         </StyledMain>
+      </>
    )
 }
 

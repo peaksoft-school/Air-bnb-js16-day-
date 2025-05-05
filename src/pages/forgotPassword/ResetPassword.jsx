@@ -3,18 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { Formik, Form, Field } from 'formik'
-import * as Yup from 'yup'
 import { Button, Input, Card } from 'antd'
 import { toast } from 'react-toastify'
-
-const ResetPasswordSchema = Yup.object().shape({
-   password: Yup.string()
-      .min(8, 'Минимум 8 символов')
-      .required('Обязательное поле'),
-   confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
-      .required('Подтвердите пароль'),
-})
+import { ResetPasswordSchema } from '../../utils/helpers/validation'
 
 const ResetPassword = () => {
    const dispatch = useDispatch()

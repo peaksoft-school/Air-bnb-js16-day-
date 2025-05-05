@@ -29,7 +29,7 @@ const Button = ({
          width={width}
       >
          {loading ? (
-            <CircularProgress size={20} sx={{ color: 'white' }} />
+            <CircularProgress size={20} color="info" />
          ) : (
             <>
                {icon && <img src={GoogleLogo} alt="Google-Logo" />}

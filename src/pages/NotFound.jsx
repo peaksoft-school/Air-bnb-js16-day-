@@ -2,31 +2,29 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router'
 
-const NotFound = () => {
-   return (
-      <Wrapper>
-         <HouseBackground
-            src="https://img.freepik.com/free-photo/greyscale-low-angle-shot-concrete-building-with-lot-windows-dark-sky_181624-14824.jpg?semt=ais_hybrid&w=740"
-            alt="House illustration"
-         />
-         <Code
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 100 }}
-         >
-            404
-         </Code>
-         <Message
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-         >
-            Упс! Страница, которую вы ищете, не существует.
-         </Message>
-         <StyledLink to="/">Назад</StyledLink>
-      </Wrapper>
-   )
-}
+const NotFound = () => (
+   <Wrapper>
+      <HouseBackground
+         src="https://img.freepik.com/free-photo/greyscale-low-angle-shot-concrete-building-with-lot-windows-dark-sky_181624-14824.jpg?semt=ais_hybrid&w=740"
+         alt="House illustration"
+      />
+      <Code
+         initial={{ scale: 0 }}
+         animate={{ scale: 1 }}
+         transition={{ type: 'spring', stiffness: 100 }}
+      >
+         404
+      </Code>
+      <Message
+         initial={{ opacity: 0, y: 30 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ delay: 0.3 }}
+      >
+         Упс! Страница, которую вы ищете, не существует.
+      </Message>
+      <StyledLink to="/">Назад</StyledLink>
+   </Wrapper>
+)
 
 export default NotFound
 
