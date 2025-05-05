@@ -11,6 +11,8 @@ import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 
+import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
+
 const AppRoutes = () => (
    <Routes>
       <Route
@@ -59,14 +61,7 @@ const AppRoutes = () => (
             />
          }
       >
-         <Route
-            path="application"
-            element={
-               <div>
-                  <h1>application</h1>
-               </div>
-            }
-         />
+         <Route path="application" element={<AnnouncementHouse />} />
 
          <Route
             path="users"
