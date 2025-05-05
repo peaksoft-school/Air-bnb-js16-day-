@@ -3,11 +3,9 @@ import { axiosInstance } from '../../../../configs/axiosInstance'
 
 export const getHouseById = createAsyncThunk(
    'user/getHouseById',
-   async (announcementId, { rejectWithValue }) => {
+   async (userId, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get(
-            `/announcements/${announcementId}`
-         )
+         const response = await axiosInstance.get(`api/users/user/${userId}`)
          return response.data
       } catch (error) {
          return rejectWithValue(
@@ -19,10 +17,10 @@ export const getHouseById = createAsyncThunk(
 
 export const getAnnouncementFeedback = createAsyncThunk(
    'user/getAnnouncementFeedback',
-   async (announcementId, { rejectWithValue }) => {
+   async (userId, { rejectWithValue }) => {
       try {
          const response = await axiosInstance.get(
-            `/announcements/${announcementId}/feedback`
+            `api/users/user/${userId}/feedback`
          )
          return response.data
       } catch (error) {
@@ -35,10 +33,10 @@ export const getAnnouncementFeedback = createAsyncThunk(
 
 export const getAnnouncementRating = createAsyncThunk(
    'user/getAnnouncementRating',
-   async (announcementId, { rejectWithValue }) => {
+   async (userId, { rejectWithValue }) => {
       try {
          const response = await axiosInstance.get(
-            `/announcements/${announcementId}/rating`
+            `api/users/user/${userId}/rating`
          )
          return response.data
       } catch (error) {
