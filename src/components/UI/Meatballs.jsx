@@ -2,7 +2,12 @@ import { useState } from 'react'
 import { IconButton, Menu, MenuItem, styled } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
-function Meatballs({ options = [], onSelect, icon = <MoreVertIcon /> }) {
+function Meatballs({
+   options = [],
+   onSelect,
+   icon = <MoreVertIcon />,
+   color = false,
+}) {
    const [anchorEl, setAnchorEl] = useState(null)
 
    const open = Boolean(anchorEl)
@@ -19,7 +24,9 @@ function Meatballs({ options = [], onSelect, icon = <MoreVertIcon /> }) {
 
    return (
       <>
-         <StyledOnMeatballs onClick={handleClick}>{icon}</StyledOnMeatballs>
+         <StyledOnMeatballs onClick={handleClick} colorU={color}>
+            {icon}
+         </StyledOnMeatballs>
 
          <Menu
             anchorEl={anchorEl}
@@ -38,6 +45,6 @@ function Meatballs({ options = [], onSelect, icon = <MoreVertIcon /> }) {
 
 export default Meatballs
 
-const StyledOnMeatballs = styled(IconButton)(() => ({
-   color: 'rgba(255, 255, 255, 1)',
+const StyledOnMeatballs = styled(IconButton)(({ colorU }) => ({
+   color: colorU ? '#C4C4C4' : 'rgba(255, 255, 255, 1)',
 }))

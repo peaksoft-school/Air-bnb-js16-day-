@@ -1,80 +1,245 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import axios from 'axios';
+import { useState } from 'react'
+import axios from '../../utils/axios'
+import { useParams } from 'react-router'
+import {
+   Box,
+   styled,
+   Tab,
+   Tabs,
+   Avatar,
+   Button,
+   ButtonBase,
+   Typography,
+} from '@mui/material'
+import AdminCard from './AdminCard'
+import BreadCrumbs from '../../components/UI/BreadCrumbs'
 
 const UserDetail = () => {
-  const { id } = useParams();
-  const [user, setUser] = useState(null);
-  const [bookings, setBookings] = useState([]);
-  const [announcements, setAnnouncements] = useState([]);
-  const [isBlocked, setIsBlocked] = useState(false);
+   const { id } = useParams()
+   const [user, setUser] = useState([])
+   const [bookings, setBookings] = useState([])
+   const [announcements, setAnnouncements] = useState([])
 
-  useEffect(() => {
-    axios
-      .get(
-        `http://ec2-18-119-111-133.us-east-2.compute.amazonaws.com/api/user/profile?choice=booking`,
-        { params: { userId: id } }
-      )
-      .then((res) => {
-        setUser(res.data.user);
-        setBookings(res.data.bookings);
-      })
-      .catch((err) => console.error(err));
+   const [isBlocked, setIsBlocked] = useState(false)
+   const [activeTab, setActiveTab] = useState('bookings')
 
-    axios
-      .get(
-        `http://ec2-18-119-111-133.us-east-2.compute.amazonaws.com/api/user/profile?choice=announcement`,
-        { params: { userId: id } }
-      )
-      .then((res) => setAnnouncements(res.data.announcements))
-      .catch((err) => console.error(err));
-  }, [id]);
+   const options = [
+      { label: 'Edit', value: 'edit' },
+      { label: 'Delete', value: 'delete' },
+   ]
+   const links = [
+      { href: '/admin/users', label: 'Users' },
+      { htef: '/users/:id', label: `User ${id}` },
+   ]
 
-  const handleBlockAll = async () => {
-    try {
-      await axios.delete(
-        `http://ec2-18-119-111-133.us-east-2.compute.amazonaws.com/api/user/delete`
-      );
-      setIsBlocked(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+   const handleBlockAll = async () => {
+      try {
+         await axios.delete(`/user/delete`, { params: { userId: id } })
+         setIsBlocked(true)
+      } catch (err) {
+         console.error('Ошибка блокировки:', err)
+      }
+   }
 
-  return (
-    <div style={{ padding: 20 }}>
-      <div>
-        <h2>User Profile</h2>
-        <p>Name: {user?.fullName}</p>
-        <p>Email: {user?.email}</p>
-      </div>
-
-      <div style={{ marginTop: 30 }}>
-        <h3>My Announcements</h3>
-        <button onClick={handleBlockAll} disabled={isBlocked}>
-          Block All Announcements
-        </button>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          {announcements.map((house) => (
-            <div
-              key={house.id}
-              style={{
-                border: '1px solid #ccc',
-                padding: 10,
-                width: 200,
-                opacity: isBlocked ? 0.5 : 1,
-              }}
-            >
-              <img src={house.image} alt="" style={{ width: '100%' }} />
-              <p>{house.address}</p>
-              <p>${house.price}/day</p>
-              <p>Guests: {house.guests}</p>
+   return (
+      <UsersBox>
+         <Box sx={{ display: 'flex', gap: '22px', flexDirection: 'column' }}>
+            <BreadCrumbs links={links} />
+            <div>
+               <h1>Медер медербеков</h1>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
+            <ContactBox>
+               {user && (
+                  <div className="contact-user">
+                     <Avatar
+                        className="avatar"
+                        src={user.image}
+                        aria-label="Open profile"
+                     />
 
-export default UserDetail;
+                     <div className="name-email">
+                        <div className="flex">
+                           <strong className="name-text">Name:</strong>
+                           <Typography className="contact-name">
+                              Медер Медербеков
+                           </Typography>
+                        </div>
+
+                        <div className="flex">
+                           <strong className="name-text">Contact:</strong>
+                           <Typography className="contact-name">
+                              mederbekov@gmail.com
+                           </Typography>
+                        </div>
+                     </div>
+                  </div>
+               )}
+            </ContactBox>
+         </Box>
+         <HousesBox>
+            <Tabs
+               value={activeTab}
+               onChange={(e, newValue) => setActiveTab(newValue)}
+               indicatorColor="secondary"
+               textColor="inherit"
+               variant="standard"
+               centered
+               className="tabs"
+            >
+               <Tab label="Bookings" value="bookings" />
+               <Tab label="My Announcements" value="announcements" />
+            </Tabs>
+
+            {activeTab === 'bookings' ? (
+               <div
+                  style={{
+                     display: 'flex',
+                     flexWrap: 'wrap',
+                     padding: '37px 0 0 0  ',
+                     gap: '20px',
+                  }}
+               >
+                  {bookings.map((house, i) => (
+                     <AdminCard
+                        key={i}
+                        imageUrls={[house.image]}
+                        price={house.price}
+                        rating={house.rating || 0}
+                        title={house.address}
+                        location={house.location || house.address}
+                        guests={house.guests}
+                        options={options}
+                     />
+                  ))}
+               </div>
+            ) : (
+               <>
+                  <Button
+                     onClick={handleBlockAll}
+                     disabled={isBlocked}
+                     className="block-button"
+                  >
+                     {isBlocked ? 'Blocked' : 'Block All Announcements'}
+                  </Button>
+
+                  <div
+                     style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '20px',
+                        padding: '37px 0 0 0  ',
+                     }}
+                  >
+                     {announcements.map((house, i) => (
+                        <AdminCard
+                           key={i}
+                           imageUrls={[house.image]}
+                           price={house.price}
+                           rating={house.rating || 0}
+                           title={house.address}
+                           location={house.location || house.address}
+                           guests={house.guests}
+                           sx={{
+                              opacity: isBlocked ? 0.5 : 1,
+                              pointerEvents: isBlocked ? 'none' : 'auto',
+                           }}
+                           options={options}
+                        />
+                     ))}
+                  </div>
+               </>
+            )}
+         </HousesBox>
+      </UsersBox>
+   )
+}
+
+export default UserDetail
+
+const UsersBox = styled(Box)(() => ({
+   display: 'flex',
+   gap: '47px',
+   padding: '46px 0px 193px 0',
+   justifyContent: 'center',
+}))
+
+const ContactBox = styled(Box)(() => ({
+   width: '413px',
+   height: '251px',
+   border: 'solid 1px #C4C4C4',
+   borderRadius: '16px',
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   '& .avatar': {
+      width: '89px',
+      height: '89px',
+   },
+   '& .contact-name': {
+      fontSize: '18px',
+      fontWeight: '700',
+      lineHeight: '100%',
+      color: '#363636',
+      fontFamily: 'Inter',
+   },
+   '& .flex': {
+      display: 'flex',
+      gap: '16px',
+   },
+   '& .name-text': {
+      fontSize: '16px',
+      fontWeight: '400',
+      lineHeight: '100%',
+      color: '#363636',
+      fontFamily: 'Inter',
+   },
+   '& .contact-user': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      gap: '30px',
+   },
+   '& .name-email': {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '12px',
+   },
+}))
+
+const HousesBox = styled(Box)(() => ({
+   marginTop: '96px',
+   width: '900px',
+
+   '& .tabs': {
+      Maxwidth: '100%',
+      Minheigth: '100px',
+      borderBottom: '1px  solid #C4C4C4',
+      '& .MuiTabs-indicator': {
+         backgroundColor: '#000',
+      },
+   },
+   '& .block-button': {
+      position: 'absolute',
+      left: '137px',
+      top: '580px',
+      width: '292px',
+      height: '37px',
+      borderRadius: '2px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '10px',
+      textTransform: 'uppercase',
+      fontFamily: 'Arial',
+      fontWeight: '500',
+      fontSize: '14px',
+      color: '#F7F7F7',
+      backgroundColor: '#DD8A08',
+      '&:hover': { backgroundColor: '#BB7200' },
+      '&:active': { backgroundColor: '#F2B75B' },
+      '&:disabled': { backgroundColor: '#C4C4C4' },
+   },
+}))

@@ -77,7 +77,9 @@ const AppRoutes = () => (
                   <Users />
                </Suspense>
             }
-         />
+         >
+            
+         </Route>
 
          <Route
             path="users/:id"
