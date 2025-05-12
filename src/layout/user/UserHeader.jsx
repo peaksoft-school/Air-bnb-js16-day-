@@ -16,6 +16,7 @@ import Input from '../../components/UI/Input'
 import { useDispatch } from 'react-redux'
 import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
 import { useNavigate } from 'react-router'
+import { UserOptions } from '../../utils/helpers/options'
 
 const UserHeader = ({
    isAuthenticated,
@@ -39,10 +40,7 @@ const UserHeader = ({
       }
    }
 
-   const menuOptions = [
-      { label: 'My profile', action: 'my-profile' },
-      { label: 'Log out', action: 'log-out' },
-   ]
+   const menuOptions = UserOptions
 
    return (
       <StyledAppBar position="static">

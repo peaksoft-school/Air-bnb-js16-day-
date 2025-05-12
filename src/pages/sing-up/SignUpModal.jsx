@@ -6,7 +6,7 @@ import { auth } from '../../configs/firebase'
 import { useDispatch } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useNavigate } from 'react-router'
-import { toast } from 'react-toastify'
+import { showToast } from '../../utils/helpers/showToast'
 
 const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
    const dispatch = useDispatch()
@@ -27,14 +27,21 @@ const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
             AUTH_THUNK.googleSignIn({ idToken, navigate })
          ).unwrap()
 
-         toast.success('Вы успешно вошли через Google!')
+         showToast({
+            title: 'Успешно!',
+            message: 'Вы успешно вошли через Google!',
+            type: 'success',
+         })
          handleClose()
       } catch (error) {
          console.error('Google sign-in error:', error)
-         toast.error(
-            error.message ||
-               'Не удалось войти через Google. Пожалуйста, попробуйте снова.'
-         )
+         showToast({
+            title: 'Ошибка!',
+            message:
+               error.message ||
+               'Не удалось войти через Google. Пожалуйста, попробуйте снова.',
+            type: 'error',
+         })
       }
    }
 

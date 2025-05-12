@@ -7,7 +7,7 @@ import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { ROUTES } from '../../routes/routes'
-import { toast } from 'react-toastify'
+import { showToast } from '../../utils/helpers/showToast'
 
 const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
    const dispatch = useDispatch()
@@ -30,7 +30,11 @@ const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
                dispatch(AUTH_THUNK.login(values))
                   .unwrap()
                   .then((result) => {
-                     toast.success('Вы успешно вошли в систему!')
+                     showToast({
+                        title: 'Успешно!',
+                        message: 'Вы успешно вошли в систему!',
+                        type: 'success',
+                     })
                      if (result.role === 'ADMIN') {
                         navigate(ROUTES.ADMIN.INDEX)
                      } else {
@@ -39,9 +43,12 @@ const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
                      handleClose()
                   })
                   .catch(() => {
-                     toast.error(
-                        'Неверный адрес электронной почты или пароль. Пожалуйста, проверьте введённые данные.'
-                     )
+                     showToast({
+                        title: 'Ошибка!',
+                        message:
+                           'Неверный адрес электронной почты или пароль. Пожалуйста, проверьте введённые данные.',
+                        type: 'error',
+                     })
                   })
                   .finally(() => {
                      setSubmitting(false)

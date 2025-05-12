@@ -22,12 +22,12 @@ const Intro = () => {
       <>
          <StyledMain>
             <StyledImage>
-               <div>
+               <>
                   <Header
                      isAuthenticated={isAuthenticated}
                      onJoinUs={handleOpenSignUp}
                   />
-               </div>
+               </>
                <StyledSearch>
                   {isAuthenticated ? (
                      <>

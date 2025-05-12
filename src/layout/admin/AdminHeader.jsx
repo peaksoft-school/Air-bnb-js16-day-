@@ -12,6 +12,7 @@ import Air from '../../assets/icons/air.svg'
 import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
 import { NavLink, useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
+import { AdminOptions } from '../../utils/helpers/options'
 
 const AdminHeader = () => {
    const dispatch = useDispatch()
@@ -28,7 +29,7 @@ const AdminHeader = () => {
       }
    }
 
-   const menuOptions = [{ label: 'Log out', action: 'log-out' }]
+   const menuOptions = AdminOptions
 
    return (
       <StyledAppBar position="static">

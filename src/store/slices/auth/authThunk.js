@@ -34,7 +34,7 @@ const googleSignIn = createAsyncThunk(
 
 const forgotPassword = createAsyncThunk(
    'auth/forgotPassword',
-   async (email, { rejectWithValue }) => {
+   async ({ email, onSuccess }, { rejectWithValue }) => {
       try {
          const resetLinkBase = `${window.location.origin}/reset-password/`
          const { data } = await axiosInstance.post(
@@ -44,6 +44,7 @@ const forgotPassword = createAsyncThunk(
                link: resetLinkBase,
             }
          )
+         if (onSuccess) onSuccess()
          return data
       } catch (error) {
          return rejectWithValue({
@@ -57,16 +58,16 @@ const forgotPassword = createAsyncThunk(
 
 const resetPassword = createAsyncThunk(
    'auth/resetPassword',
-   async ({ token, password }, { rejectWithValue }) => {
+   async ({ token, password, onSuccess, onError }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.post('/api/auth/reset-password', {
             token,
-            newPassword: password,
+            password,
          })
+         if (onSuccess) onSuccess()
          return data
       } catch (error) {
-         console.log(token)
-
+         if (onError) onError(error.response?.data || error)
          return rejectWithValue({
             message:
                error.response?.data?.message || 'Ошибка при сбросе пароля',

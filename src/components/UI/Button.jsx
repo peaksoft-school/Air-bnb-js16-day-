@@ -1,6 +1,9 @@
-import { ButtonBase as MuiButtonBase, styled } from '@mui/material'
+import {
+   ButtonBase as MuiButtonBase,
+   styled,
+   CircularProgress,
+} from '@mui/material'
 import GoogleLogo from '../../assets/icons/google-logo.svg'
-import { CircularProgress } from '@mui/material'
 
 const Button = ({
    children,

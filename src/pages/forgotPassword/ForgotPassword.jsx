@@ -3,22 +3,29 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { Formik, Form, Field } from 'formik'
 import { Input, Card } from 'antd'
-import { toast } from 'react-toastify'
 import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
 import { ForgotPasswordSchema } from '../../utils/helpers/validation'
+import { showToast } from '../../utils/helpers/showToast'
 
 const ForgotPassword = ({ open, handleClose }) => {
    const dispatch = useDispatch()
    const { forgotPasswordStatus } = useSelector((state) => state.auth)
 
    const handleSubmit = (values) => {
-      dispatch(AUTH_THUNK.forgotPassword(values.email))
-         .unwrap()
-         .then(() => {
-            toast.success('Ссылка для сброса пароля отправлена на ваш email')
-            handleClose()
+      dispatch(
+         AUTH_THUNK.forgotPassword({
+            email: values.email,
+            onSuccess: () => {
+               showToast({
+                  title: 'Успешно!',
+                  message: 'Ссылка для сброса пароля отправлена на ваш email',
+                  type: 'success',
+               })
+               handleClose()
+            },
          })
+      )
    }
 
    return (

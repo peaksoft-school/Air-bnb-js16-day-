@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { Formik, Form, Field } from 'formik'
 import { Button, Input, Card } from 'antd'
-import { toast } from 'react-toastify'
+import { showToast } from '../../utils/helpers/showToast'
 import { ResetPasswordSchema } from '../../utils/helpers/validation'
 
 const ResetPassword = () => {
@@ -20,23 +20,34 @@ const ResetPassword = () => {
 
    const handleSubmit = (values) => {
       if (!token) {
-         toast.error('Токен отсутствует!')
+         showToast({
+            title: 'Ошибка!',
+            message: 'Токен отсутствует!',
+            type: 'error',
+         })
          return
       }
       dispatch(
          AUTH_THUNK.resetPassword({
             token: newToken,
             password: values.password,
+            onSuccess: () => {
+               showToast({
+                  title: 'Успешно!',
+                  message: 'Пароль успешно изменен!',
+                  type: 'success',
+               })
+               navigate('/')
+            },
+            onError: (err) => {
+               showToast({
+                  title: 'Ошибка!',
+                  message: err?.message || 'Ошибка при сбросе пароля',
+                  type: 'error',
+               })
+            },
          })
       )
-         .unwrap()
-         .then(() => {
-            toast.success('Пароль успешно изменен!')
-            navigate('/')
-         })
-         .catch((err) => {
-            toast.error(err.message || 'Ошибка при сбросе пароля')
-         })
    }
 
    return (
