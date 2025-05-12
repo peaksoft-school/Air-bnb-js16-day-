@@ -8,7 +8,6 @@ import {
    Tabs,
    Avatar,
    Button,
-   ButtonBase,
    Typography,
 } from '@mui/material'
 import AdminCard from './AdminCard'
@@ -17,7 +16,24 @@ import BreadCrumbs from '../../components/UI/BreadCrumbs'
 const UserDetail = () => {
    const { id } = useParams()
    const [user, setUser] = useState([])
-   const [bookings, setBookings] = useState([])
+   const [bookings, setBookings] = useState([
+      {
+         image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+         price: 26,
+         rating: 3.4,
+         address: 'Beautiful and picturesque...',
+         location: '12 Morris Ave, Torontohtsjhgjghghssfgshnbjhgfhjhgd',
+         guests: 2,
+      },
+      {
+         image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+         price: 26,
+         rating: 3.4,
+         address: 'Beautiful and picturesque...',
+         location: '12 Morris Ave, Toronto',
+         guests: 2,
+      },
+   ])
    const [announcements, setAnnouncements] = useState([])
 
    const [isBlocked, setIsBlocked] = useState(false)
@@ -43,7 +59,7 @@ const UserDetail = () => {
 
    return (
       <UsersBox>
-         <Box sx={{ display: 'flex', gap: '22px', flexDirection: 'column' }}>
+         <Box className="box-users">
             <BreadCrumbs links={links} />
             <div>
                <h1>Медер медербеков</h1>
@@ -161,6 +177,11 @@ const UsersBox = styled(Box)(() => ({
    gap: '47px',
    padding: '46px 0px 193px 0',
    justifyContent: 'center',
+   '& .box-users': {
+      display: 'flex',
+      gap: '22px',
+      flexDirection: 'column',
+   },
 }))
 
 const ContactBox = styled(Box)(() => ({

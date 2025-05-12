@@ -27,10 +27,7 @@ const AdminCard = ({
    guests,
    options,
 }) => {
-   const [isLiked, setIsLiked] = useState(false)
    const [hovered, setHovered] = useState(false)
-
-   const handleLike = () => setIsLiked(!isLiked)
 
    const CustomPrevArrow = ({ onClick }) => (
       <ArrowButton onClick={onClick} direction="left">
@@ -67,7 +64,7 @@ const AdminCard = ({
                      <div key={index}>
                         <CardMedia
                            component="img"
-                           height="140"
+                           height="136"
                            image={url}
                            alt={title}
                         />
@@ -77,14 +74,14 @@ const AdminCard = ({
             ) : (
                <CardMedia
                   component="img"
-                  height="140"
+                  height="136"
                   image={imageUrls[0]}
                   alt={title}
                />
             )}
          </ImageContainer>
 
-         <CardContent>
+         <CardContent sx={{ padding: '12px 12px 12px 12px' }}>
             <Row>
                <Typography variant="h6" component="div">
                   ${price}{' '}
@@ -107,24 +104,23 @@ const AdminCard = ({
                {title}
             </Title>
 
-            <Row gap={1}>
+            <Row gap={1} className="location">
                <LocationOnIcon fontSize="small" color="action" />
-               <Typography variant="body2" color="text.secondary">
+               <Typography variant="body2" color="text.secondary" noWrap>
                   {location}
                </Typography>
             </Row>
+            <ActionRow>
+               <Typography fontSize={14} variant="body2" color="text.secondary">
+                  {guests} guests
+               </Typography>
+               <Meatballs
+                  color={true}
+                  icon={<MoreHorizIcon />}
+                  options={options}
+               />
+            </ActionRow>
          </CardContent>
-
-         <ActionRow>
-            <Typography fontSize={14} variant="body2" color="text.secondary">
-               {guests} guests
-            </Typography>
-            <Meatballs
-               color={true}
-               icon={<MoreHorizIcon />}
-               options={options}
-            />
-         </ActionRow>
       </StyledCard>
    )
 }
@@ -133,11 +129,16 @@ export default AdminCard
 
 const StyledCard = styled(MuiCard)(() => ({
    width: '210px',
-   height: '280px',
+   maxHeight: '290px',
+   minHeight: '300px',
    display: 'flex',
    flexDirection: 'column',
    justifyContent: 'space-between',
    boxShadow: 'none',
+   '& .location': {
+      display: 'flex',
+      alignItems: 'center',
+   },
 }))
 
 const ImageContainer = styled(Box)(() => ({
@@ -190,6 +191,6 @@ const ActionRow = styled(Box)(({ theme }) => ({
    display: 'flex',
    justifyContent: 'space-between',
    alignItems: 'center',
-   paddingBottom: theme.spacing(2),
+   paddingBottom: 0,
    paddingInline: theme.spacing(1),
 }))
