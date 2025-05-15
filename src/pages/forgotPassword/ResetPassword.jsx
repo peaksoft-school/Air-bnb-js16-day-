@@ -1,11 +1,11 @@
+import { Formik, Form, Field } from 'formik'
 import { Typography, Box, styled } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
-import { Formik, Form, Field } from 'formik'
-import { Button, Input, Card } from 'antd'
 import { showToast } from '../../utils/helpers/showToast'
 import { ResetPasswordSchema } from '../../utils/helpers/validation'
+import { Button, Input, Card } from 'antd'
 
 const ResetPassword = () => {
    const dispatch = useDispatch()
@@ -13,10 +13,7 @@ const ResetPassword = () => {
    const { resetPasswordStatus } = useSelector((state) => state.auth)
 
    const location = useLocation()
-   const searchParams = new URLSearchParams(location.search)
-   const token = searchParams.get('token')
-
-   const newToken = token
+   const token = new URLSearchParams(location.search).get('token')
 
    const handleSubmit = (values) => {
       if (!token) {
@@ -27,10 +24,11 @@ const ResetPassword = () => {
          })
          return
       }
+
       dispatch(
          AUTH_THUNK.resetPassword({
-            token: newToken,
-            password: values.password,
+            token,
+            newPassword: values.password,
             onSuccess: () => {
                showToast({
                   title: 'Успешно!',
@@ -156,9 +154,9 @@ export const AuthCard = styled(Card)(({ theme }) => ({
    '& .reset-password-change': {
       width: '414px',
       height: '39px',
-      borderRadius: '2px',
-      borderColor: '#828282',
+
       border: '1px solid #828282',
+      borderRadius: '2px',
    },
    '& .ant-card-head-title': {
       fontSize: '19px',
@@ -191,5 +189,5 @@ const ResetBox = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'center',
-   padding: '15% 0 0 0 ',
+   padding: '15% 0 0 0',
 }))

@@ -1,13 +1,13 @@
-import { Formik } from 'formik'
+import { Formik, Form, Field } from 'formik'
 import { Typography, Box, styled } from '@mui/material'
 import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
-import Input from '../../components/UI/Input'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { ROUTES } from '../../routes/routes'
 import { showToast } from '../../utils/helpers/showToast'
+import { Input } from 'antd'
 
 const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
    const dispatch = useDispatch()
@@ -20,12 +20,6 @@ const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
       <Modal open={open} handleClose={handleClose}>
          <Formik
             initialValues={{ email: '', password: '' }}
-            validate={(values) => {
-               const errors = {}
-               if (!values.email) errors.email = 'Email is required'
-               if (!values.password) errors.password = 'Password is required'
-               return errors
-            }}
             onSubmit={(values, { setSubmitting }) => {
                dispatch(AUTH_THUNK.login(values))
                   .unwrap()
@@ -55,24 +49,32 @@ const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
                   })
             }}
          >
-            {({ values, handleChange, handleSubmit, isSubmitting }) => (
-               <form onSubmit={handleSubmit}>
+            {({ isSubmitting }) => (
+               <Form>
                   <JoinUsBox>
                      <Box className="first-block">
                         <Typography className="signin-text">Sign in</Typography>
-                        <Input
-                           placeholder="Email"
-                           name="email"
-                           onChange={handleChange}
-                           value={values.email}
-                        />
-                        <Input
-                           placeholder="Password"
-                           name="password"
-                           onChange={handleChange}
-                           type="password"
-                           value={values.password}
-                        />
+
+                        <Field name="email">
+                           {({ field }) => (
+                              <Input
+                                 {...field}
+                                 placeholder="Email"
+                                 className="signin-input"
+                              />
+                           )}
+                        </Field>
+
+                        <Field name="password">
+                           {({ field }) => (
+                              <Input.Password
+                                 {...field}
+                                 placeholder="Password"
+                                 className="signin-input"
+                              />
+                           )}
+                        </Field>
+
                         <Box className="forgot-box">
                            <Typography
                               className="forgot-pass"
@@ -87,13 +89,14 @@ const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
                         <Button
                            width={414}
                            type="submit"
+                           htmlType="submit"
                            disabled={isSubmitting || isLoading}
                         >
                            {isLoading ? 'Loading...' : 'SIGN IN'}
                         </Button>
                      </Box>
                   </JoinUsBox>
-               </form>
+               </Form>
             )}
          </Formik>
       </Modal>
@@ -133,10 +136,17 @@ const JoinUsBox = styled(Box)(() => ({
       gap: '10px',
    },
    '& .forgot-pass': {
-      color: '#828282',
+      color: '#646464',
       fontSize: '14px',
       textAlign: 'end',
       cursor: 'pointer',
       textDecoration: 'none',
+   },
+   '& .signin-input': {
+      width: '414px',
+      height: '39px',
+      borderRadius: '2px',
+      borderColor: '#828282',
+      border: '1px solid #828282',
    },
 }))
