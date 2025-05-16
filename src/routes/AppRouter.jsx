@@ -3,11 +3,9 @@ import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
-
 const ResetPassword = lazy(
    () => import('../pages/forgotPassword/ResetPassword')
 )
-
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 

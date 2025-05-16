@@ -1,104 +1,80 @@
-import { Formik, Form, Field } from 'formik'
+import { useFormik } from 'formik'
 import { Typography, Box, styled } from '@mui/material'
 import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
-import { ROUTES } from '../../routes/routes'
-import { showToast } from '../../utils/helpers/showToast'
 import { Input } from 'antd'
 
 const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
+   const { isLoading } = useSelector((state) => state.auth)
+
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { isLoading } = useSelector((state) => state.auth)
 
    const handleClose = () => setOpen(false)
 
+   const onSubmit = (values, { setSubmitting }) => {
+      dispatch(
+         AUTH_THUNK.login({ values, navigate, setSubmitting, handleClose })
+      )
+   }
+
+   const { handleSubmit, values, handleChange, isSubmitting } = useFormik({
+      initialValues: {
+         email: '',
+         password: '',
+      },
+
+      onSubmit,
+   })
+
    return (
       <Modal open={open} handleClose={handleClose}>
-         <Formik
-            initialValues={{ email: '', password: '' }}
-            onSubmit={(values, { setSubmitting }) => {
-               dispatch(AUTH_THUNK.login(values))
-                  .unwrap()
-                  .then((result) => {
-                     showToast({
-                        title: 'Успешно!',
-                        message: 'Вы успешно вошли в систему!',
-                        type: 'success',
-                     })
-                     if (result.role === 'ADMIN') {
-                        navigate(ROUTES.ADMIN.INDEX)
-                     } else {
-                        navigate(ROUTES.USER.INDEX)
-                     }
-                     handleClose()
-                  })
-                  .catch(() => {
-                     showToast({
-                        title: 'Ошибка!',
-                        message:
-                           'Неверный адрес электронной почты или пароль. Пожалуйста, проверьте введённые данные.',
-                        type: 'error',
-                     })
-                  })
-                  .finally(() => {
-                     setSubmitting(false)
-                  })
-            }}
-         >
-            {({ isSubmitting }) => (
-               <Form>
-                  <JoinUsBox>
-                     <Box className="first-block">
-                        <Typography className="signin-text">Sign in</Typography>
+         <form onSubmit={handleSubmit}>
+            <JoinUsBox>
+               <Box className="first-block">
+                  <Typography className="signin-text">Sign in</Typography>
 
-                        <Field name="email">
-                           {({ field }) => (
-                              <Input
-                                 {...field}
-                                 placeholder="Email"
-                                 className="signin-input"
-                              />
-                           )}
-                        </Field>
+                  <Input
+                     name="email"
+                     placeholder="Email"
+                     className="signin-input"
+                     value={values.email}
+                     onChange={handleChange}
+                  />
 
-                        <Field name="password">
-                           {({ field }) => (
-                              <Input.Password
-                                 {...field}
-                                 placeholder="Password"
-                                 className="signin-input"
-                              />
-                           )}
-                        </Field>
+                  <Input.Password
+                     name="password"
+                     placeholder="Password"
+                     className="signin-input"
+                     value={values.password}
+                     onChange={handleChange}
+                  />
 
-                        <Box className="forgot-box">
-                           <Typography
-                              className="forgot-pass"
-                              onClick={onForgotPasswordClick}
-                           >
-                              Forgot Password
-                           </Typography>
-                        </Box>
-                     </Box>
+                  <Box className="forgot-box">
+                     <Typography
+                        className="forgot-pass"
+                        onClick={onForgotPasswordClick}
+                     >
+                        Forgot Password
+                     </Typography>
+                  </Box>
+               </Box>
 
-                     <Box className="second-block">
-                        <Button
-                           width={414}
-                           type="submit"
-                           htmlType="submit"
-                           disabled={isSubmitting || isLoading}
-                        >
-                           {isLoading ? 'Loading...' : 'SIGN IN'}
-                        </Button>
-                     </Box>
-                  </JoinUsBox>
-               </Form>
-            )}
-         </Formik>
+               <Box className="second-block">
+                  <Button
+                     width={414}
+                     type="submit"
+                     htmlType="submit"
+                     disabled={isSubmitting || isLoading}
+                  >
+                     {isLoading ? 'Loading...' : 'SIGN IN'}
+                  </Button>
+               </Box>
+            </JoinUsBox>
+         </form>
       </Modal>
    )
 }

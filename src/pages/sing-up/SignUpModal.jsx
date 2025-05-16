@@ -6,10 +6,10 @@ import { auth } from '../../configs/firebase'
 import { useDispatch } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useNavigate } from 'react-router'
-import { showToast } from '../../utils/helpers/showToast'
 
 const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
    const dispatch = useDispatch()
+
    const navigate = useNavigate()
 
    const handleClose = () => setOpen(false)
@@ -23,25 +23,11 @@ const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
          const result = await signInWithPopup(auth, provider)
          const idToken = await result.user.getIdToken()
 
-         const response = await dispatch(
-            AUTH_THUNK.googleSignIn({ idToken, navigate })
+         await dispatch(
+            AUTH_THUNK.googleSignIn({ idToken, navigate, handleClose })
          ).unwrap()
-
-         showToast({
-            title: 'Успешно!',
-            message: 'Вы успешно вошли через Google!',
-            type: 'success',
-         })
-         handleClose()
       } catch (error) {
          console.error('Google sign-in error:', error)
-         showToast({
-            title: 'Ошибка!',
-            message:
-               error.message ||
-               'Не удалось войти через Google. Пожалуйста, попробуйте снова.',
-            type: 'error',
-         })
       }
    }
 
