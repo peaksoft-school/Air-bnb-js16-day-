@@ -9,14 +9,12 @@ function Meatballs({
    color = false,
 }) {
    const [anchorEl, setAnchorEl] = useState(null)
-
    const open = Boolean(anchorEl)
 
    const handleClick = (e) => setAnchorEl(e.currentTarget)
 
    const handleClose = (option) => {
       setAnchorEl(null)
-
       if (option && onSelect) {
          onSelect(option)
       }
@@ -24,10 +22,14 @@ function Meatballs({
 
    return (
       <>
+<<<<<<< HEAD
          <StyledOnMeatballs onClick={handleClick} colorU={color}>
             {icon}
          </StyledOnMeatballs>
 
+=======
+         <StyledOnMeatballs onClick={handleClick}>{icon}</StyledOnMeatballs>
+>>>>>>> development
          <Menu
             anchorEl={anchorEl}
             open={open}
