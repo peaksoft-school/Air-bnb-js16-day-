@@ -1,16 +1,23 @@
 import { toast } from 'react-toastify'
+import { styled } from '@mui/material'
 
 const showToast = ({ title, message, autoClose = 5000, type = 'type' }) => {
    toast[type](
-      <div>
+      <ToastContent>
          <strong>{title}</strong>
          <p>{message}</p>
-      </div>,
+      </ToastContent>,
       {
          autoClose,
          icon: false,
       }
    )
 }
+
+const ToastContent = styled('div')({
+   display: 'flex',
+   flexDirection: 'column',
+   gap: 8,
+})
 
 export { showToast }

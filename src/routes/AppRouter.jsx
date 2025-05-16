@@ -3,7 +3,9 @@ import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
-
+const ResetPassword = lazy(
+   () => import('../pages/forgotPassword/ResetPassword')
+)
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 
@@ -60,7 +62,7 @@ const AppRoutes = () => (
          }
       >
          <Route
-            path="application"
+            path={ROUTES.ADMIN.APPLICATION}
             element={
                <div>
                   <h1>application</h1>
@@ -69,7 +71,7 @@ const AppRoutes = () => (
          />
 
          <Route
-            path="users"
+            path={ROUTES.ADMIN.USERS}
             element={
                <div>
                   <h1>User Profile</h1>
@@ -78,7 +80,7 @@ const AppRoutes = () => (
          />
 
          <Route
-            path="allhousing"
+            path={ROUTES.ADMIN.ALLHOUSING}
             element={
                <div>
                   <h1>allhousing</h1>
@@ -87,7 +89,23 @@ const AppRoutes = () => (
          />
       </Route>
 
-      <Route path="*" element={<NotFound />} />
+      <Route
+         path={ROUTES.AUTH.RESET_PASSWORD}
+         element={
+            <Suspense fallback={<Loading />}>
+               <ResetPassword />
+            </Suspense>
+         }
+      />
+
+      <Route
+         path="*"
+         element={
+            <Suspense fallback={<Loading />}>
+               <NotFound />
+            </Suspense>
+         }
+      />
    </Routes>
 )
 

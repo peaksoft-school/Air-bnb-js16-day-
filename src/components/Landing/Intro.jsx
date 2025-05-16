@@ -1,52 +1,89 @@
-import { Box, Typography } from '@mui/material'
+import { useState } from 'react'
+import { Box, Typography, styled } from '@mui/material'
 import Header from '../../layout/Header'
-import styled from '@emotion/styled'
+import SignUpModal from '../../pages/sing-up/SignUpModal'
+import SignInModal from '../../pages/sign-in/SignInModal'
 import MainPagePhoto from '../../assets/images/Image-main-page.png'
 import Input from '../UI/Input'
 import Checkbox from '../UI/Checkbox'
+import { useSelector } from 'react-redux'
+import ForgotPassword from '../../pages/forgotPassword/ForgotPassword'
 
 const Intro = () => {
-   const isAuthenticated = false
+   const [openSignIn, setOpenSignIn] = useState(false)
+   const [openSignUp, setOpenSignUp] = useState(false)
+   const [openForgotPassword, setOpenForgotPassword] = useState(false)
+
+   const isAuthenticated = useSelector((state) => state.auth.isAuth)
+
+   const handleOpenSignUp = () => setOpenSignUp(true)
 
    return (
-      <StyledMain>
-         <StyledImage>
-            <div>
-               <Header isAuthenticated={isAuthenticated} />
-            </div>
-            <StyledSearch>
-               {isAuthenticated ? (
-                  <>
-                     <StyledText>
-                        Find a place you'll love to stay at
-                     </StyledText>
-                     <Input
-                        placeholder={'Region, city, apartment, house...'}
-                        icon={true}
-                        sizeVariant="large"
-                     />
-                  </>
-               ) : (
-                  <>
-                     <StyledText>
-                        Find a place you'll love to stay at
-                     </StyledText>
-                     <Input
-                        placeholder={'Region, city, apartment, house...'}
-                        icon={true}
-                        sizeVariant="large"
-                     />
-                     <StyledCheckbox>
-                        <Checkbox />
-                        <Typography className="SearchText">
-                           Искать поблизости
-                        </Typography>
-                     </StyledCheckbox>
-                  </>
-               )}
-            </StyledSearch>
-         </StyledImage>
-      </StyledMain>
+      <>
+         <StyledMain>
+            <StyledImage>
+               <>
+                  <Header
+                     isAuthenticated={isAuthenticated}
+                     onJoinUs={handleOpenSignUp}
+                  />
+               </>
+               <StyledSearch>
+                  {isAuthenticated ? (
+                     <>
+                        <StyledText>
+                           Find a place you'll love to stay at
+                        </StyledText>
+                        <Input
+                           placeholder={'Region, city, apartment, house...'}
+                           icon={true}
+                           sizeVariant="large"
+                        />
+                     </>
+                  ) : (
+                     <>
+                        <StyledText>
+                           Find a place you'll love to stay at
+                        </StyledText>
+                        <Input
+                           placeholder={'Region, city, apartment, house...'}
+                           icon={true}
+                           sizeVariant="large"
+                        />
+                        <StyledCheckbox>
+                           <Checkbox />
+                           <Typography className="SearchText">
+                              Искать поблизости
+                           </Typography>
+                        </StyledCheckbox>
+                     </>
+                  )}
+               </StyledSearch>
+               <SignUpModal
+                  open={openSignUp}
+                  setOpen={setOpenSignUp}
+                  onAdminLoginClick={() => {
+                     setOpenSignUp(false)
+                     setOpenSignIn(true)
+                  }}
+               />
+
+               <SignInModal
+                  open={openSignIn}
+                  setOpen={setOpenSignIn}
+                  onForgotPasswordClick={() => {
+                     setOpenSignIn(false)
+                     setOpenForgotPassword(true)
+                  }}
+               />
+
+               <ForgotPassword
+                  open={openForgotPassword}
+                  handleClose={() => setOpenForgotPassword(false)}
+               />
+            </StyledImage>
+         </StyledMain>
+      </>
    )
 }
 
