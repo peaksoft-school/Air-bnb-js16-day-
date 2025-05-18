@@ -22,14 +22,10 @@ function Meatballs({
 
    return (
       <>
-<<<<<<< HEAD
          <StyledOnMeatballs onClick={handleClick} colorU={color}>
             {icon}
          </StyledOnMeatballs>
 
-=======
-         <StyledOnMeatballs onClick={handleClick}>{icon}</StyledOnMeatballs>
->>>>>>> development
          <Menu
             anchorEl={anchorEl}
             open={open}

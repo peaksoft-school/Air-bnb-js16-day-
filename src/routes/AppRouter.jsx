@@ -2,18 +2,19 @@ import { Routes, Route } from 'react-router'
 import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
+
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
+const Users = lazy(() => import('../pages/admin/user/Users'))
+const UserDetail = lazy(() => import('../pages/admin/user/UserDetail'))
+
 const ResetPassword = lazy(
-   () => import('../pages/forgotPassword/ResetPassword')
-)
+   () => import('../pages/forgotPassword/ResetPassword'))
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
-import Users from '../pages/admin/Users'
-import UserDetail from '../pages/admin/UserDetail'
 
 const AppRoutes = () => (
    <Routes>
@@ -79,12 +80,10 @@ const AppRoutes = () => (
                   <Users />
                </Suspense>
             }
-         >
-            
-         </Route>
+         ></Route>
 
          <Route
-            path="users/:id"
+            path={ROUTES.ADMIN.USER_DETAIL}
             element={
                <Suspense fallback={<Loading />}>
                   <UserDetail />
