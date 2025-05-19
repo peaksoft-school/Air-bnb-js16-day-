@@ -5,6 +5,6 @@ import announcementReducer from './slice/admin/user/announcementSlice'
 export const store = configureStore({
    reducer: {
       auth: authReducer,
-      userInfo: announcementReducer,
+      announcement: announcementReducer,
    },
 })

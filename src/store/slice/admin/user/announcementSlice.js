@@ -1,31 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {
-   getHouseById,
-   getAnnouncementFeedback,
-   getAnnouncementRating,
-} from './announcementThunk'
+import { fetchAnnouncementById } from './announcementThunk'
+
+const initialState = {
+   data: null,
+   isLoading: false,
+   error: null,
+}
 
 const announcementSlice = createSlice({
-   name: 'userInfo',
-   initialState: {
-      user: null,
-      announcement: {},
-      feedbacks: [],
-      rating: null,
-      loading: false,
-      error: null,
-   },
+   name: 'announcement',
+   initialState,
    reducers: {},
    extraReducers: (builder) => {
       builder
-         .addCase(getHouseById.fulfilled, (state, action) => {
-            state.announcement = action.payload
+         .addCase(fetchAnnouncementById.pending, (state) => {
+            state.isLoading = true
          })
-         .addCase(getAnnouncementFeedback.fulfilled, (state, action) => {
-            state.feedbacks = action.payload
+         .addCase(fetchAnnouncementById.fulfilled, (state, action) => {
+            state.data = action.payload
+            state.isLoading = false
          })
-         .addCase(getAnnouncementRating.fulfilled, (state, action) => {
-            state.rating = action.payload
+         .addCase(fetchAnnouncementById.rejected, (state, action) => {
+            state.error = action.error.message
+            state.isLoading = false
          })
    },
 })

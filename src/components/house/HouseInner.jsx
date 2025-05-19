@@ -52,9 +52,7 @@ const HouseInner = ({
             params: { houseId },
          })
          setBookings(data)
-      } catch (error) {
-         console.error(error)
-      }
+      } catch (error) {}
    }
 
    const getAllFavorites = async () => {
@@ -63,9 +61,7 @@ const HouseInner = ({
             params: { houseId },
          })
          setFavorites(data)
-      } catch (error) {
-         console.error(error)
-      }
+      } catch (error) {}
    }
 
    useEffect(() => {

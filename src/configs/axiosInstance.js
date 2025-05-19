@@ -11,28 +11,27 @@ export const axiosInstance = axios.create({
 
 let customStore
 
-export const injectStore = (_store) => {
-   customStore = _store
+export const injectStore = (store) => {
+   customStore = store
 }
 
 export const getStore = () => customStore
 
 axiosInstance.interceptors.request.use(
    (config) => {
-      const updateConfig = { ...config }
-      const token = customStore?.getState()?.auth?.accessToken
-
+      const { token } = customStore?.getState()?.auth || {}
       if (token) {
-         updateConfig.headers.Authorization = `Bearer ${token}`
+         config.headers.Authorization = `Bearer ${token}`
       }
-
-      return updateConfig
+      return config
    },
-   (error) => Promise.reject(error)
+   (error) => {
+      return Promise.reject(error)
+   }
 )
 
 axiosInstance.interceptors.response.use(
-   (response) => Promise.resolve(response),
+   (response) => response,
    (error) => {
       if (error.response?.status === 401) {
          console.warn(
