@@ -9,23 +9,27 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
    const [currentIndex, setCurrentIndex] = useState(0)
 
    const handleNext = () => {
-      setCurrentImages(([first, second]) => {
+      setCurrentImages(([second]) => {
          const nextIndex =
             images.indexOf(second) + 1 === images.length
                ? 0
                : images.indexOf(second) + 1
+
          setCurrentIndex(nextIndex)
+
          return [second, images[nextIndex]]
       })
    }
 
    const handlePrev = () => {
-      setCurrentImages(([first, second]) => {
+      setCurrentImages(([first]) => {
          const prevIndex =
             images.indexOf(first) - 1 < 0
                ? images.length - 1
                : images.indexOf(first) - 1
+
          setCurrentIndex(prevIndex)
+
          return [images[prevIndex], first]
       })
    }
@@ -36,11 +40,11 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
    return (
       <Wrapper>
          <MotionCarousel layout>
-            {currentImages.map((url, index) => (
+            {currentImages.map((url, i) => (
                <MotionImage
                   key={url}
                   layout
-                  isSecond={index === 1}
+                  isSecond={i === 1}
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   src={url}
                   alt="carousel-img"

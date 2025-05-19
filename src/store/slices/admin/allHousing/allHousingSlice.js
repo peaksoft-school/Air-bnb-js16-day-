@@ -30,4 +30,6 @@ const allHousingSlice = createSlice({
    },
 })
 
-export default allHousingSlice.reducer
+const ALL_HOUSING_ACTIONS = allHousingSlice.actions
+
+export { allHousingSlice, ALL_HOUSING_ACTIONS}

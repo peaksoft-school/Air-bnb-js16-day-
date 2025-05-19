@@ -1,4 +1,8 @@
-import { colors, ButtonBase as MuiButtonBase, styled } from '@mui/material'
+import {
+   ButtonBase as MuiButtonBase,
+   styled,
+   CircularProgress,
+} from '@mui/material'
 import GoogleLogo from '../../assets/icons/google-logo.svg'
 
 const Button = ({
@@ -9,6 +13,7 @@ const Button = ({
    variant = 'first',
    icon = false,
    width,
+   loading = false,
 }) => {
    const ButtonComponent =
       variant === 'second'
@@ -22,12 +27,18 @@ const Button = ({
    return (
       <ButtonComponent
          type={type}
-         onClick={onClick}
-         disabled={disabled}
+         onClick={loading ? undefined : onClick}
+         disabled={disabled || loading}
          width={width}
       >
-         {icon && <img src={GoogleLogo} alt="Google-Logo" />}
-         {children}
+         {loading ? (
+            <CircularProgress size={20} color="info" />
+         ) : (
+            <>
+               {icon && <img src={GoogleLogo} alt="Google-Logo" />}
+               {children}
+            </>
+         )}
       </ButtonComponent>
    )
 }
@@ -38,6 +49,7 @@ const FirstButton = styled(MuiButtonBase)(({ width }) => ({
    width: width,
    height: '37px',
    borderRadius: '2px',
+   cursor: 'pointer',
 
    display: 'flex',
    justifyContent: 'center',
@@ -60,6 +72,7 @@ const SecondButton = styled(MuiButtonBase)(({ width }) => ({
    height: '35px',
    border: '1px solid grey',
    borderRadius: '2px',
+   cursor: 'pointer',
 
    display: 'flex',
    justifyContent: 'center',
@@ -81,13 +94,14 @@ const ThirdButton = styled(MuiButtonBase)(({ width }) => ({
    height: '50px',
    borderRadius: '8px',
    border: '1px solid lightgrey',
+   cursor: 'pointer',
 
    display: 'flex',
    justifyContent: 'center',
    alignItems: 'center',
    gap: '10px',
 
-   fontFamily: 'Arial',
+   fontFamily: 'Inter, sans-serif',
    fontWeight: '550',
    fontSize: '18px',
    lineHeight: '100%',
@@ -101,6 +115,7 @@ const FourthButton = styled(MuiButtonBase)(({ width }) => ({
    width: width,
    height: '33px',
    padding: '8px 16px 8px 16px',
+   cursor: 'pointer',
 
    fontFamily: 'Arial',
    fontWeight: '400',

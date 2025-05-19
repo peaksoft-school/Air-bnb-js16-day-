@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, styled } from '@mui/material'
 
-import { getFilteredHousingRequest } from '../../store/slice/admin/allHousing/allHousingThunk'
+import { getFilteredHousingRequest } from '../../store/slices/admin/allHousing/allHousingThunk'
 import Card from '../../components/admin/AdminCard'
 import DropDown from '../../components/UI/DropDown'
 
