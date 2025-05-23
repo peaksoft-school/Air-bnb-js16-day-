@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router'
 import {
    fetchAllUsers,
    deleteUser,
+   fetchUserProfile,
 } from '../../../store/slices/admin/userThunk'
 import Loading from '../../Loading'
 
@@ -31,11 +32,23 @@ const Users = () => {
    }, [dispatch])
 
    if (loading) return <Loading />
+
    if (error) return <Typography color="error">Error: {error}</Typography>
 
    const handleDelete = (e, userId) => {
       e.stopPropagation()
       dispatch(deleteUser(userId))
+   }
+
+   const handleNavigate = (id) => {
+      dispatch(fetchUserProfile({ choice: 'booking', id }))
+         .unwrap()
+         .then(() => {
+            navigate(`/admin/users/${id}`)
+         })
+         .catch((error) => {
+            console.error('Ошибка загрузки профиля:', error)
+         })
    }
 
    return (
@@ -58,7 +71,7 @@ const Users = () => {
                      <StyledTableRow
                         key={user.id}
                         hover
-                        onClick={() => navigate(`/admin/users/${user.id}`)}
+                        onClick={() => handleNavigate(user.id)}
                         style={{ cursor: 'pointer' }}
                      >
                         <StyledTableCell>{idx + 1}</StyledTableCell>

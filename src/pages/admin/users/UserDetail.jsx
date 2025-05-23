@@ -13,93 +13,128 @@ import {
    Alert,
 } from '@mui/material'
 import AdminCard from '../AdminCard'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import {
    fetchUserProfile,
    deleteUser,
+   deleteHouse,
+   blockAllAnnoucement,
 } from '../../../store/slices/admin/userThunk'
+import { CardOptions } from '../../../utils/helpers/options'
 
 const UserDetail = () => {
    const { id } = useParams()
    const dispatch = useDispatch()
 
    const [activeTab, setActiveTab] = useState('booking')
-
-   const { users, userProfile, loading, error } = useSelector((s) => s.user)
-   const viewedUser = users.find((u) => u.id === Number(id))
+   const { userProfile, loading, error } = useSelector((s) => s.user)
+   const user = userProfile?.user
 
    useEffect(() => {
-      dispatch(fetchUserProfile({ choice: activeTab }))
-   }, [dispatch, activeTab])
+      dispatch(fetchUserProfile({ choice: activeTab, id }))
+   }, [dispatch, activeTab, id])
 
-   const handleBlockAll = async () => {
+   const handleBlockAll = async (id) => {
       try {
-         await dispatch(deleteUser(id)).unwrap()
+         await dispatch(blockAllAnnoucement(id)).unwrap()
       } catch (err) {
          console.error('Blocking error:', err)
       }
    }
 
+   const links = [
+      { href: '/admin/users', label: 'Users' },
+      { href: `/users/${id}`, label: `User ${id}` },
+   ]
+   const options = CardOptions
+
+   const handleDeleteHouse = async (houseId) => {
+      try {
+         await dispatch(deleteHouse(houseId)).unwrap()
+      } catch (err) {
+         console.error('Delete error:', err)
+      }
+   }
    return (
       <UsersBox>
-         <ContactBox>
-            {viewedUser && (
-               <div className="contact-user">
-                  <Avatar className="avatar" src={viewedUser.image} />
-                  <div className="name-email">
-                     <div className="flex">
-                        <strong>Name:</strong>
-                        <Typography>{viewedUser.fullName}</Typography>
-                     </div>
-                     <div className="flex">
-                        <strong>Contact:</strong>
-                        <Typography>{viewedUser.email}</Typography>
+         <Box className="box-users">
+            <BreadCrumbs links={links} />
+            <Typography variant="h4" gutterBottom>
+               {user?.fullName}
+            </Typography>
+
+            <ContactBox>
+               {user && (
+                  <div className="contact-user">
+                     <Avatar
+                        className="avatar"
+                        src={user.image}
+                        aria-label="User avatar"
+                     />
+                     <div className="name-email">
+                        <div className="flex">
+                           <strong className="name-text">Name:</strong>
+                           <Typography className="contact-name">
+                              {user.fullName}
+                           </Typography>
+                        </div>
+                        <div className="flex">
+                           <strong className="name-text">Contact:</strong>
+                           <Typography className="contact-name">
+                              {user.email}
+                           </Typography>
+                        </div>
                      </div>
                   </div>
-               </div>
-            )}
-         </ContactBox>
+               )}
+            </ContactBox>
+         </Box>
 
          <HousesBox>
             <Tabs
                value={activeTab}
                onChange={(_, v) => setActiveTab(v)}
+               indicatorColor="secondary"
+               textColor="inherit"
+               variant="standard"
                centered
+               className="tabs"
             >
                <Tab label="Bookings" value="booking" />
                <Tab label="Announcements" value="announcement" />
             </Tabs>
 
             {loading ? (
-               <CircularProgress sx={{ m: '20% auto' }} />
+               <CircularProgress />
             ) : error ? (
                <Alert severity="error">{error}</Alert>
             ) : activeTab === 'booking' ? (
                <div className="cards-container">
-                  {(userProfile?.bookings || []).map((b, i) => (
+                  {userProfile?.houses.map((house, i) => (
                      <AdminCard
                         key={i}
-                        title={b.name}
-                        price={b.price}
-                        location={b.address}
+                        house={house}
+                        options={options}
+                        onDelete={(houseId) => handleDeleteHouse(houseId)}
                      />
                   ))}
                </div>
             ) : (
                <>
                   <Button
-                     onClick={handleBlockAll}
-                     disabled={viewedUser?.isBlocked}
+                     onClick={handleBlockAll(user?.id)}
+                     disabled={user?.isBlocked}
                      className="block-button"
                   >
-                     {viewedUser?.isBlocked ? 'Blocked' : 'Block All'}
+                     {user?.isBlocked ? 'Blocked' : 'Block All'}
                   </Button>
                   <div className="cards-container">
-                     {(userProfile?.announcements || []).map((a, i) => (
+                     {userProfile?.houses.map((house, i) => (
                         <AdminCard
                            key={i}
-                           title={a.name}
-                           price={a.price}
-                           location={a.address}
+                           house={house}
+                           options={options}
+                           onDelete={(houseId) => handleDeleteHouse(houseId)}
                         />
                      ))}
                   </div>
@@ -115,6 +150,11 @@ const UsersBox = styled(Box)(() => ({
    gap: '47px',
    padding: '46px 0px 193px 0',
    justifyContent: 'center',
+   '& .box-users': {
+      display: 'flex',
+      gap: '22px',
+      flexDirection: 'column',
+   },
 }))
 
 const ContactBox = styled(Box)(() => ({
@@ -168,7 +208,6 @@ const HousesBox = styled(Box)(() => ({
    width: '900px',
    '& .tabs': {
       maxWidth: '100%',
-      minHeight: '100px',
       borderBottom: '1px solid #C4C4C4',
       '& .MuiTabs-indicator': {
          backgroundColor: '#000',
@@ -194,6 +233,12 @@ const HousesBox = styled(Box)(() => ({
       '&:hover': { backgroundColor: '#BB7200' },
       '&:active': { backgroundColor: '#F2B75B' },
       '&:disabled': { backgroundColor: '#C4C4C4' },
+   },
+   '& .cards-container': {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '20px',
+      padding: '37px 0 0 0',
    },
 }))
 

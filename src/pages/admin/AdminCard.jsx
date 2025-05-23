@@ -18,16 +18,16 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Meatballs from '../../components/UI/Meatballs'
 
-const AdminCard = ({
-   imageUrls,
-   price,
-   rating,
-   title,
-   location,
-   guests,
-   options,
-}) => {
+const AdminCard = ({ house, options, onDelete }) => {
+   const { price, rating, address, guests, description, images } = house
+
    const [hovered, setHovered] = useState(false)
+
+   const handleSelect = (option) => {
+      if (option.action === 'delete' && typeof onDelete === 'function') {
+         onDelete(house.id)
+      }
+   }
 
    const CustomPrevArrow = ({ onClick }) => (
       <ArrowButton onClick={onClick} direction="left">
@@ -42,12 +42,12 @@ const AdminCard = ({
    )
 
    const settings = {
-      dots: imageUrls.length > 1,
+      dots: images?.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls.length > 1,
+      arrows: images?.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -58,15 +58,15 @@ const AdminCard = ({
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            {imageUrls.length > 1 ? (
+            {images?.length > 1 ? (
                <Slider {...settings}>
-                  {imageUrls.map((url, index) => (
+                  {images?.map((url, index) => (
                      <div key={index}>
                         <CardMedia
                            component="img"
                            height="136"
                            image={url}
-                           alt={title}
+                           alt={description}
                         />
                      </div>
                   ))}
@@ -75,8 +75,8 @@ const AdminCard = ({
                <CardMedia
                   component="img"
                   height="136"
-                  image={imageUrls[0]}
-                  alt={title}
+                  image={images[0]}
+                  alt={description}
                />
             )}
          </ImageContainer>
@@ -84,7 +84,7 @@ const AdminCard = ({
          <CardContent sx={{ padding: '12px 12px 12px 12px' }}>
             <Row>
                <Typography variant="h6" component="div">
-                  ${price}{' '}
+                  ${price}
                   <GrayText variant="body2" component="span">
                      / day
                   </GrayText>
@@ -101,13 +101,13 @@ const AdminCard = ({
             </Row>
 
             <Title noWrap variant="h5" component="div">
-               {title}
+               {description}
             </Title>
 
             <Row gap={1} className="location">
                <LocationOnIcon fontSize="small" color="action" />
                <Typography variant="body2" color="text.secondary" noWrap>
-                  {location}
+                  {address}
                </Typography>
             </Row>
             <ActionRow>
@@ -118,6 +118,7 @@ const AdminCard = ({
                   color={true}
                   icon={<MoreHorizIcon />}
                   options={options}
+                  onSelect={handleSelect}
                />
             </ActionRow>
          </CardContent>

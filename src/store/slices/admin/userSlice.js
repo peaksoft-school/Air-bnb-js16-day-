@@ -1,5 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchAllUsers, fetchUserProfile, deleteUser } from './userThunk'
+import {
+   fetchAllUsers,
+   fetchUserProfile,
+   deleteUser,
+   deleteHouse,
+   rejectWithValue,
+   blockAllAnnoucement,
+} from './userThunk'
 
 const initialState = {
    users: [],
@@ -47,6 +54,31 @@ const userSlice = createSlice({
             state.users = state.users.filter((u) => u.id !== action.payload)
          })
          .addCase(deleteUser.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         .addCase(deleteHouse.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(deleteHouse.fulfilled, (state, action) => {
+            state.loading = false
+            state.userProfile.houses = state.userProfile.houses.filter(
+               (house) => house.id !== action.payload
+            )
+         })
+         .addCase(deleteHouse.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         .addCase(blockAllAnnoucement.pending,(state)=>{
+            state.loading = true
+            state.error = null
+         })
+         .addCase(blockAllAnnoucement.fulfilled,(state,action)=>{
+            state.loading = false
+         })
+         .addCase(blockAllAnnoucement.rejected,(state,action)=>{
             state.loading = false
             state.error = action.payload
          })
