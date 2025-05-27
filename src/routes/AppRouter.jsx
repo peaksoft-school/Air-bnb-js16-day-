@@ -12,6 +12,7 @@ const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
+import Application from '../pages/admin/Applications'
 
 const AppRoutes = () => (
    <Routes>
@@ -64,9 +65,9 @@ const AppRoutes = () => (
          <Route
             path={ROUTES.ADMIN.APPLICATION}
             element={
-               <div>
-                  <h1>application</h1>
-               </div>
+               <Suspense fallback={<Loading />}>
+                     <Application/>
+                  </Suspense>
             }
          />
 
