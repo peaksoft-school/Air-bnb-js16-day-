@@ -4,9 +4,11 @@ import { styled } from '@mui/material/styles'
 import Pagination from '@mui/material/Pagination'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import Card from '../../components/UI/Card'
+import Card from './AdminCard'
 import { fetchApplications } from '../../store/slices/admin/houseApplicationsThunk'
 import { resetApplications } from '../../store/slices/admin/houseApplicationsSlice'
+import { CardOptions } from '../../utils/helpers/options'
+import Loading from '../Loading'
 
 const CARDS_PER_PAGE = 18
 
@@ -34,9 +36,6 @@ export default function Application() {
          setContainerHeight(gridRef.current.offsetHeight)
       }
    }, [page, cards])
-
-   console.log('Cards in component:', cards);
-   console.log('Cards type:', typeof cards, Array.isArray(cards));
 
    const flattenedCards = Array.isArray(cards) ? cards : []
 
@@ -66,6 +65,8 @@ export default function Application() {
       dispatch(fetchApplications({ page: value, size: CARDS_PER_PAGE }))
    }
 
+   const options = CardOptions
+
    return (
       <Box
          sx={{
@@ -79,7 +80,7 @@ export default function Application() {
             APPLICATION
          </Typography>
 
-         {loading && <LinearProgress sx={{ mb: 2 }} />}
+         {loading && <Loading sx={{ mb: 2 }} />}
          {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
                {error.message}
@@ -122,26 +123,23 @@ export default function Application() {
                      spacing={3}
                      sx={{ position: 'relative' }}
                   >
-                     {flattenedCards.map((card, index) => {
-                        console.log(`Card ${index}:`, card);
-                        
+                     {flattenedCards?.map((house, index) => {
                         return (
                            <Grid
                               item
-                              key={card.id || index} 
-                              xs={12}
-                              sm={6}
-                              md={4}
-                              lg={2}
+                              key={house.id || index}
                               sx={{ display: 'flex', justifyContent: 'center' }}
+                              onClick={() => {
+                                 console.log('fghjkljuytg')
+                              }}
                            >
                               <Card
-                                 title={card.description || 'No description'}
-                                 imageUrls={card.imageUrls || []}
-                                 price={card.price || 0}
-                                 rating={card.averageRating || 0}
-                                 guests={card.maxGuests || 0}
-                                 location={card.address || 'No address'}
+                                 key={index}
+                                 house={house}
+                                 options={options}
+                                 onDelete={(houseId) =>
+                                    handleDeleteHouse(houseId)
+                                 }
                               />
                            </Grid>
                         )
