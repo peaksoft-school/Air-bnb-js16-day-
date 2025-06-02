@@ -8,6 +8,7 @@ const ResetPassword = lazy(
 )
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
+const RegionPage = lazy(() => import('../pages/user/RegionPage'))
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
@@ -44,7 +45,15 @@ const AppRoutes = () => (
             />
          }
       >
-         <Route index element={<div>Welcome to User Page</div>} />
+         <Route
+            index
+            path={ROUTES.USER.REGION_PAGE}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <RegionPage />
+               </Suspense>
+            }
+         />
       </Route>
 
       <Route
@@ -62,6 +71,7 @@ const AppRoutes = () => (
          }
       >
          <Route
+            index
             path={ROUTES.ADMIN.APPLICATION}
             element={
                <div>

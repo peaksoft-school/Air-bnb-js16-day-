@@ -17,6 +17,8 @@ import { useDispatch } from 'react-redux'
 import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
 import { useNavigate } from 'react-router'
 import { UserOptions } from '../../utils/helpers/options'
+import { setSearch } from '../../store/slices/user/regionPageSlice'
+import { useState } from 'react'
 
 const UserHeader = ({
    isAuthenticated,
@@ -28,6 +30,7 @@ const UserHeader = ({
 }) => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
+   const [searchValue, setSearchValue] = useState('')
 
    const handleLogout = () => {
       dispatch(AUTH_ACTIONS.logOut())
@@ -38,6 +41,11 @@ const UserHeader = ({
       if (option.action === 'log-out') {
          handleLogout()
       }
+   }
+
+   const handleSearchChange = (e) => {
+      setSearchValue(e.target.value)
+      dispatch(setSearch(e.target.value))
    }
 
    const menuOptions = UserOptions
@@ -68,7 +76,12 @@ const UserHeader = ({
                      </Typography>
                   </Box>
 
-                  <Input placeholder="Search" icon={true} />
+                  <Input
+                     placeholder="Search"
+                     icon={true}
+                     value={searchValue}
+                     onChange={handleSearchChange}
+                  />
                </Box>
 
                <Box className="favorites-container">

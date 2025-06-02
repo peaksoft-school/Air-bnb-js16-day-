@@ -16,7 +16,7 @@ const PopularApartments = ({ handleAllClick, handleMoreClick }) => (
          <StyledHotelContainer>
             <StyledImageContainer>
                <img src={Rectangle} alt="Hotel" />
-
+               
                <StyledDistance>
                   <StyledDistanceTexts>
                      <StyledHotelText>

@@ -22,6 +22,7 @@ export const ROUTES = {
       CART: '/user/cart',
       CHECKOUT: '/user/checkout',
       PAYMENT: '/user/payment',
+      REGION_PAGE: '/user/region-page',
    },
 }
 
