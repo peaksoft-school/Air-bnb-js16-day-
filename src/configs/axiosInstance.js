@@ -15,8 +15,6 @@ export const injectStore = (store) => {
    customStore = store
 }
 
-export const getStore = () => customStore
-
 axiosInstance.interceptors.request.use(
    (config) => {
       const { token } = customStore?.getState()?.auth || {}
@@ -34,11 +32,7 @@ axiosInstance.interceptors.response.use(
    (response) => response,
    (error) => {
       if (error.response?.status === 401) {
-         console.warn(
-            'Unauthorized - consider dispatching logout or redirecting.'
-         )
       }
-
       return Promise.reject(error)
    }
 )

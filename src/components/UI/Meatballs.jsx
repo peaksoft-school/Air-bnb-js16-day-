@@ -4,14 +4,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 function Meatballs({ options = [], onSelect, icon = <MoreVertIcon /> }) {
    const [anchorEl, setAnchorEl] = useState(null)
-
    const open = Boolean(anchorEl)
 
    const handleClick = (e) => setAnchorEl(e.currentTarget)
 
    const handleClose = (option) => {
       setAnchorEl(null)
-
       if (option && onSelect) {
          onSelect(option)
       }
@@ -20,7 +18,6 @@ function Meatballs({ options = [], onSelect, icon = <MoreVertIcon /> }) {
    return (
       <>
          <StyledOnMeatballs onClick={handleClick}>{icon}</StyledOnMeatballs>
-
          <Menu
             anchorEl={anchorEl}
             open={open}

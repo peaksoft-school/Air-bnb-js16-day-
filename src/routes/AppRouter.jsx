@@ -3,7 +3,9 @@ import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
-
+const ResetPassword = lazy(
+   () => import('../pages/forgotPassword/ResetPassword')
+)
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 
@@ -12,6 +14,7 @@ import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 
 import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
+import Application from '../pages/admin/user-page/Application'
 
 const AppRoutes = () => (
    <Routes>
@@ -61,10 +64,26 @@ const AppRoutes = () => (
             />
          }
       >
-         <Route path="application" element={<AnnouncementHouse />} />
+         <Route
+            path={ROUTES.ADMIN.APPLICATION}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <Application />
+               </Suspense>
+            }
+         />
 
          <Route
-            path="users"
+            path="/admin/application/:id"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementHouse />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USERS}
             element={
                <div>
                   <h1>User Profile</h1>
@@ -73,7 +92,7 @@ const AppRoutes = () => (
          />
 
          <Route
-            path="allhousing"
+            path={ROUTES.ADMIN.ALLHOUSING}
             element={
                <div>
                   <h1>allhousing</h1>
@@ -82,7 +101,23 @@ const AppRoutes = () => (
          />
       </Route>
 
-      <Route path="*" element={<NotFound />} />
+      <Route
+         path={ROUTES.AUTH.RESET_PASSWORD}
+         element={
+            <Suspense fallback={<Loading />}>
+               <ResetPassword />
+            </Suspense>
+         }
+      />
+
+      <Route
+         path="*"
+         element={
+            <Suspense fallback={<Loading />}>
+               <NotFound />
+            </Suspense>
+         }
+      />
    </Routes>
 )
 

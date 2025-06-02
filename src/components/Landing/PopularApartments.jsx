@@ -4,59 +4,56 @@ import Rectangle from '../../assets/images/Rectangle.png'
 import ImageCarousel from '../ImageCarousel'
 import { IMAGES_POPULARS } from '../../utils/constants/Index'
 
-const PopularApartments = ({ handleAllClick, handleMoreClick }) => {
-   return (
-      <StyledMainContainer>
-         <StyledSecondContainer>
-            <StyledTextContainer>
-               <StyledApartamentText>Popular Apartments</StyledApartamentText>
+const PopularApartments = ({ handleAllClick, handleMoreClick }) => (
+   <StyledMainContainer>
+      <StyledSecondContainer>
+         <StyledTextContainer>
+            <StyledApartamentText>Popular Apartments</StyledApartamentText>
 
-               <StyledMoreText onClick={handleAllClick}>
-                  View all
-               </StyledMoreText>
-            </StyledTextContainer>
+            <StyledMoreText onClick={handleAllClick}>View all</StyledMoreText>
+         </StyledTextContainer>
 
-            <StyledHotelContainer>
-               <StyledImageContainer>
-                  <img src={Rectangle} alt="Hotel" />
+         <StyledHotelContainer>
+            <StyledImageContainer>
+               <img src={Rectangle} alt="Hotel" />
 
-                  <StyledDistance>
-                     <StyledDistanceTexts>
-                        <StyledHotelText>
-                           Aska Lara Resort & Spa Hotel
-                        </StyledHotelText>
-                        <StyledApartamentsText>
-                           The Aska Lara Resort & Spa Hotel, which operates on
-                           an all-inclusive system, occupies 2 plots separated
-                           by a road. The hotel is located in the Lara district,
-                           500 meters from the sea...
-                        </StyledApartamentsText>
-                     </StyledDistanceTexts>
+               <StyledDistance>
+                  <StyledDistanceTexts>
+                     <StyledHotelText>
+                        Aska Lara Resort & Spa Hotel
+                     </StyledHotelText>
 
-                     <StyledDistanceTexts>
-                        <StyledTextLocation>
-                           <LocationOnIcon
-                              fontSize="inherit"
-                              sx={{ color: '#97C69E' }}
-                           />
-                           723510 Osh Muzurbek Alimbekov 9/7
-                        </StyledTextLocation>
+                     <StyledApartamentsText>
+                        The Aska Lara Resort & Spa Hotel, which operates on an
+                        all-inclusive system, occupies 2 plots separated by a
+                        road. The hotel is located in the Lara district, 500
+                        meters from the sea...
+                     </StyledApartamentsText>
+                  </StyledDistanceTexts>
 
-                        <StyledMoreText onClick={handleMoreClick}>
-                           Read more
-                        </StyledMoreText>
-                     </StyledDistanceTexts>
-                  </StyledDistance>
-               </StyledImageContainer>
+                  <StyledDistanceTexts>
+                     <StyledTextLocation>
+                        <LocationOnIcon
+                           fontSize="inherit"
+                           sx={{ color: '#97C69E' }}
+                        />
+                        723510 Osh Muzurbek Alimbekov 9/7
+                     </StyledTextLocation>
 
-               <StyledSliderContainer>
-                  <ImageCarousel images={IMAGES_POPULARS} />
-               </StyledSliderContainer>
-            </StyledHotelContainer>
-         </StyledSecondContainer>
-      </StyledMainContainer>
-   )
-}
+                     <StyledMoreText onClick={handleMoreClick}>
+                        Read more
+                     </StyledMoreText>
+                  </StyledDistanceTexts>
+               </StyledDistance>
+            </StyledImageContainer>
+
+            <StyledSliderContainer>
+               <ImageCarousel images={IMAGES_POPULARS} />
+            </StyledSliderContainer>
+         </StyledHotelContainer>
+      </StyledSecondContainer>
+   </StyledMainContainer>
+)
 
 const StyledMainContainer = styled(Box)(() => ({
    width: '100%',
@@ -104,7 +101,7 @@ const StyledApartamentsText = styled(Typography)(() => ({
    lineHeight: '130%',
 }))
 
-const StyledDistanceTexts = styled(Typography)(() => ({
+const StyledDistanceTexts = styled(Box)(() => ({
    display: 'flex',
    flexDirection: 'column',
    gap: '28px',

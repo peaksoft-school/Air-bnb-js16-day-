@@ -1,12 +1,35 @@
-import { AppBar, Toolbar, Typography, Box, IconButton } from '@mui/material'
+import {
+   AppBar,
+   Toolbar,
+   Typography,
+   Box,
+   IconButton,
+   styled,
+} from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Meatballs from '../../components/UI/Meatballs'
 import Air from '../../assets/icons/air.svg'
-import styled from 'styled-components'
-import { NavLink } from 'react-router'
+import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
+import { NavLink, useNavigate } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { AdminOptions } from '../../utils/helpers/options'
 
 const AdminHeader = () => {
-   const menuOptions = [{ label: 'Log out', action: 'log-out' }]
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+
+   const handleLogout = () => {
+      dispatch(AUTH_ACTIONS.logOut())
+      navigate('/')
+   }
+
+   const handleMenuSelect = (option) => {
+      if (option.action === 'log-out') {
+         handleLogout()
+      }
+   }
+
+   const menuOptions = AdminOptions
 
    return (
       <StyledAppBar position="static">
@@ -40,6 +63,7 @@ const AdminHeader = () => {
                   <Meatballs
                      icon={<ExpandMoreIcon className="expand-icon" />}
                      options={menuOptions}
+                     onSelect={handleMenuSelect}
                   />
                </Box>
             </Box>

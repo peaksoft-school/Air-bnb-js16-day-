@@ -1,0 +1,195 @@
+import { Typography, Box, styled } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useLocation } from 'react-router'
+import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
+import { showToast } from '../../utils/helpers/showToast'
+import { ResetPasswordSchema } from '../../utils/helpers/validation'
+import { Button, Input, Card } from 'antd'
+import { useFormik } from 'formik'
+
+const ResetPassword = () => {
+   const { resetPasswordStatus } = useSelector((state) => state.auth)
+
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+
+   const location = useLocation()
+   const token = new URLSearchParams(location.search).get('token')
+
+   const onSubmit = (values) => {
+      if (!token) {
+         showToast({
+            title: 'Ошибка!',
+            message: 'Токен отсутствует!',
+            type: 'error',
+         })
+
+         return
+      }
+
+      dispatch(
+         AUTH_THUNK.resetPassword({
+            token,
+            newPassword: values.password,
+
+            onSuccess: () => {
+               showToast({
+                  title: 'Успешно!',
+                  message: 'Пароль успешно изменен!',
+                  type: 'success',
+               })
+
+               navigate('/')
+            },
+
+            onError: (err) => {
+               showToast({
+                  title: 'Ошибка!',
+                  message: err?.message || 'Ошибка при сбросе пароля',
+                  type: 'error',
+               })
+            },
+         })
+      )
+   }
+
+   const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
+      useFormik({
+         initialValues: { password: '', confirmPassword: '' },
+
+         validationSchema: ResetPasswordSchema,
+         onSubmit,
+      })
+
+   return (
+      <ResetBox>
+         <HouseBackground
+            src="https://img.freepik.com/free-photo/greyscale-low-angle-shot-concrete-building-with-lot-windows-dark-sky_181624-14824.jpg?semt=ais_hybrid&w=740"
+            alt="House illustration"
+         />
+
+         <AuthCard title="Reset Password">
+            <form onSubmit={handleSubmit}>
+               <FormBlock>
+                  <Input.Password
+                     name="password"
+                     placeholder="New Password"
+                     value={values.password}
+                     onChange={handleChange}
+                     onBlur={handleBlur}
+                     status={touched.password && errors.password ? 'error' : ''}
+                     className="reset-password-change"
+                  />
+
+                  {errors.password && touched.password && (
+                     <ErrorText>{errors.password}</ErrorText>
+                  )}
+               </FormBlock>
+
+               <FormBlock gap={24}>
+                  <Input.Password
+                     name="confirmPassword"
+                     placeholder="Confirm your password"
+                     value={values.confirmPassword}
+                     onChange={handleChange}
+                     onBlur={handleBlur}
+                     status={
+                        touched.confirmPassword && errors.confirmPassword
+                           ? 'error'
+                           : ''
+                     }
+                     className="reset-password-change"
+                  />
+
+                  {errors.confirmPassword && touched.confirmPassword && (
+                     <ErrorText>{errors.confirmPassword}</ErrorText>
+                  )}
+               </FormBlock>
+
+               <Button
+                  type="text"
+                  htmlType="submit"
+                  loading={resetPasswordStatus === 'loading'}
+                  block
+                  className="reset-button"
+               >
+                  Save password
+               </Button>
+            </form>
+         </AuthCard>
+      </ResetBox>
+   )
+}
+
+export default ResetPassword
+
+export const AuthCard = styled(Card)(({ theme }) => ({
+   width: 500,
+   borderRadius: '12px',
+   boxShadow: theme.shadows[3],
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   flexDirection: 'column',
+
+   '& .reset-button': {
+      width: '414px',
+      height: '37px',
+      borderRadius: '2px',
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '10px',
+      textTransform: 'uppercase',
+      fontFamily: 'Arial',
+      fontWeight: '500',
+      fontSize: '14px',
+      color: '#F7F7F7',
+      backgroundColor: '#DD8A08',
+
+      '&:hover': { backgroundColor: '#BB7200' },
+      '&:active': { backgroundColor: '#F2B75B' },
+      '&:disabled': { backgroundColor: '#C4C4C4' },
+   },
+
+   '& .reset-password-change': {
+      width: '414px',
+      height: '39px',
+      border: '1px solid #828282',
+      borderRadius: '2px',
+   },
+
+   '& .ant-card-head-title': {
+      fontSize: '19px',
+      fontWeight: 500,
+      textAlign: 'center',
+      fontFamily: 'Inter, sans-serif',
+   },
+}))
+
+export const FormBlock = styled(Box)(({ gap = 16 }) => ({
+   marginBottom: `${gap}px`,
+}))
+
+export const ErrorText = styled(Typography)(({ theme }) => ({
+   color: theme.palette.error.main,
+   marginTop: 4,
+   fontSize: 13,
+}))
+
+const HouseBackground = styled('img')(() => ({
+   position: 'absolute',
+   opacity: 0.08,
+   width: '100%',
+   maxWidth: '100%',
+   bottom: 0,
+   zIndex: 0,
+}))
+
+const ResetBox = styled(Box)(() => ({
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   padding: '15% 0 0 0',
+}))
