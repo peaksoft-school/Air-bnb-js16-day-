@@ -1,12 +1,11 @@
-import { Typography, Box, styled } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
+import { useFormik } from 'formik'
 import { Input, Card } from 'antd'
+import { Typography, Box, styled } from '@mui/material'
 import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
-import { ForgotPasswordSchema } from '../../utils/helpers/validation'
-import { showToast } from '../../utils/helpers/showToast'
-import { useFormik } from 'formik'
+import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
+import { VALIDATION_FORGOT_PASSWORD } from '../../utils/helpers/validation'
 
 const ForgotPassword = ({ open, handleClose }) => {
    const { forgotPasswordStatus } = useSelector((state) => state.auth)
@@ -17,16 +16,7 @@ const ForgotPassword = ({ open, handleClose }) => {
       dispatch(
          AUTH_THUNK.forgotPassword({
             email: values.email,
-
-            onSuccess: () => {
-               showToast({
-                  title: 'Успешно!',
-                  message: 'Ссылка для сброса пароля отправлена на ваш email',
-                  type: 'success',
-               })
-
-               handleClose()
-            },
+            handleClose,
          })
       )
    }
@@ -35,7 +25,7 @@ const ForgotPassword = ({ open, handleClose }) => {
       useFormik({
          initialValues: { email: '' },
 
-         validationSchema: ForgotPasswordSchema,
+         validationSchema: VALIDATION_FORGOT_PASSWORD,
          onSubmit,
       })
 

@@ -14,10 +14,10 @@ const showToast = ({ title, message, autoClose = 5000, type = 'type' }) => {
    )
 }
 
+export { showToast }
+
 const ToastContent = styled('div')({
    display: 'flex',
    flexDirection: 'column',
    gap: 8,
 })
-
-export { showToast }
