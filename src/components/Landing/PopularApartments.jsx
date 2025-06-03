@@ -1,7 +1,7 @@
 import { Box, styled, Typography } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
-import Rectangle from '../../assets/images/Rectangle.png'
-import ImageCarousel from '../ImageCarousel'
+import Rectangle from '../../assets/images/rectangle.png'
+import ImageCarousel from '../UI/ImageCarousel'
 import { IMAGES_POPULARS } from '../../utils/constants/Index'
 
 const PopularApartments = ({ handleAllClick, handleMoreClick }) => (
@@ -15,8 +15,8 @@ const PopularApartments = ({ handleAllClick, handleMoreClick }) => (
 
          <StyledHotelContainer>
             <StyledImageContainer>
-               <img src={Rectangle} alt="Hotel" />
-               
+               <img src={Rectangle} alt="hotel" />
+
                <StyledDistance>
                   <StyledDistanceTexts>
                      <StyledHotelText>
@@ -35,9 +35,12 @@ const PopularApartments = ({ handleAllClick, handleMoreClick }) => (
                      <StyledTextLocation>
                         <LocationOnIcon
                            fontSize="inherit"
-                           sx={{ color: '#97C69E' }}
+                           className="location-icon"
                         />
-                        723510 Osh Muzurbek Alimbekov 9/7
+
+                        <Typography>
+                           723510 Osh Muzurbek Alimbekov 9/7
+                        </Typography>
                      </StyledTextLocation>
 
                      <StyledMoreText onClick={handleMoreClick}>
@@ -54,6 +57,8 @@ const PopularApartments = ({ handleAllClick, handleMoreClick }) => (
       </StyledSecondContainer>
    </StyledMainContainer>
 )
+
+export default PopularApartments
 
 const StyledMainContainer = styled(Box)(() => ({
    width: '100%',
@@ -107,7 +112,7 @@ const StyledDistanceTexts = styled(Box)(() => ({
    gap: '28px',
 }))
 
-const StyledTextLocation = styled(Typography)(() => ({
+const StyledTextLocation = styled(Box)(() => ({
    color: '#97C69E',
    fontWeight: '400',
    fontSize: '14px',
@@ -115,6 +120,10 @@ const StyledTextLocation = styled(Typography)(() => ({
    display: 'flex',
    alignItems: 'center',
    gap: '8px',
+
+   '& .location-icon': {
+      color: '#97C69E',
+   },
 }))
 
 const StyledMoreText = styled(Typography)(() => ({
@@ -126,7 +135,7 @@ const StyledMoreText = styled(Typography)(() => ({
    textDecoration: 'underline',
 }))
 
-const StyledDistance = styled(Typography)(() => ({
+const StyledDistance = styled(Box)(() => ({
    display: 'flex',
    flexDirection: 'column',
    gap: '7.44px',
@@ -144,5 +153,3 @@ const StyledApartamentText = styled(Typography)(() => ({
 const StyledSliderContainer = styled(Box)(() => ({
    display: 'flex',
 }))
-
-export default PopularApartments

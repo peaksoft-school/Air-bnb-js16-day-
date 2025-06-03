@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
 import {
    AppBar,
    Toolbar,
@@ -10,18 +12,16 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '../../components/UI/Button'
 import Meatballs from '../../components/UI/Meatballs'
-import Air from '../../assets/icons/BlackAir.svg'
+import Air from '../../assets/icons/black-air.svg'
 import Checkbox from '../../components/UI/Checkbox'
 import Input from '../../components/UI/Input'
-import { useDispatch } from 'react-redux'
 import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
-import { useNavigate } from 'react-router'
-import { UserOptions } from '../../utils/helpers/options'
 import { setSearch } from '../../store/slices/user/regionPageSlice'
 import { useState } from 'react'
+import { USER_OPTIONS } from '../../utils/helpers'
 
 const UserHeader = ({
-   isAuthenticated,
+   isAuth,
    onJoinUs,
    onProfileClick,
    onAddLeave,
@@ -32,14 +32,9 @@ const UserHeader = ({
    const navigate = useNavigate()
    const [searchValue, setSearchValue] = useState('')
 
-   const handleLogout = () => {
-      dispatch(AUTH_ACTIONS.logOut())
-      navigate('/')
-   }
-
    const handleMenuSelect = (option) => {
       if (option.action === 'log-out') {
-         handleLogout()
+         dispatch(AUTH_ACTIONS.logOut({ navigate }))
       }
    }
 
@@ -47,8 +42,6 @@ const UserHeader = ({
       setSearchValue(e.target.value)
       dispatch(setSearch(e.target.value))
    }
-
-   const menuOptions = UserOptions
 
    return (
       <StyledAppBar position="static">
@@ -60,7 +53,7 @@ const UserHeader = ({
                   </IconButton>
                </Box>
 
-               {!isAuthenticated && (
+               {!isAuth && (
                   <Typography className="leave" onClick={handleLeaveAddClick}>
                      leave an ad
                   </Typography>
@@ -71,6 +64,7 @@ const UserHeader = ({
                <Box className="search-container">
                   <Box className="checkbox-container">
                      <Checkbox />
+
                      <Typography className="search-text">
                         Search nearby
                      </Typography>
@@ -85,14 +79,11 @@ const UserHeader = ({
                </Box>
 
                <Box className="favorites-container">
-                  <Button
-                     onClick={isAuthenticated ? onAddLeave : onJoinUs}
-                     width={196}
-                  >
-                     {isAuthenticated ? 'SUBMIT AN AD' : 'JOIN US'}
+                  <Button onClick={isAuth ? onAddLeave : onJoinUs} width={196}>
+                     {isAuth ? 'SUBMIT AN AD' : 'JOIN US'}
                   </Button>
 
-                  {isAuthenticated && (
+                  {!isAuth && (
                      <>
                         <Typography>FAVORITE({favoriteCount})</Typography>
 
@@ -102,9 +93,10 @@ const UserHeader = ({
                               onClick={onProfileClick}
                               aria-label="Open profile"
                            />
+
                            <Meatballs
                               icon={<ExpandMoreIcon className="expend-icon" />}
-                              options={menuOptions}
+                              options={USER_OPTIONS}
                               onSelect={handleMenuSelect}
                            />
                         </Box>

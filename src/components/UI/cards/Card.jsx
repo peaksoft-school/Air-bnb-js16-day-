@@ -17,7 +17,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import Button from './Button'
+import Button from '../Button'
 
 const Card = ({ imageUrls, price, rating, title, location, guests }) => {
    const [isLiked, setIsLiked] = useState(false)

@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { showToast } from '../../utils/helpers/showToast'
-import { ResetPasswordSchema } from '../../utils/helpers/validation'
 import { Button, Input, Card } from 'antd'
 import { useFormik } from 'formik'
+import { VALIDATION_RESET_PASSWORD } from '../../utils/helpers/validation'
 
 const ResetPassword = () => {
    const { resetPasswordStatus } = useSelector((state) => state.auth)
@@ -31,24 +31,7 @@ const ResetPassword = () => {
          AUTH_THUNK.resetPassword({
             token,
             newPassword: values.password,
-
-            onSuccess: () => {
-               showToast({
-                  title: 'Успешно!',
-                  message: 'Пароль успешно изменен!',
-                  type: 'success',
-               })
-
-               navigate('/')
-            },
-
-            onError: (err) => {
-               showToast({
-                  title: 'Ошибка!',
-                  message: err?.message || 'Ошибка при сбросе пароля',
-                  type: 'error',
-               })
-            },
+            navigate,
          })
       )
    }
@@ -57,7 +40,7 @@ const ResetPassword = () => {
       useFormik({
          initialValues: { password: '', confirmPassword: '' },
 
-         validationSchema: ResetPasswordSchema,
+         validationSchema: VALIDATION_RESET_PASSWORD,
          onSubmit,
       })
 

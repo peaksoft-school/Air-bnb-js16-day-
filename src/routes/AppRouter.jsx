@@ -4,7 +4,7 @@ import { lazy, Suspense } from 'react'
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
 const ResetPassword = lazy(
-   () => import('../pages/forgotPassword/ResetPassword')
+   () => import('../pages/reset-password/ResetPassword')
 )
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
@@ -13,6 +13,7 @@ const RegionPage = lazy(() => import('../pages/user/RegionPage'))
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
+import AllHousing from '../pages/admin/AllHousing'
 
 const AppRoutes = () => (
    <Routes>
@@ -47,7 +48,6 @@ const AppRoutes = () => (
       >
          <Route
             index
-            path={ROUTES.USER.REGION_PAGE}
             element={
                <Suspense fallback={<Loading />}>
                   <RegionPage />
@@ -81,20 +81,11 @@ const AppRoutes = () => (
          />
 
          <Route
-            path={ROUTES.ADMIN.USERS}
-            element={
-               <div>
-                  <h1>User Profile</h1>
-               </div>
-            }
-         />
-
-         <Route
             path={ROUTES.ADMIN.ALLHOUSING}
             element={
-               <div>
-                  <h1>allhousing</h1>
-               </div>
+               <Suspense fallback={<Loading />}>
+                  <AllHousing />
+               </Suspense>
             }
          />
       </Route>

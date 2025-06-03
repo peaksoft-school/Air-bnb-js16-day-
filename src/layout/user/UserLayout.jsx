@@ -1,12 +1,13 @@
+import { useSelector } from 'react-redux'
 import { Outlet } from 'react-router'
 import UserHeader from './UserHeader'
-import { useSelector } from 'react-redux'
 
 const UserLayout = () => {
-   const isAuthenticated = useSelector((state) => state.auth.isAuth)
+   const { isAuth } = useSelector((state) => state.auth.isAuth)
+
    return (
       <>
-         <UserHeader isAuthenticated={isAuthenticated} />
+         <UserHeader isAuth={isAuth} />
          <Outlet />
       </>
    )
