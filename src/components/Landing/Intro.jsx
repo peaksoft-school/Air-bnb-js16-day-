@@ -1,20 +1,20 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Box, Typography, styled } from '@mui/material'
+import Input from '../UI/Input'
+import Checkbox from '../UI/Checkbox'
+import MainPagePhoto from '../../assets/images/intro.png'
 import Header from '../../layout/Header'
 import SignUpModal from '../../pages/sing-up/SignUpModal'
 import SignInModal from '../../pages/sign-in/SignInModal'
-import MainPagePhoto from '../../assets/images/Image-main-page.png'
-import Input from '../UI/Input'
-import Checkbox from '../UI/Checkbox'
-import { useSelector } from 'react-redux'
-import ForgotPassword from '../../pages/forgotPassword/ForgotPassword'
+import ForgotPassword from '../../pages/forgot-password/ForgotPassword'
 
 const Intro = () => {
+   const isAuthenticated = useSelector((state) => state.auth.isAuth)
+
    const [openSignIn, setOpenSignIn] = useState(false)
    const [openSignUp, setOpenSignUp] = useState(false)
    const [openForgotPassword, setOpenForgotPassword] = useState(false)
-
-   const isAuthenticated = useSelector((state) => state.auth.isAuth)
 
    const handleOpenSignUp = () => setOpenSignUp(true)
 
@@ -22,20 +22,20 @@ const Intro = () => {
       <>
          <StyledMain>
             <StyledImage>
-               <>
-                  <Header
-                     isAuthenticated={isAuthenticated}
-                     onJoinUs={handleOpenSignUp}
-                  />
-               </>
+               <Header
+                  isAuthenticated={isAuthenticated}
+                  onJoinUs={handleOpenSignUp}
+               />
+
                <StyledSearch>
                   {isAuthenticated ? (
                      <>
                         <StyledText>
                            Find a place you'll love to stay at
                         </StyledText>
+
                         <Input
-                           placeholder={'Region, city, apartment, house...'}
+                           placeholder="Region, city, apartment, house..."
                            icon={true}
                            sizeVariant="large"
                         />
@@ -45,20 +45,23 @@ const Intro = () => {
                         <StyledText>
                            Find a place you'll love to stay at
                         </StyledText>
+
                         <Input
-                           placeholder={'Region, city, apartment, house...'}
+                           placeholder="Region, city, apartment, house..."
                            icon={true}
                            sizeVariant="large"
                         />
                         <StyledCheckbox>
                            <Checkbox />
-                           <Typography className="SearchText">
+
+                           <Typography className="search-text">
                               Искать поблизости
                            </Typography>
                         </StyledCheckbox>
                      </>
                   )}
                </StyledSearch>
+
                <SignUpModal
                   open={openSignUp}
                   setOpen={setOpenSignUp}
@@ -130,7 +133,8 @@ const StyledCheckbox = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'center',
    padding: '0 0 0 528px',
-   '& .SearchText': {
+
+   '& .search-text': {
       color: '#EDEDED',
       fontWeight: 400,
       fontSize: '16px',

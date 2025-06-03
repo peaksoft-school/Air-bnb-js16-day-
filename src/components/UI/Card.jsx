@@ -2,14 +2,13 @@ import { useState } from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import styled from 'styled-components'
 import {
-   Card as MuiCard,
    CardMedia,
    CardContent,
    Typography,
    Box,
    IconButton,
+   styled,
 } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import FavoriteIcon from '@mui/icons-material/Favorite'
@@ -49,24 +48,25 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
    }
 
    return (
-      <MuiCard sx={{ maxWidth: 300, margin: 2 }}>
+      <StyledMuiCard>
          <Box
-            sx={{ position: 'relative' }}
+            className="images-content"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
             <Slider {...settings}>
                {imageUrls.length > 1 ? (
                   <Slider {...settings}>
-                     {imageUrls.map((url, index) => (
-                        <div key={index}>
+                     {imageUrls.map((url, i) => (
+                        <Box key={i}>
                            <CardMedia
                               component="img"
                               height="140"
                               image={url}
                               alt={title}
+                              className="image"
                            />
-                        </div>
+                        </Box>
                      ))}
                   </Slider>
                ) : (
@@ -75,56 +75,41 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                      height="140"
                      image={imageUrls[0]}
                      alt={title}
+                     className="image"
                   />
                )}
             </Slider>
          </Box>
 
-         <CardContent>
-            <Box
-               display="flex"
-               justifyContent="space-between"
-               alignItems="center"
-            >
-               <Typography variant="h6" component="div">
-                  ${price} <span style={{ color: 'gray' }}>/ day</span>
+         <CardContent className="content">
+            <Box className="first-block">
+               <Typography variant="h6">
+                  ${price} / <span className="word"> day</span>
                </Typography>
 
                <StyledRating>
-                  <Typography variant="body2" sx={{ color: 'white' }}>
-                     <StarIcon sx={{ color: '#F7D212', fontSize: '13px' }} />
+                  <Typography className="rating-number">
+                     <StarIcon className="rating-icon" />
+
                      {rating}
                   </Typography>
                </StyledRating>
             </Box>
 
-            <StyledTitle gutterBottom variant="h5" component="div">
-               {title}
-            </StyledTitle>
+            <Box>
+               <StyledTitle>{title}</StyledTitle>
 
-            <Box display="flex" alignItems="center" gap={1}>
-               <LocationOnIcon fontSize="small" color="action" />
+               <Box className="location-content">
+                  <LocationOnIcon fontSize="small" color="action" />
 
-               <Typography variant="body2" color="text.secondary">
-                  {location}
-               </Typography>
-            </Box>
-         </CardContent>
-
-         <Box
-            display="flex"
-            justifyContent="space-around"
-            alignItems="center"
-            pb={2}
-         >
-            <Box display="flex" alignItems="center" gap={1}>
-               <Typography fontSize={14} variant="body2" color="text.secondary">
-                  {guests} guests
-               </Typography>
+                  <Typography className="location-name">{location}</Typography>
+               </Box>
             </Box>
 
-            <Box display="flex" gap="10px">
-               <Button width={100}>BOOK</Button>
+            <Box className="second-block">
+               <Typography className="guest">{guests} guests</Typography>
+
+               <Button width={103}>BOOK</Button>
 
                <IconButton aria-label="like" onClick={handleLike}>
                   {isLiked ? (
@@ -134,12 +119,74 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                   )}
                </IconButton>
             </Box>
-         </Box>
-      </MuiCard>
+         </CardContent>
+      </StyledMuiCard>
    )
 }
 
 export default Card
+
+const StyledMuiCard = styled(Box)(() => ({
+   maxWidth: '295px',
+   maxHeight: '362px',
+   width: '100%',
+   height: '100%',
+   margin: '16px',
+   borderRadius: '4px',
+   transition: 'all 0.3s',
+
+   '& .images-content': {
+      position: 'relative',
+
+      '& .image': {
+         borderRadius: '4px 4px 0 0',
+      },
+   },
+
+   '& .content': {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '0.5rem',
+
+      '& .first-block': {
+         display: 'flex',
+         justifyContent: 'space-between',
+         alignItems: 'center',
+
+         '& .word': {
+            color: 'gray',
+            fontWeight: 300,
+         },
+      },
+
+      '& .location-content': {
+         display: 'flex',
+         alignItems: 'start',
+         gap: '5px',
+         color: '#828282',
+
+         '& .location-name': {
+            fontWeight: 300,
+         },
+      },
+
+      '& .second-block': {
+         display: 'flex',
+         justifyContent: 'space-between',
+         alignItems: 'center',
+
+         '& .guest': {
+            fontWeight: 300,
+            color: '#939393',
+         },
+      },
+   },
+
+   '&:hover': {
+      backgroundColor: 'white',
+      cursor: 'pointer',
+   },
+}))
 
 const StyledIconButtonBack = styled(IconButton)(() => ({
    position: 'absolute',
@@ -177,10 +224,23 @@ const StyledRating = styled(Box)(() => ({
    alignItems: 'center',
    justifyContent: 'center',
    borderRadius: '2px',
+
+   '& .rating-number': {
+      color: 'white',
+   },
+
+   '& .rating-icon': {
+      color: '#F7D212',
+      fontSize: '13px',
+   },
 }))
 
 const StyledTitle = styled(Typography)(() => ({
    whiteSpace: 'nowrap',
    overflow: 'hidden',
    textOverflow: 'ellipsis',
+   lineHeight: '100%',
+   fontWeight: 300,
+   fontSize: '18px',
+   margin: '18px 0 8px 0',
 }))

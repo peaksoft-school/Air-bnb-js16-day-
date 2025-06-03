@@ -62,6 +62,7 @@ const FirstButton = styled(MuiButtonBase)(({ width }) => ({
    fontSize: '14px',
    color: '#F7F7F7',
    backgroundColor: '#DD8A08',
+
    '&:hover': { backgroundColor: '#BB7200' },
    '&:active': { backgroundColor: '#F2B75B' },
    '&:disabled': { backgroundColor: '#C4C4C4' },
@@ -84,6 +85,7 @@ const SecondButton = styled(MuiButtonBase)(({ width }) => ({
    fontWeight: '500',
    fontSize: '16px',
    color: '#737272',
+
    '&:hover': { border: '1.5px solid black' },
    '&:active': { backgroundColor: '#DD8A08', color: '#FFF' },
    '&:disabled': { backgroundColor: '#C4C4C4' },
@@ -131,6 +133,7 @@ const FourthButton = styled(MuiButtonBase)(({ width }) => ({
    color: '#828282',
 
    gap: '10px',
+   
    '&:active': { background: '#F3F3F3', color: '#363636' },
    '&:disabled': { backgroundColor: '#C4C4C4' },
 }))

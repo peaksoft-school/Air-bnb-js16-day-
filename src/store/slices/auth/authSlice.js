@@ -1,93 +1,102 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { AUTH_THUNK } from './authThunk';
+import { createSlice } from '@reduxjs/toolkit'
+import { AUTH_THUNK } from './authThunk'
 
 const initialState = {
-  role: 'GUEST',
-  email: null,
-  token: null,
-  isAuth: false,
-  isLoading: false,
-  error: null,
-  forgotPasswordStatus: 'idle',
-  resetPasswordStatus: 'idle',
-};
+   role: 'GUEST',
+   email: null,
+   token: null,
+   isAuth: false,
+   isLoading: false,
+   error: null,
+   forgotPasswordStatus: 'idle',
+   resetPasswordStatus: 'idle',
+}
 
 const authSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    logOut: (state) => {
-      state.token = null;
-      state.isAuth = false;
-      state.role = 'GUEST';
-      state.email = null;
-    },
-    resetError: (state) => {
-      state.error = null;
-    },
-    resetPasswordStatus: (state) => {
-      state.resetPasswordStatus = 'idle';
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      // Login
-      .addCase(AUTH_THUNK.login.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(AUTH_THUNK.login.fulfilled, (state, action) => {
-        Object.assign(state, {
-          ...action.payload,
-          isAuth: true,
-          isLoading: false,
-        });
-      })
-      .addCase(AUTH_THUNK.login.rejected, (state) => {
-        state.isLoading = false;
-      })
+   name: 'auth',
+   initialState,
+   reducers: {
+      logOut: (state, { payload }) => {
+         state.token = null
+         state.isAuth = false
+         state.role = 'GUEST'
+         state.email = null
 
-      // Google Sign In
-      .addCase(AUTH_THUNK.googleSignIn.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(AUTH_THUNK.googleSignIn.fulfilled, (state, action) => {
-        Object.assign(state, {
-          ...action.payload,
-          isAuth: true,
-          isLoading: false,
-        });
-      })
-      .addCase(AUTH_THUNK.googleSignIn.rejected, (state) => {
-        state.isLoading = false;
-      })
+         payload.navigate('/')
+      },
 
-      // Forgot Password
-      .addCase(AUTH_THUNK.forgotPassword.pending, (state) => {
-        state.forgotPasswordStatus = 'loading';
-        state.error = null;
-      })
-      .addCase(AUTH_THUNK.forgotPassword.fulfilled, (state) => {
-        state.forgotPasswordStatus = 'succeeded';
-      })
-      .addCase(AUTH_THUNK.forgotPassword.rejected, (state, action) => {
-        state.forgotPasswordStatus = 'failed';
-        state.error = action.payload?.message;
-      })
+      resetError: (state) => {
+         state.error = null
+      },
 
-      // Reset Password
-      .addCase(AUTH_THUNK.resetPassword.pending, (state) => {
-        state.resetPasswordStatus = 'loading';
-        state.error = null;
-      })
-      .addCase(AUTH_THUNK.resetPassword.fulfilled, (state) => {
-        state.resetPasswordStatus = 'succeeded';
-      })
-      .addCase(AUTH_THUNK.resetPassword.rejected, (state, action) => {
-        state.resetPasswordStatus = 'failed';
-        state.error = action.payload?.message;
-      });
-  },
-});
+      resetPasswordStatus: (state) => {
+         state.resetPasswordStatus = 'idle'
+      },
+   },
 
-export const AUTH_ACTIONS = authSlice.actions;
-export const authReducer = authSlice.reducer;
+   extraReducers: (builder) => {
+      builder
+         .addCase(AUTH_THUNK.signIn.pending, (state) => {
+            state.isLoading = true
+         })
+
+         .addCase(AUTH_THUNK.signIn.fulfilled, (state, action) => {
+            Object.assign(state, {
+               ...action.payload,
+               isAuth: true,
+               isLoading: false,
+            })
+         })
+
+         .addCase(AUTH_THUNK.signIn.rejected, (state) => {
+            state.isLoading = false
+         })
+
+         .addCase(AUTH_THUNK.authWithGoogle.pending, (state) => {
+            state.isLoading = true
+         })
+
+         .addCase(AUTH_THUNK.authWithGoogle.fulfilled, (state, action) => {
+            Object.assign(state, {
+               ...action.payload,
+               isAuth: true,
+               isLoading: false,
+            })
+         })
+
+         .addCase(AUTH_THUNK.authWithGoogle.rejected, (state) => {
+            state.isLoading = false
+         })
+
+         .addCase(AUTH_THUNK.forgotPassword.pending, (state) => {
+            state.forgotPasswordStatus = 'loading'
+            state.error = null
+         })
+
+         .addCase(AUTH_THUNK.forgotPassword.fulfilled, (state) => {
+            state.forgotPasswordStatus = 'succeeded'
+         })
+
+         .addCase(AUTH_THUNK.forgotPassword.rejected, (state, { payload }) => {
+            state.forgotPasswordStatus = 'failed'
+            state.error = payload?.message
+         })
+
+         .addCase(AUTH_THUNK.resetPassword.pending, (state) => {
+            state.resetPasswordStatus = 'loading'
+            state.error = null
+         })
+
+         .addCase(AUTH_THUNK.resetPassword.fulfilled, (state) => {
+            state.resetPasswordStatus = 'succeeded'
+         })
+
+         .addCase(AUTH_THUNK.resetPassword.rejected, (state, { payload }) => {
+            state.resetPasswordStatus = 'failed'
+            state.error = payload?.message
+         })
+   },
+})
+
+export const AUTH_ACTIONS = authSlice.actions
+export const authReducer = authSlice.reducer
