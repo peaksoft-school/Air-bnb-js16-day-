@@ -4,7 +4,7 @@ import {
    fetchUserProfile,
    deleteUser,
    deleteHouse,
-   rejectWithValue,
+   
    blockAllAnnoucement,
 } from './userThunk'
 

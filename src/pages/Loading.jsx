@@ -1,17 +1,14 @@
-import { styled } from '@mui/material/styles'
-import { Box } from '@mui/material'
+import { Box, styled, Typography } from '@mui/material'
 
-const Loading = () => {
-   return (
-      <StyledLoaderWrapper>
-         <LoaderDots>
-            <span></span>
-            <span></span>
-            <span></span>
-         </LoaderDots>
-      </StyledLoaderWrapper>
-   )
-}
+const Loading = () => (
+   <StyledLoaderWrapper>
+      <LoaderDots>
+         <Typography variant="span"></Typography>
+         <Typography variant="span"></Typography>
+         <Typography variant="span"></Typography>
+      </LoaderDots>
+   </StyledLoaderWrapper>
+)
 
 export default Loading
 
@@ -43,9 +40,11 @@ const LoaderDots = styled('div')(() => ({
    '& span:nth-of-type(1)': {
       animationDelay: '0s',
    },
+
    '& span:nth-of-type(2)': {
       animationDelay: '0.2s',
    },
+
    '& span:nth-of-type(3)': {
       animationDelay: '0.4s',
    },
@@ -54,6 +53,7 @@ const LoaderDots = styled('div')(() => ({
       '0%, 80%, 100%': {
          transform: 'scale(0)',
       },
+
       '40%': {
          transform: 'scale(1)',
       },

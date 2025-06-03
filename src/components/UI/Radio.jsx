@@ -1,17 +1,21 @@
-import { Radio as MuiRadio, RadioGroup, FormControlLabel } from '@mui/material'
-import styled from 'styled-components'
+import {
+   Radio as MuiRadio,
+   RadioGroup,
+   FormControlLabel,
+   styled,
+} from '@mui/material'
 
 const Radio = ({ options, value, onChange, ...rest }) => {
    const changeHandler = (e) => onChange(e.target.value)
 
    return (
       <RadioGroup value={value} onChange={changeHandler} {...rest}>
-         {options.map((option) => (
+         {options.map(({ value, label }) => (
             <FormControlLabel
-               key={option.value}
-               value={option.value}
+               key={value}
+               value={value}
                control={<StyledRadio />}
-               label={option.label}
+               label={label}
             />
          ))}
       </RadioGroup>

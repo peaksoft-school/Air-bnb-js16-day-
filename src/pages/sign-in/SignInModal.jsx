@@ -1,11 +1,11 @@
-import { useFormik } from 'formik'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import { Typography, Box, styled } from '@mui/material'
+import { useFormik } from 'formik'
+import { Input } from 'antd'
 import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
-import { Input } from 'antd'
 
 const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
    const { isLoading } = useSelector((state) => state.auth)
@@ -17,7 +17,7 @@ const SignInModal = ({ open, setOpen, onForgotPasswordClick }) => {
 
    const onSubmit = (values, { setSubmitting }) => {
       dispatch(
-         AUTH_THUNK.login({ values, navigate, setSubmitting, handleClose })
+         AUTH_THUNK.signIn({ values, navigate, setSubmitting, handleClose })
       )
    }
 
@@ -100,10 +100,12 @@ const JoinUsBox = styled(Box)(() => ({
          color: '#000',
          textTransform: 'uppercase',
       },
+
       '& .forgot-box': {
          marginLeft: '18em',
       },
    },
+
    '& .second-block': {
       display: 'flex',
       flexDirection: 'column',
@@ -111,6 +113,7 @@ const JoinUsBox = styled(Box)(() => ({
       alignItems: 'center',
       gap: '10px',
    },
+
    '& .forgot-pass': {
       color: '#646464',
       fontSize: '14px',
@@ -118,6 +121,7 @@ const JoinUsBox = styled(Box)(() => ({
       cursor: 'pointer',
       textDecoration: 'none',
    },
+
    '& .signin-input': {
       width: '414px',
       height: '39px',

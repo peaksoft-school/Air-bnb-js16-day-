@@ -13,15 +13,7 @@ const DropDown = ({ label, value, onChange, options, disabled = false }) => {
             variant="standard"
             disableUnderline
             disabled={disabled}
-            sx={{
-               color: 'black',
-               '& .MuiSelect-select': {
-                  paddingRight: '24px',
-               },
-               '& svg': {
-                  right: 0,
-               },
-            }}
+            className="select"
          >
             {options.map(({ value, label }) => (
                <MenuItem key={value} value={value}>
@@ -45,8 +37,21 @@ const StyledSelectBox = styled(Box)(() => ({
    width: '271px',
    height: '42px',
    backgroundColor: 'white',
+
    '&:hover': {
       backgroundColor: '#F3F3F3',
+   },
+
+   '& .select': {
+      color: 'black',
+
+      '& .MuiSelect-select': {
+         paddingRight: '24px',
+      },
+
+      '& svg': {
+         right: 0,
+      },
    },
 }))
 

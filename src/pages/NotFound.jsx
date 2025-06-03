@@ -1,6 +1,6 @@
-import styled from 'styled-components'
-import { motion } from 'framer-motion'
 import { Link } from 'react-router'
+import { motion } from 'framer-motion'
+import styled from 'styled-components'
 
 const NotFound = () => (
    <Wrapper>
@@ -15,6 +15,7 @@ const NotFound = () => (
       >
          404
       </Code>
+
       <Message
          initial={{ opacity: 0, y: 30 }}
          animate={{ opacity: 1, y: 0 }}
@@ -22,6 +23,7 @@ const NotFound = () => (
       >
          Упс! Страница, которую вы ищете, не существует.
       </Message>
+
       <StyledLink to="/">Назад</StyledLink>
    </Wrapper>
 )
