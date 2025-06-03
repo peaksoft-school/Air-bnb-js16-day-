@@ -16,9 +16,13 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import Button from './Button'
+import Button from '../Button'
+import EmptyHouseImage from '../../../assets/images/empty-house.jpg'
 
-const Card = ({ imageUrls, price, rating, title, location, guests }) => {
+const Card = ({ house }) => {
+   const { imageUrls, price, averageRating, description, address, maxGuests } =
+      house
+
    const [isLiked, setIsLiked] = useState(false)
    const [hovered, setHovered] = useState(false)
 
@@ -63,7 +67,7 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                               component="img"
                               height="140"
                               image={url}
-                              alt={title}
+                              alt={description}
                               className="image"
                            />
                         </Box>
@@ -73,8 +77,12 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                   <CardMedia
                      component="img"
                      height="140"
-                     image={imageUrls[0]}
-                     alt={title}
+                     image={
+                        imageUrls.length === 0
+                           ? `${EmptyHouseImage}`
+                           : imageUrls[0]
+                     }
+                     alt={description}
                      className="image"
                   />
                )}
@@ -91,25 +99,25 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                   <Typography className="rating-number">
                      <StarIcon className="rating-icon" />
 
-                     {rating}
+                     {averageRating}
                   </Typography>
                </StyledRating>
             </Box>
 
             <Box>
-               <StyledTitle>{title}</StyledTitle>
+               <StyledTitle>{description}</StyledTitle>
 
                <Box className="location-content">
                   <LocationOnIcon fontSize="small" color="action" />
 
-                  <Typography className="location-name">{location}</Typography>
+                  <Typography className="location-name">{address}</Typography>
                </Box>
             </Box>
 
             <Box className="second-block">
-               <Typography className="guest">{guests} guests</Typography>
+               <Typography className="guest">{maxGuests} guests</Typography>
 
-               <Button width={103}>BOOK</Button>
+               <Button width={110}>BOOK</Button>
 
                <IconButton aria-label="like" onClick={handleLike}>
                   {isLiked ? (
@@ -131,7 +139,6 @@ const StyledMuiCard = styled(Box)(() => ({
    maxHeight: '362px',
    width: '100%',
    height: '100%',
-   margin: '16px',
    borderRadius: '4px',
    transition: 'all 0.3s',
 
@@ -167,6 +174,9 @@ const StyledMuiCard = styled(Box)(() => ({
 
          '& .location-name': {
             fontWeight: 300,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
          },
       },
 
@@ -178,6 +188,7 @@ const StyledMuiCard = styled(Box)(() => ({
          '& .guest': {
             fontWeight: 300,
             color: '#939393',
+            width: '110px',
          },
       },
    },
@@ -185,6 +196,7 @@ const StyledMuiCard = styled(Box)(() => ({
    '&:hover': {
       backgroundColor: 'white',
       cursor: 'pointer',
+      boxShadow: '0 4px 12px #69696914',
    },
 }))
 
@@ -227,6 +239,11 @@ const StyledRating = styled(Box)(() => ({
 
    '& .rating-number': {
       color: 'white',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '4px',
+      justifyContent: 'center',
+      textAlign: 'center',
    },
 
    '& .rating-icon': {

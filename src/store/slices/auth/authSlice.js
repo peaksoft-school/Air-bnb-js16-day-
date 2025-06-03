@@ -98,5 +98,6 @@ const authSlice = createSlice({
    },
 })
 
-export const AUTH_ACTIONS = authSlice.actions
-export const authReducer = authSlice.reducer
+const AUTH_ACTIONS = authSlice.actions
+
+export { AUTH_ACTIONS, authSlice }
