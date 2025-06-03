@@ -1,21 +1,15 @@
 import { StrictMode } from 'react'
+import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router'
 import './index.css'
 import App from './App.jsx'
 import Notification from './components/Notification.jsx'
 import Themes from './components/Themes.jsx'
 import { injectStore } from './configs/axiosInstance.js'
 import { persistor, store } from './store/store.js'
-import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { BrowserRouter } from 'react-router'
-import { Provider } from 'react-redux'
-
-import store from './store/store.js'
-import { injectStore } from './store/slice/axiosInstance.js'
-
-injectStore(store)
 
 injectStore(store)
 
@@ -27,6 +21,7 @@ createRoot(document.getElementById('root')).render(
                <BrowserRouter>
                   <Themes>
                      <App />
+
                      <Notification />
                   </Themes>
                </BrowserRouter>

@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, styled } from '@mui/material'
-
-import { getFilteredHousingRequest } from '../../store/slices/admin/allHousing/allHousingThunk'
-import Card from '../../components/admin/AdminCard'
+import { ALL_HOUSING_THUNK } from '../../store/slices/admin/all-housing/allHousingThunk'
+import AdminCard from '../../components/UI/cards/AdminCard'
 import DropDown from '../../components/UI/DropDown'
-
 import {
    BOOKING_FILTER_OPTIONS,
    POPULAR_SORT_OPTIONS,
    HOUSE_TYPE_OPTIONS,
    PRICE_FILTER_OPTIONS,
-} from '../../utils/constants/admin/allHousing'
+} from '../../utils/constants/admin'
+import Loading from '../Loading'
 
 const AllHousing = () => {
    const [filterOption, setFilterOption] = useState('All')
@@ -19,8 +18,9 @@ const AllHousing = () => {
    const [homeTypeOption, setHomeTypeOption] = useState('All')
    const [priceOption, setPriceOption] = useState('All')
 
+   const { housing, loading, error } = useSelector((state) => state.housing)
+
    const dispatch = useDispatch()
-   const { data, loading, error } = useSelector((state) => state.housing)
 
    const handleChangeFilterOptionValue = (value) => setFilterOption(value)
    const handleChangeSortOptionValue = (value) => setSortByOption(value)
@@ -29,7 +29,7 @@ const AllHousing = () => {
 
    useEffect(() => {
       dispatch(
-         getFilteredHousingRequest({
+         ALL_HOUSING_THUNK.getFilteredHousingRequest({
             bookingStatus: filterOption,
             popularity: sortByOption,
             priceSort: priceOption,
@@ -40,7 +40,7 @@ const AllHousing = () => {
 
    const handleSubmit = () => {
       dispatch(
-         getFilteredHousingRequest({
+         ALL_HOUSING_THUNK.getFilteredHousingRequest({
             bookingStatus: filterOption,
             popularity: sortByOption,
             priceSort: priceOption,
@@ -52,9 +52,10 @@ const AllHousing = () => {
    return (
       <>
          <StyledFirstBox>
-            <StyledBox>
-               <h2 onClick={handleSubmit}>All housing</h2>
-            </StyledBox>
+            <Typography onClick={handleSubmit} className="title">
+               All housing
+            </Typography>
+
             <StyledSelectBox>
                <DropDown
                   label="Filter by:"
@@ -62,18 +63,21 @@ const AllHousing = () => {
                   onChange={handleChangeFilterOptionValue}
                   options={BOOKING_FILTER_OPTIONS}
                />
+
                <DropDown
                   label="Sort by:"
                   value={sortByOption}
                   onChange={handleChangeSortOptionValue}
                   options={POPULAR_SORT_OPTIONS}
                />
+
                <DropDown
                   label="Filter by home type:"
                   value={homeTypeOption}
                   onChange={handleChangeHomeTypeValue}
                   options={HOUSE_TYPE_OPTIONS}
                />
+
                <DropDown
                   label="Filter by price:"
                   value={priceOption}
@@ -84,25 +88,20 @@ const AllHousing = () => {
          </StyledFirstBox>
 
          <StyledCardBox>
-            {loading && <Typography>Loading...</Typography>}
+            {loading && <Loading />}
+
             {error && (
                <Typography sx={{ color: 'error.main' }}>{error}</Typography>
             )}
+
             {!loading &&
                !error &&
-               data.length > 0 &&
-               data.map((housing) => (
-                  <Card
-                     key={housing.id}
-                     imageUrls={housing.imageUrls}
-                     price={housing.price}
-                     rating={housing.rating}
-                     title={housing.title}
-                     location={housing.location}
-                     guests={housing.guests}
-                  />
+               housing.length > 0 &&
+               housing.map((house) => (
+                  <AdminCard key={house.id} house={house} />
                ))}
-            {!loading && !error && data.length === 0 && (
+
+            {!loading && !error && housing.length === 0 && (
                <Typography>Not found.</Typography>
             )}
          </StyledCardBox>
@@ -116,23 +115,28 @@ const StyledFirstBox = styled(Box)(() => ({
    display: 'flex',
    flexWrap: 'wrap',
    gap: '2px',
-   padding: '3px',
    alignItems: 'center',
    justifyContent: 'space-between',
-}))
 
-const StyledBox = styled(Box)(({}) => ({ paddingLeft: '40px' }))
+   '& .title': {
+      fontSize: '20px',
+      lineHeight: '100%',
+      fontWeight: 500,
+      textTransform: 'uppercase',
+   },
+}))
 
 const StyledSelectBox = styled(Box)(() => ({
    display: 'flex',
    flexWrap: 'wrap',
    gap: '16px',
-   padding: '3px',
-   paddingRight: '40px',
 }))
 
 const StyledCardBox = styled(Box)(() => ({
    display: 'flex',
    flexWrap: 'wrap',
-   justifyContent: 'center',
+   justifyContent: 'start',
+   alignItems: 'center',
+   gap: '20px',
+   marginTop: '40px',
 }))

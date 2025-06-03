@@ -4,12 +4,14 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
 function Meatballs({ options = [], onSelect, icon = <MoreHorizIcon /> }) {
    const [anchorEl, setAnchorEl] = useState(null)
+
    const open = Boolean(anchorEl)
 
    const handleClick = (e) => setAnchorEl(e.currentTarget)
 
    const handleClose = (option) => {
       setAnchorEl(null)
+
       if (option && onSelect) {
          onSelect(option)
       }
@@ -18,6 +20,7 @@ function Meatballs({ options = [], onSelect, icon = <MoreHorizIcon /> }) {
    return (
       <>
          <StyledOnMeatballs onClick={handleClick}>{icon}</StyledOnMeatballs>
+
          <Menu
             anchorEl={anchorEl}
             open={open}

@@ -1,5 +1,4 @@
-import { Checkbox as MuiCheckbox } from '@mui/material'
-import styled from 'styled-components'
+import { Checkbox as MuiCheckbox, styled } from '@mui/material'
 
 const Checkbox = ({ checked, onChange, disabled = false, ...rest }) => {
    const changeHandler = (e) => onChange(e.target.checked)

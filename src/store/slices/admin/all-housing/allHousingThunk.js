@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { axiosInstance } from '../../axiosInstance'
+import { axiosInstance } from '../../../../configs/axiosInstance'
 
-export const getFilteredHousingRequest = createAsyncThunk(
+const getFilteredHousingRequest = createAsyncThunk(
    'housing/getFilteredHousing',
    async (
       { bookingStatus, popularity, priceSort, houseType },
@@ -20,3 +20,5 @@ export const getFilteredHousingRequest = createAsyncThunk(
       }
    }
 )
+
+export const ALL_HOUSING_THUNK = { getFilteredHousingRequest }
