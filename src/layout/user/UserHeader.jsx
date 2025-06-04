@@ -31,6 +31,9 @@ const UserHeader = ({
    const navigate = useNavigate()
 
    const handleMenuSelect = (option) => {
+      if (option.action === 'my-profile') {
+         navigate('/user/profile')
+      }
       if (option.action === 'log-out') {
          dispatch(AUTH_ACTIONS.logOut({ navigate }))
       }

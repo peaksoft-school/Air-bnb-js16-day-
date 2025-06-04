@@ -13,6 +13,7 @@ import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 import AllHousing from '../pages/admin/AllHousing'
+import UserProfile from '../pages/user/userProfile'
 
 const AppRoutes = () => (
    <Routes>
@@ -45,6 +46,7 @@ const AppRoutes = () => (
             />
          }
       >
+         <Route path="/user/profile" element={<UserProfile />} />
          <Route index element={<div>Welcome to User Page</div>} />
       </Route>
 
