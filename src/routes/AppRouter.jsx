@@ -4,7 +4,7 @@ import { lazy, Suspense } from 'react'
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
 const ResetPassword = lazy(
-   () => import('../pages/forgotPassword/ResetPassword')
+   () => import('../pages/reset-password/ResetPassword')
 )
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
@@ -12,6 +12,7 @@ const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
+import AllHousing from '../pages/admin/AllHousing'
 
 import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
 import Application from '../pages/admin/user-page/Application'
@@ -91,14 +92,7 @@ const AppRoutes = () => (
             }
          />
 
-         <Route
-            path={ROUTES.ADMIN.ALLHOUSING}
-            element={
-               <div>
-                  <h1>allhousing</h1>
-               </div>
-            }
-         />
+         <Route path="allhousing" element={<AllHousing />} />
       </Route>
 
       <Route

@@ -8,6 +8,7 @@ import houseApplicationsReducer from './slices/admin/user/houseApplicationsSlice
 import persistStore from 'redux-persist/es/persistStore'
 import persistReducer from 'redux-persist/es/persistReducer'
 import storage from 'redux-persist/lib/storage'
+import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
 
 const rootReducer = combineReducers({
    userInfo: userInfoReducer,
@@ -26,6 +27,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
    reducer: persistedReducer,
+
    middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
          serializableCheck: false,
