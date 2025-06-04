@@ -16,7 +16,6 @@ import AdminCard from '../AdminCard'
 import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import {
    fetchUserProfile,
-   deleteUser,
    deleteHouse,
    blockAllAnnoucement,
 } from '../../../store/slices/admin/userThunk'
@@ -44,7 +43,7 @@ const UserDetail = () => {
 
    const links = [
       { href: '/admin/users', label: 'Users' },
-      { href: `/users/${id}`, label: `User ${id}` },
+      { href: `/users/${id}`, label: ` ${user.fullName}` },
    ]
    const options = CardOptions
 
@@ -122,7 +121,7 @@ const UserDetail = () => {
             ) : (
                <>
                   <Button
-                     onClick={handleBlockAll(user?.id)}
+                     onClick={() => handleBlockAll(user?.id)}
                      disabled={user?.isBlocked}
                      className="block-button"
                   >
@@ -146,6 +145,8 @@ const UserDetail = () => {
 }
 
 const UsersBox = styled(Box)(() => ({
+   width: '100%',
+   height: '100%',
    display: 'flex',
    gap: '47px',
    padding: '46px 0px 193px 0',
@@ -216,7 +217,7 @@ const HousesBox = styled(Box)(() => ({
    '& .block-button': {
       position: 'absolute',
       left: '137px',
-      top: '580px',
+      top: '670px',
       width: '292px',
       height: '37px',
       borderRadius: '2px',
