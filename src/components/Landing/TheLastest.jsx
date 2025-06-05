@@ -3,64 +3,75 @@ import LocationOnIcon from '@mui/icons-material/LocationOn'
 import Rectangle from '../../assets/images/Rectangle.png'
 import ImageCarousel from '../UI/ImageCarousel'
 import { IMAGES_POPULARS } from '../../utils/constants/Index'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getLandingPageReguest } from '../../store/slices/user/Landing/LandingThunk'
 
-const TheLastest = ({ handleAllClick, handleMoreClick }) => (
-   <StyledMainContainer>
-      <StyledSecondContainer>
-         <StyledTextContainer>
-            <StyledApartamentText>the lastest</StyledApartamentText>
+const TheLastest = ({ handleAllClick, handleMoreClick }) => {
+   const dispatch = useDispatch()
+   const { landing, error } = useSelector((state) => state.landing)
 
-            <StyledViewText onClick={handleAllClick}>View all</StyledViewText>
-         </StyledTextContainer>
+   useEffect(() => {
+      dispatch(getLandingPageReguest({ houseStatus: 'true' }))
+   }, [dispatch])
 
-         <StyledHotelContainer>
-            <StyledImageContainer>
-               <img src={Rectangle} alt="hotel" />
+   if (error) return <div>{error}</div>
 
-               <StyledDistance>
-                  <StyledDistanceTexts>
-                     <StyledHotelText>
-                        Aska Lara Resort & Spa Hotel
-                     </StyledHotelText>
+   return (
+      <StyledMainContainer>
+         <StyledSecondContainer>
+            <StyledTextContainer>
+               <StyledApartamentText>the lastest</StyledApartamentText>
 
-                     <StyledApartamentsText>
-                        The Aska Lara Resort & Spa Hotel, which operates on an
-                        all-inclusive system, occupies 2 plots separated by a
-                        road. The hotel is located in the Lara district, 500
-                        meters from the sea...
-                     </StyledApartamentsText>
-                  </StyledDistanceTexts>
+               <StyledViewText onClick={handleAllClick}>
+                  View all
+               </StyledViewText>
+            </StyledTextContainer>
 
-                  <StyledDistanceTexts>
-                     <StyledTextLocation>
-                        <LocationOnIcon
-                           fontSize="inherit"
-                           className="location-icon"
-                        />
-                        <Typography className="location-name">
-                           723510 Osh Muzurbek Alimbekov 9/7
-                        </Typography>
-                     </StyledTextLocation>
-
-                     <StyledMoreText onClick={handleMoreClick}>
-                        Read more
-                     </StyledMoreText>
-                  </StyledDistanceTexts>
-               </StyledDistance>
-            </StyledImageContainer>
-
-            <StyledSliderContainer>
-               <ImageCarousel
-                  images={IMAGES_POPULARS}
-                  isButtonBlack={true}
-                  isBlackCount="black"
-                  left="left"
-               />
-            </StyledSliderContainer>
-         </StyledHotelContainer>
-      </StyledSecondContainer>
-   </StyledMainContainer>
-)
+            <StyledHotelContainer>
+               {landing.slice(5, 6).map((apartment) => (
+                  <StyledImageContainer key={apartment.id}>
+                     <StyledImg
+                        src={apartment.imageUrls[0] || Rectangle}
+                        alt={apartment.name}
+                     />
+                     <StyledDistance>
+                        <StyledDistanceTexts>
+                           <StyledHotelText>{apartment.name}</StyledHotelText>
+                           <StyledApartamentsText>
+                              {apartment.description}
+                           </StyledApartamentsText>
+                        </StyledDistanceTexts>
+                        <StyledDistanceTexts>
+                           <StyledTextLocation>
+                              <LocationOnIcon
+                                 fontSize="inherit"
+                                 className="location-icon"
+                              />
+                              <Typography className="location-name">
+                                 {apartment.address}
+                              </Typography>
+                           </StyledTextLocation>
+                           <StyledMoreText onClick={handleMoreClick}>
+                              Read more
+                           </StyledMoreText>
+                        </StyledDistanceTexts>
+                     </StyledDistance>
+                  </StyledImageContainer>
+               ))}
+               <StyledSliderContainer>
+                  <ImageCarousel
+                     images={IMAGES_POPULARS}
+                     isButtonBlack={true}
+                     isBlackCount="black"
+                     left="left"
+                  />
+               </StyledSliderContainer>
+            </StyledHotelContainer>
+         </StyledSecondContainer>
+      </StyledMainContainer>
+   )
+}
 
 export default TheLastest
 
@@ -169,4 +180,10 @@ const StyledViewText = styled(Typography)(() => ({
    letterSpacing: '0%',
    cursor: 'pointer',
    textDecoration: 'underline',
+}))
+const StyledImg = styled('img')(() => ({
+   width: '525px',
+   height: '456px',
+   borderRadius: '2px',
+   objectFit: 'cover',
 }))
