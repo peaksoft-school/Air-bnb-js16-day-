@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux'
+import { NavLink, useNavigate } from 'react-router'
 import {
    AppBar,
    Toolbar,
@@ -10,26 +12,18 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Meatballs from '../../components/UI/Meatballs'
 import Air from '../../assets/icons/air.svg'
 import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
-import { NavLink, useNavigate } from 'react-router'
-import { useDispatch } from 'react-redux'
-import { AdminOptions } from '../../utils/helpers/options'
+import { ADMIN_OPTIONS } from '../../utils/helpers'
 
 const AdminHeader = () => {
    const dispatch = useDispatch()
-   const navigate = useNavigate()
 
-   const handleLogout = () => {
-      dispatch(AUTH_ACTIONS.logOut())
-      navigate('/')
-   }
+   const navigate = useNavigate()
 
    const handleMenuSelect = (option) => {
       if (option.action === 'log-out') {
-         handleLogout()
+         dispatch(AUTH_ACTIONS.logOut({ navigate }))
       }
    }
-
-   const menuOptions = AdminOptions
 
    return (
       <StyledAppBar position="static">
@@ -42,16 +36,16 @@ const AdminHeader = () => {
                </Box>
 
                <Box className="navigation-container">
-                  <NavLink to={'application'} className="nav-text">
-                     {' '}
+                  <NavLink to="application" className="nav-text">
                      Application
                   </NavLink>
-                  <NavLink to={'users'} className="nav-text">
-                     Users{' '}
+
+                  <NavLink to="users" className="nav-text">
+                     Users
                   </NavLink>
-                  <NavLink to={'allhousing'} className="nav-text">
-                     {' '}
-                     AllHousing
+
+                  <NavLink to="all-housing" className="nav-text">
+                     All housing
                   </NavLink>
                </Box>
             </Box>
@@ -62,7 +56,7 @@ const AdminHeader = () => {
 
                   <Meatballs
                      icon={<ExpandMoreIcon className="expand-icon" />}
-                     options={menuOptions}
+                     options={ADMIN_OPTIONS}
                      onSelect={handleMenuSelect}
                   />
                </Box>
@@ -98,6 +92,7 @@ const StyledAppBar = styled(AppBar)(() => ({
             justifyContent: 'space-between',
             gap: '36px',
             color: 'white',
+
             '& .nav-text': {
                color: '#E5E5E5',
                fontFamily: " 'Inter', sans-serif",
@@ -106,6 +101,7 @@ const StyledAppBar = styled(AppBar)(() => ({
                fontSize: '18px',
                lineHeight: '100%',
                letterSpacing: '0%',
+
                '&.active': {
                   color: '#FF4B4B',
                },

@@ -1,6 +1,5 @@
-import { Chip as MuiChip } from '@mui/material'
+import { Chip as MuiChip, styled } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear'
-import styled from 'styled-components'
 
 const Chip = ({ onClick, onDelete, label }) => (
    <StyledMuiChip

@@ -3,8 +3,8 @@ import { axiosInstance } from '../../../configs/axiosInstance'
 import { showToast } from '../../../utils/helpers/showToast'
 import { ROUTES } from '../../../routes/routes'
 
-const login = createAsyncThunk(
-   'auth/login',
+const signIn = createAsyncThunk(
+   'auth/signIn',
 
    async (
       { values, navigate, setSubmitting, handleClose },
@@ -13,22 +13,20 @@ const login = createAsyncThunk(
       try {
          const { data } = await axiosInstance.post('/api/auth/login', values)
 
+         navigate(
+            data.role === 'ADMIN' ? ROUTES.ADMIN.APPLICATION : ROUTES.USER.INDEX
+         )
+
          showToast({
             title: 'Успешно!',
-            message: 'Вы успешно вошли в систему!',
+            message: 'Вы успешно вошли!',
             type: 'success',
          })
-
-         navigate(
-            data.role === 'ADMIN' ? ROUTES.ADMIN.INDEX : ROUTES.USER.INDEX
-         )
 
          handleClose()
 
          return data
       } catch (error) {
-         console.log(error)
-
          showToast({
             title: 'Ошибка!',
             message:
@@ -45,8 +43,8 @@ const login = createAsyncThunk(
    }
 )
 
-const googleSignIn = createAsyncThunk(
-   'auth/googleSignIn',
+const authWithGoogle = createAsyncThunk(
+   'auth/authWithGoogle',
 
    async ({ idToken, navigate, handleClose }, { rejectWithValue }) => {
       try {
@@ -56,13 +54,14 @@ const googleSignIn = createAsyncThunk(
 
          showToast({
             title: 'Успешно!',
-            message: 'Вы успешно вошли через Google!',
+            message: 'Вы успешно вошли!',
             type: 'success',
          })
 
          handleClose()
 
          navigate('/user')
+
          return data
       } catch (error) {
          showToast({
@@ -83,7 +82,7 @@ const googleSignIn = createAsyncThunk(
 const forgotPassword = createAsyncThunk(
    'auth/forgotPassword',
 
-   async ({ email, onSuccess }, { rejectWithValue }) => {
+   async ({ email, handleClose }, { rejectWithValue }) => {
       try {
          const resetLinkBase = `${window.location.origin}/reset-password/`
 
@@ -95,7 +94,13 @@ const forgotPassword = createAsyncThunk(
             }
          )
 
-         if (onSuccess) onSuccess()
+         showToast({
+            title: 'Успешно!',
+            message: 'Ссылка для сброса пароля отправлена на ваш email',
+            type: 'success',
+         })
+
+         handleClose()
 
          return data
       } catch (error) {
@@ -108,21 +113,31 @@ const forgotPassword = createAsyncThunk(
    }
 )
 
-export const resetPassword = createAsyncThunk(
+const resetPassword = createAsyncThunk(
    'auth/resetPassword',
 
-   async ({ token, newPassword, onSuccess, onError }, { rejectWithValue }) => {
+   async ({ token, newPassword, navigate }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.post('/api/auth/reset-password', {
             token,
             newPassword,
          })
 
-         if (onSuccess) onSuccess()
+         showToast({
+            title: 'Успешно!',
+            message: 'Пароль успешно изменен!',
+            type: 'success',
+         })
+
+         navigate('/')
 
          return data
       } catch (error) {
-         if (onError) onError(error.response?.data || error)
+         showToast({
+            title: 'Ошибка!',
+            message: error?.message || 'Ошибка при сбросе пароля',
+            type: 'error',
+         })
 
          return rejectWithValue({
             message:
@@ -133,8 +148,8 @@ export const resetPassword = createAsyncThunk(
 )
 
 export const AUTH_THUNK = {
-   login,
-   googleSignIn,
+   signIn,
+   authWithGoogle,
    forgotPassword,
    resetPassword,
 }

@@ -15,20 +15,17 @@ import {
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
-import {
-   fetchAllUsers,
-   deleteUser,
-   fetchUserProfile,
-} from '../../../store/slices/admin/userThunk'
 import Loading from '../../Loading'
+import { USERS_THUNKS } from '../../../store/slices/admin/users/userThunk'
 
 const Users = () => {
+   const { users, loading, error } = useSelector((state) => state.users)
+
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { users, loading, error } = useSelector((s) => s.user)
 
    useEffect(() => {
-      dispatch(fetchAllUsers())
+      dispatch(USERS_THUNKS.getAllUsers())
    }, [dispatch])
 
    if (loading) return <Loading />
@@ -37,23 +34,18 @@ const Users = () => {
 
    const handleDelete = (e, userId) => {
       e.stopPropagation()
-      dispatch(deleteUser(userId))
+
+      dispatch(USERS_THUNKS.deleteUser(userId))
    }
 
    const handleNavigate = (id) => {
-      dispatch(fetchUserProfile({ choice: 'booking', id }))
-         .unwrap()
-         .then(() => {
-            navigate(`/admin/users/${id}`)
-         })
-         .catch((error) => {
-            console.error('Ошибка загрузки профиля:', error)
-         })
+      dispatch(USERS_THUNKS.getUserProfile({ choice: 'booking', id, navigate }))
    }
 
    return (
       <UsersTable>
          <Typography className="title">USERS</Typography>
+
          <StyledTableContainer component={Paper}>
             <StyledTable>
                <StyledTableHead>
@@ -66,15 +58,15 @@ const Users = () => {
                      <StyledTableCell head>Action</StyledTableCell>
                   </TableRow>
                </StyledTableHead>
+
                <TableBody>
-                  {users.map((user, idx) => (
+                  {users?.map((user, i) => (
                      <StyledTableRow
                         key={user.id}
                         hover
                         onClick={() => handleNavigate(user.id)}
-                        style={{ cursor: 'pointer' }}
                      >
-                        <StyledTableCell>{idx + 1}</StyledTableCell>
+                        <StyledTableCell>{i + 1}</StyledTableCell>
                         <StyledTableCell>{user.fullName}</StyledTableCell>
                         <StyledTableCell>{user.email}</StyledTableCell>
                         <StyledTableCell>{user.bookingHouses}</StyledTableCell>
@@ -95,19 +87,36 @@ const Users = () => {
    )
 }
 
+export default Users
+
 const StyledTableContainer = styled(TableContainer)({
    background: '#f5f5f5',
    borderRadius: 0,
    boxShadow: 'none',
-   marginTop: 20,
 })
-const StyledTable = styled(Table)({ minWidth: 700, borderCollapse: 'collapse' })
-const StyledTableHead = styled(TableHead)({ background: '#545454' })
+
+const StyledTable = styled(Table)({
+   minWidth: 700,
+   borderCollapse: 'collapse',
+})
+
+const StyledTableHead = styled(TableHead)({
+   background: '#545454',
+})
+
 const StyledTableRow = styled(TableRow)({
    borderBottom: '1px solid #e0e0e0',
-   '&:nth-of-type(even)': { backgroundColor: '#f0f0f0' },
-   '&:hover': { backgroundColor: '#e9e9e9' },
+   cursor: 'pointer',
+
+   '&:nth-of-type(even)': {
+      backgroundColor: '#f0f0f0',
+   },
+
+   '&:hover': {
+      backgroundColor: '#e9e9e9',
+   },
 })
+
 const StyledTableCell = styled(TableCell)(({ head }) => ({
    fontSize: 15,
    padding: '10px 16px',
@@ -116,8 +125,8 @@ const StyledTableCell = styled(TableCell)(({ head }) => ({
    border: 'none',
    fontWeight: head ? 500 : 400,
 }))
+
 const UsersTable = styled(Box)(() => ({
-   padding: '50px 40px',
    '& .title': {
       fontSize: 20,
       fontWeight: 500,
@@ -126,5 +135,3 @@ const UsersTable = styled(Box)(() => ({
       fontFamily: 'Inter',
    },
 }))
-
-export default Users

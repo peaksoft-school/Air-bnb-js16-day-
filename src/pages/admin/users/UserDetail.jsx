@@ -14,78 +14,77 @@ import {
 } from '@mui/material'
 import AdminCard from '../AdminCard'
 import BreadCrumbs from '../../../components/UI/BreadCrumbs'
-import {
-   fetchUserProfile,
-   deleteUser,
-   deleteHouse,
-   blockAllAnnoucement,
-} from '../../../store/slices/admin/userThunk'
-import { CardOptions } from '../../../utils/helpers/options'
+import { USERS_THUNKS } from '../../../store/slices/admin/users/userThunk'
+import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
 
 const UserDetail = () => {
-   const { id } = useParams()
-   const dispatch = useDispatch()
+   const { userProfile, loading, error } = useSelector((state) => state.users)
 
    const [activeTab, setActiveTab] = useState('booking')
-   const { userProfile, loading, error } = useSelector((s) => s.user)
+
+   const { id } = useParams()
+
+   const dispatch = useDispatch()
+
    const user = userProfile?.user
 
    useEffect(() => {
-      dispatch(fetchUserProfile({ choice: activeTab, id }))
+      dispatch(USERS_THUNKS.getUserProfile({ choice: activeTab, id }))
    }, [dispatch, activeTab, id])
 
-   const handleBlockAll = async (id) => {
-      try {
-         await dispatch(blockAllAnnoucement(id)).unwrap()
-      } catch (err) {
-         console.error('Blocking error:', err)
-      }
+   const handleBlockAll = (id) => {
+      dispatch(blockAllAnnoucement(id))
    }
 
    const links = [
       { href: '/admin/users', label: 'Users' },
       { href: `/users/${id}`, label: `User ${id}` },
    ]
-   const options = CardOptions
 
-   const handleDeleteHouse = async (houseId) => {
-      try {
-         await dispatch(deleteHouse(houseId)).unwrap()
-      } catch (err) {
-         console.error('Delete error:', err)
-      }
+   const handleDeleteHouse = (houseId) => {
+      dispatch(deleteHouse(houseId))
    }
+
    return (
       <UsersBox>
          <Box className="box-users">
             <BreadCrumbs links={links} />
+
             <Typography variant="h4" gutterBottom>
                {user?.fullName}
             </Typography>
 
             <ContactBox>
                {user && (
-                  <div className="contact-user">
+                  <Box className="contact-user">
                      <Avatar
                         className="avatar"
                         src={user.image}
                         aria-label="User avatar"
                      />
-                     <div className="name-email">
-                        <div className="flex">
-                           <strong className="name-text">Name:</strong>
+
+                     <Box className="name-email">
+                        <Box className="flex">
+                           <Typography variant="strong" className="name-text">
+                              Name:
+                           </Typography>
+
                            <Typography className="contact-name">
                               {user.fullName}
                            </Typography>
-                        </div>
-                        <div className="flex">
-                           <strong className="name-text">Contact:</strong>
+                        </Box>
+
+                        <Box className="flex">
+                           <Typography variant="strong" className="name-text">
+                              Contact:
+                           </Typography>
+
                            <Typography className="contact-name">
                               {user.email}
                            </Typography>
-                        </div>
-                     </div>
-                  </div>
+                        </Box>
+                     </Box>
+                  </Box>
                )}
             </ContactBox>
          </Box>
@@ -109,16 +108,16 @@ const UserDetail = () => {
             ) : error ? (
                <Alert severity="error">{error}</Alert>
             ) : activeTab === 'booking' ? (
-               <div className="cards-container">
+               <Box className="cards-container">
                   {userProfile?.houses.map((house, i) => (
                      <AdminCard
                         key={i}
                         house={house}
-                        options={options}
+                        options={ADMIN_CARD_OPTIONS}
                         onDelete={(houseId) => handleDeleteHouse(houseId)}
                      />
                   ))}
-               </div>
+               </Box>
             ) : (
                <>
                   <Button
@@ -128,16 +127,17 @@ const UserDetail = () => {
                   >
                      {user?.isBlocked ? 'Blocked' : 'Block All'}
                   </Button>
-                  <div className="cards-container">
+
+                  <Box className="cards-container">
                      {userProfile?.houses.map((house, i) => (
                         <AdminCard
                            key={i}
                            house={house}
-                           options={options}
+                           options={ADMIN_CARD_OPTIONS}
                            onDelete={(houseId) => handleDeleteHouse(houseId)}
                         />
                      ))}
-                  </div>
+                  </Box>
                </>
             )}
          </HousesBox>
@@ -150,6 +150,7 @@ const UsersBox = styled(Box)(() => ({
    gap: '47px',
    padding: '46px 0px 193px 0',
    justifyContent: 'center',
+
    '& .box-users': {
       display: 'flex',
       gap: '22px',
@@ -165,10 +166,12 @@ const ContactBox = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'center',
+
    '& .avatar': {
       width: '89px',
       height: '89px',
    },
+
    '& .contact-name': {
       fontSize: '18px',
       fontWeight: '700',
@@ -176,10 +179,12 @@ const ContactBox = styled(Box)(() => ({
       color: '#363636',
       fontFamily: 'Inter',
    },
+
    '& .flex': {
       display: 'flex',
       gap: '16px',
    },
+
    '& .name-text': {
       fontSize: '16px',
       fontWeight: '400',
@@ -187,6 +192,7 @@ const ContactBox = styled(Box)(() => ({
       color: '#363636',
       fontFamily: 'Inter',
    },
+
    '& .contact-user': {
       display: 'flex',
       alignItems: 'center',
@@ -194,6 +200,7 @@ const ContactBox = styled(Box)(() => ({
       flexDirection: 'column',
       gap: '30px',
    },
+
    '& .name-email': {
       display: 'flex',
       flexDirection: 'column',
@@ -206,13 +213,16 @@ const ContactBox = styled(Box)(() => ({
 const HousesBox = styled(Box)(() => ({
    marginTop: '96px',
    width: '900px',
+
    '& .tabs': {
       maxWidth: '100%',
       borderBottom: '1px solid #C4C4C4',
+
       '& .MuiTabs-indicator': {
          backgroundColor: '#000',
       },
    },
+
    '& .block-button': {
       position: 'absolute',
       left: '137px',
@@ -230,10 +240,20 @@ const HousesBox = styled(Box)(() => ({
       fontSize: '14px',
       color: '#F7F7F7',
       backgroundColor: '#DD8A08',
-      '&:hover': { backgroundColor: '#BB7200' },
-      '&:active': { backgroundColor: '#F2B75B' },
-      '&:disabled': { backgroundColor: '#C4C4C4' },
+
+      '&:hover': {
+         backgroundColor: '#BB7200',
+      },
+
+      '&:active': {
+         backgroundColor: '#F2B75B',
+      },
+
+      '&:disabled': {
+         backgroundColor: '#C4C4C4',
+      },
    },
+
    '& .cards-container': {
       display: 'flex',
       flexWrap: 'wrap',

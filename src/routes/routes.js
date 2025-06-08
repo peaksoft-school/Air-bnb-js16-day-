@@ -3,6 +3,7 @@ export const ROUTES = {
       FORGOT_PASSWORD: '/forgot-password',
       RESET_PASSWORD: '/reset-password',
    },
+
    GUEST: {
       INDEX: '/',
    },
@@ -11,7 +12,7 @@ export const ROUTES = {
       INDEX: '/admin',
       USERS: '/admin/users',
       USER_DETAIL: '/admin/users/:id',
-      ALLHOUSING: '/admin/allhousing',
+      ALLHOUSING: '/admin/all-housing',
       APPLICATION: '/admin/application',
    },
 

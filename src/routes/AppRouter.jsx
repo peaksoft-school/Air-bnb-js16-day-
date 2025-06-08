@@ -2,13 +2,14 @@ import { Routes, Route } from 'react-router'
 import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
-
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
+const AllHousing = lazy(() => import('../pages/admin/all-housing/AllHousing'))
 const Users = lazy(() => import('../pages/admin/users/Users'))
 const UserDetail = lazy(() => import('../pages/admin/users/UserDetail'))
 
 const ResetPassword = lazy(
-   () => import('../pages/forgotPassword/ResetPassword'))
+   () => import('../pages/reset-password/ResetPassword')
+)
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 
@@ -94,9 +95,9 @@ const AppRoutes = () => (
          <Route
             path={ROUTES.ADMIN.ALLHOUSING}
             element={
-               <div>
-                  <h1>allhousing</h1>
-               </div>
+               <Suspense fallback={<Loading />}>
+                  <AllHousing />
+               </Suspense>
             }
          />
       </Route>

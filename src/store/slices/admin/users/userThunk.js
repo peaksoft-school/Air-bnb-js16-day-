@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { axiosInstance } from '../../../configs/axiosInstance'
+import { axiosInstance } from '../../../../configs/axiosInstance'
 
-export const fetchAllUsers = createAsyncThunk(
-   'user/fetchAllUsers',
+const getAllUsers = createAsyncThunk(
+   'users/getAllUsers',
 
    async (_, { rejectWithValue }) => {
       try {
@@ -15,13 +15,17 @@ export const fetchAllUsers = createAsyncThunk(
    }
 )
 
-export const fetchUserProfile = createAsyncThunk(
-   'user/fetchUserProfile',
-   async ({ choice, id }, { rejectWithValue }) => {
+const getUserProfile = createAsyncThunk(
+   'user/getUserProfile',
+
+   async ({ choice, id, navigate }, { rejectWithValue }) => {
       try {
          const response = await axiosInstance.get('/api/user/profile', {
             params: { choice },
          })
+
+         navigate(`/admin/users/${id}`)
+
          return { data: response.data, choice }
       } catch (err) {
          return rejectWithValue(err.response?.data || err.message)
@@ -29,13 +33,15 @@ export const fetchUserProfile = createAsyncThunk(
    }
 )
 
-export const deleteUser = createAsyncThunk(
+const deleteUser = createAsyncThunk(
    'user/deleteUser',
+
    async (userId, { rejectWithValue }) => {
       try {
          await axiosInstance.delete('/api/user/delete', {
             data: { userId },
          })
+
          return userId
       } catch (err) {
          return rejectWithValue(err.response?.data || err.message)
@@ -43,29 +49,41 @@ export const deleteUser = createAsyncThunk(
    }
 )
 
-export const deleteHouse = createAsyncThunk(
+const deleteHouse = createAsyncThunk(
    'user/deleteHouse',
+
    async (houseId, { rejectWithValue }) => {
       try {
          await axiosInstance.delete('/api/house/delete', {
             data: { houseId },
          })
+
          return houseId
       } catch (err) {
          return rejectWithValue(err.response?.data || err.message)
       }
    }
 )
-export const blockAllAnnoucement = createAsyncThunk(
+
+const blockAllAnnoucement = createAsyncThunk(
    'blockAllAnnoucement',
    async (userId, { rejectWithValue }) => {
       try {
          await axiosInstance.put('/api/house/block-allAnnouncement', {
             userId,
          })
+
          return userId
       } catch (error) {
          return rejectWithValue(err.response?.data || error.message)
       }
    }
 )
+
+export const USERS_THUNKS = {
+   getAllUsers,
+   getUserProfile,
+   deleteUser,
+   deleteHouse,
+   blockAllAnnoucement,
+}

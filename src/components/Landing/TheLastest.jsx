@@ -1,67 +1,68 @@
 import { Box, styled, Typography } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import Rectangle from '../../assets/images/Rectangle.png'
-import ImageCarousel from '../ImageCarousel'
+import ImageCarousel from '../UI/ImageCarousel'
 import { IMAGES_POPULARS } from '../../utils/constants/Index'
 
-const TheLastest = ({ handleAllClick, handleMoreClick }) => {
-   return (
-      <StyledMainContainer>
-         <StyledSecondContainer>
-            <StyledTextContainer>
-               <StyledApartamentText>the lastest</StyledApartamentText>
+const TheLastest = ({ handleAllClick, handleMoreClick }) => (
+   <StyledMainContainer>
+      <StyledSecondContainer>
+         <StyledTextContainer>
+            <StyledApartamentText>the lastest</StyledApartamentText>
 
-               <StyledViewText onClick={handleAllClick}>
-                  View all
-               </StyledViewText>
-            </StyledTextContainer>
+            <StyledViewText onClick={handleAllClick}>View all</StyledViewText>
+         </StyledTextContainer>
 
-            <StyledHotelContainer>
-               <StyledImageContainer>
-                  <img src={Rectangle} alt="Hotel" />
+         <StyledHotelContainer>
+            <StyledImageContainer>
+               <img src={Rectangle} alt="hotel" />
 
-                  <StyledDistance>
-                     <StyledDistanceTexts>
-                        <StyledHotelText>
-                           Aska Lara Resort & Spa Hotel
-                        </StyledHotelText>
-                        <StyledApartamentsText>
-                           The Aska Lara Resort & Spa Hotel, which operates on
-                           an all-inclusive system, occupies 2 plots separated
-                           by a road. The hotel is located in the Lara district,
-                           500 meters from the sea...
-                        </StyledApartamentsText>
-                     </StyledDistanceTexts>
+               <StyledDistance>
+                  <StyledDistanceTexts>
+                     <StyledHotelText>
+                        Aska Lara Resort & Spa Hotel
+                     </StyledHotelText>
 
-                     <StyledDistanceTexts>
-                        <StyledTextLocation>
-                           <LocationOnIcon
-                              fontSize="inherit"
-                              sx={{ color: '#97C69E' }}
-                           />
+                     <StyledApartamentsText>
+                        The Aska Lara Resort & Spa Hotel, which operates on an
+                        all-inclusive system, occupies 2 plots separated by a
+                        road. The hotel is located in the Lara district, 500
+                        meters from the sea...
+                     </StyledApartamentsText>
+                  </StyledDistanceTexts>
+
+                  <StyledDistanceTexts>
+                     <StyledTextLocation>
+                        <LocationOnIcon
+                           fontSize="inherit"
+                           className="location-icon"
+                        />
+                        <Typography className="location-name">
                            723510 Osh Muzurbek Alimbekov 9/7
-                        </StyledTextLocation>
+                        </Typography>
+                     </StyledTextLocation>
 
-                        <StyledMoreText onClick={handleMoreClick}>
-                           Read more
-                        </StyledMoreText>
-                     </StyledDistanceTexts>
-                  </StyledDistance>
-               </StyledImageContainer>
+                     <StyledMoreText onClick={handleMoreClick}>
+                        Read more
+                     </StyledMoreText>
+                  </StyledDistanceTexts>
+               </StyledDistance>
+            </StyledImageContainer>
 
-               <StyledSliderContainer>
-                  <ImageCarousel
-                     images={IMAGES_POPULARS}
-                     isButtonBlack={true}
-                     isBlackCount={'black'}
-                     Left={'left'}
-                  />
-               </StyledSliderContainer>
-            </StyledHotelContainer>
-         </StyledSecondContainer>
-      </StyledMainContainer>
-   )
-}
+            <StyledSliderContainer>
+               <ImageCarousel
+                  images={IMAGES_POPULARS}
+                  isButtonBlack={true}
+                  isBlackCount="black"
+                  left="left"
+               />
+            </StyledSliderContainer>
+         </StyledHotelContainer>
+      </StyledSecondContainer>
+   </StyledMainContainer>
+)
+
+export default TheLastest
 
 const StyledMainContainer = styled(Box)(() => ({
    width: '100%',
@@ -109,20 +110,27 @@ const StyledApartamentsText = styled(Typography)(() => ({
    lineHeight: '130%',
 }))
 
-const StyledDistanceTexts = styled(Typography)(() => ({
+const StyledDistanceTexts = styled(Box)(() => ({
    display: 'flex',
    flexDirection: 'column',
    gap: '28px',
 }))
 
-const StyledTextLocation = styled(Typography)(() => ({
-   color: '#97C69E',
-   fontWeight: '400',
-   fontSize: '14px',
-   lineHeight: '100%',
+const StyledTextLocation = styled(Box)(() => ({
    display: 'flex',
-   alignItems: 'center',
+   alignItems: 'end',
    gap: '8px',
+
+   '& .location-icon': {
+      color: '#97C69E',
+   },
+
+   '& .location-name': {
+      color: '#97C69E',
+      fontWeight: '400',
+      fontSize: '14px',
+      lineHeight: '100%',
+   },
 }))
 
 const StyledMoreText = styled(Typography)(() => ({
@@ -134,7 +142,7 @@ const StyledMoreText = styled(Typography)(() => ({
    textDecoration: 'underline',
 }))
 
-const StyledDistance = styled(Typography)(() => ({
+const StyledDistance = styled(Box)(() => ({
    display: 'flex',
    flexDirection: 'column',
    gap: '7.44px',
@@ -162,5 +170,3 @@ const StyledViewText = styled(Typography)(() => ({
    cursor: 'pointer',
    textDecoration: 'underline',
 }))
-
-export default TheLastest

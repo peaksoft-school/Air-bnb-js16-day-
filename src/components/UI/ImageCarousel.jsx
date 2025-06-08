@@ -1,10 +1,10 @@
-import { Box, IconButton, styled, Typography } from '@mui/material'
-import { motion } from 'framer-motion'
-import Arrow from '../assets/icons/Arrow.svg'
-import BlackArrow from '../assets/icons/BlackArrow.svg'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Box, IconButton, styled, Typography } from '@mui/material'
+import Arrow from '../../assets/icons/arrow.svg'
+import BlackArrow from '../../assets/icons/black-arrow.svg'
 
-const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
+const ImageCarousel = ({ images, isButtonBlack, isBlackCount, left }) => {
    const [currentImages, setCurrentImages] = useState([images[0], images[1]])
    const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -52,9 +52,9 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
             ))}
          </MotionCarousel>
 
-         <Controls Paddingleft={Left}>
+         <Controls paddingleft={left}>
             <ButtonLeft
-               isBlack={isButtonBlack}
+               isblack={isButtonBlack}
                onClick={handlePrev}
                disabled={isPrevDisabled}
             >
@@ -69,7 +69,7 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, Left }) => {
             </StyledCountText>
 
             <ButtonRight
-               isBlack={isButtonBlack}
+               isblack={isButtonBlack}
                onClick={handleNext}
                disabled={isNextDisabled}
             >

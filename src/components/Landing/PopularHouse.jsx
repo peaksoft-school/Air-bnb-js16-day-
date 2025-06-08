@@ -1,49 +1,57 @@
 import { Box, styled, Typography } from '@mui/material'
-import GeoIcon from '../../assets/icons/Geo.svg'
+import GeoIcon from '../../assets/icons/geo.svg'
+import StarIcon from '../../assets/icons/star.svg'
 import { HOUSES } from '../../utils/constants/Index'
 
-const PopularHouse = () => {
-   return (
-      <StyledMainBox>
-         <StyledSecondBox>
-            <StyledDiv>
-               <div>
-                  <h2>Popular House</h2>
-                  <p>
-                     Helping you make the best decisions in buying, selling, &
-                     renting your last minute locations.
-                  </p>
-               </div>
-               <Box>
-                  <StyledTypography>View all</StyledTypography>
-               </Box>
-            </StyledDiv>
+const PopularHouse = () => (
+   <StyledMainBox>
+      <StyledSecondBox>
+         <StyledDiv>
+            <Box>
+               <Typography variant="h2">Popular House</Typography>
 
-            <StyledBox>
-               {HOUSES.map((house) => (
-                  <StyledCardBox key={house.id}>
-                     <ImageWrapper>
-                        <StyledImg src={house.image} alt={house.title} />
-                        <RatingTag>⭐ {house.rating}</RatingTag>
-                     </ImageWrapper>
+               <Typography>
+                  Helping you make the best decisions in buying, selling, &
+                  renting your last minute locations.
+               </Typography>
+            </Box>
 
-                     <div>
-                        <h3>{house.title}</h3>
-                        <p>
-                           <StyledSecondImg src={GeoIcon} alt="GeoIcon" />
-                           {house.address}
-                        </p>
-                     </div>
-                     <p>
-                        <span>${house.price}</span> / day
-                     </p>
-                  </StyledCardBox>
-               ))}
-            </StyledBox>
-         </StyledSecondBox>
-      </StyledMainBox>
-   )
-}
+            <Box>
+               <StyledTypography>View all</StyledTypography>
+            </Box>
+         </StyledDiv>
+
+         <StyledBox>
+            {HOUSES.map(({ id, image, title, rating, address, price }) => (
+               <StyledCardBox key={id}>
+                  <ImageWrapper>
+                     <StyledImg src={image} alt={title} />
+
+                     <RatingTag>
+                        <img src={StarIcon} alt="star" />
+
+                        <Typography variant="span">{rating}</Typography>
+                     </RatingTag>
+                  </ImageWrapper>
+
+                  <Box className="card-content">
+                     <Typography variant="h3">{title}</Typography>
+
+                     <Typography>
+                        <StyledSecondImg src={GeoIcon} alt="geo" />
+                        {address}
+                     </Typography>
+                  </Box>
+
+                  <Typography>
+                     <Typography variant="span">${price}</Typography> / day
+                  </Typography>
+               </StyledCardBox>
+            ))}
+         </StyledBox>
+      </StyledSecondBox>
+   </StyledMainBox>
+)
 
 export default PopularHouse
 
@@ -111,7 +119,7 @@ const StyledCardBox = styled(Box)(() => ({
    gap: '16px',
    fontFamily: 'Arial',
 
-   '& div': {
+   '& .card-content': {
       display: 'flex',
       flexDirection: 'column',
       gap: '10px',
@@ -134,9 +142,11 @@ const StyledCardBox = styled(Box)(() => ({
 
       '& span': {
          color: '#000',
+         fontWeight: 500,
       },
    },
 }))
+
 const StyledImg = styled('img')(() => ({
    width: '400px',
    height: '484px',
@@ -148,6 +158,7 @@ const StyledSecondImg = styled('img')(() => ({
    width: '12px',
    height: '16px',
 }))
+
 const StyledTypography = styled(Typography)(() => ({
    fontFamily: 'Arial',
    fontWeight: 400,
@@ -163,15 +174,17 @@ const ImageWrapper = styled(Box)(() => ({
    height: '484px',
 }))
 
-const RatingTag = styled('p')(() => ({
+const RatingTag = styled(Box)(() => ({
    position: 'absolute',
-   top: '12px',
-   right: '12px',
-   backgroundColor: 'white',
+   top: '20px',
+   right: '16px',
+   backgroundColor: '#34343480',
    padding: '4px 8px',
-   borderRadius: '4px',
+   borderRadius: '2px',
    fontSize: '14px',
    fontWeight: 500,
-   color: '#000',
+   color: 'white',
    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+   display: 'flex',
+   gap: '4px',
 }))
