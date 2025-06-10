@@ -13,7 +13,7 @@ import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 import AllHousing from '../pages/admin/AllHousing'
-import InnerPage from '../pages/user/InnerPage'
+import UserProfile from '../pages/user/UserProfile'
 
 const AppRoutes = () => (
    <Routes>
@@ -40,14 +40,13 @@ const AppRoutes = () => (
                Component={
                   <Suspense fallback={<Loading />}>
                      <UserLayout />
-                     <InnerPage />
                   </Suspense>
                }
                fallbackPath={'/'}
             />
          }
       >
-         <Route index element={<div>Welcome to User Page</div>} />
+         <Route path="house/:houseId" element={<UserProfile />} />
       </Route>
 
       <Route

@@ -1,24 +1,25 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Avatar, Box, styled, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
+import { showToast } from '../../utils/helpers/showToast'
+
 import Feedback from '../UI/Feedback'
 import HouseImageSlider from './HouseImageSlider'
 import Button from '../UI/Button'
 import Rating from '../UI/rating/Rating'
+import FeedbackModal from '../UI/feedback/FeedbackModal'
+
 import {
    blockedHouses,
    deleteHouseAsync,
 } from '../../store/slices/admin/user/userThunk'
-import FeedbackModal from '../UI/feedback/FeedbackModal'
-import { showToast } from '../../utils/helpers/showToast'
 
-const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
+const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const { role } = useSelector((state) => state.auth)
-   const { houseId, id } = useParams()
-   const [openFeedback, setOpenFeedback] = useState(false)
+   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
 
    const toggleFeedbackModal = () => {
       setOpenFeedback((prev) => !prev)
@@ -114,25 +115,26 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
                         <h2 className="title">There are no feedbacks yet</h2>
                      )}
                   </Box>
-
                   <Rating
                      rating={rating?.rating || 0}
                      toggleFeedbackModal={toggleFeedbackModal}
                   />
+                  <Button onClick={() => setIsFeedbackOpen(true)}>
+                     Оставить отзыв
+                  </Button>
+                  <FeedbackModal
+                     open={isFeedbackOpen}
+                     onClose={() => setIsFeedbackOpen(false)}
+                     houseId={houseInfo.id}
+                  />
                </Box>
             </Box>
          </StyledContainer>
-
-         <FeedbackModal
-            open={openFeedback}
-            onClose={toggleFeedbackModal}
-            houseId={houseId || id}
-         />
       </>
    )
 }
 
-export default HouseInner
+export default InnerPage
 
 const StyledContainer = styled(Box)(() => ({
    padding: '0 0 40px 0',

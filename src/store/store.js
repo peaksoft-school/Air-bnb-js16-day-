@@ -1,13 +1,20 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { authSlice } from './slices/auth/authSlice'
-import persistReducer from 'redux-persist/es/persistReducer'
+import { userInfoReducer } from './slices/admin/user/userInfoSlice'
+import { addHouseSlice } from './slices/user/addHouse/addHouseSlice'
+import { houseSlice } from './slices/user/house/houseSlice'
+
 import persistStore from 'redux-persist/es/persistStore'
+import persistReducer from 'redux-persist/es/persistReducer'
 import storage from 'redux-persist/lib/storage'
 import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
 
 const rootReducer = combineReducers({
-   [authSlice.name]: authSlice.reducer,
-   [allHousingSlice.name]: allHousingSlice.reducer,
+   userInfo: userInfoReducer,
+   addHouseSlice: addHouseSlice.reducer,
+   houseSlice: houseSlice.reducer,
+   auth: authSlice.reducer,
+   allHousing: allHousingSlice.reducer,
 })
 
 const persistConfig = {

@@ -23,6 +23,7 @@ export const ROUTES = {
       CART: '/user/cart',
       CHECKOUT: '/user/checkout',
       PAYMENT: '/user/payment',
+      HOUSE_DETAIL: '/user/house/:houseId',
    },
 }
 
