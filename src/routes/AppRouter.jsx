@@ -13,6 +13,7 @@ import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 import AllHousing from '../pages/admin/AllHousing'
+import CreateHouseForm from '../pages/user/createHouse'
 
 const AppRoutes = () => (
    <Routes>
@@ -45,7 +46,15 @@ const AppRoutes = () => (
             />
          }
       >
-         <Route index element={<div>Welcome to User Page</div>} />
+         <Route  element={<div>Welcome to User Page</div>} />
+         <Route
+            index
+            element={
+               <Suspense fallback={<Loading />}>
+                  <CreateHouseForm />
+               </Suspense>
+            }
+         />
       </Route>
 
       <Route
