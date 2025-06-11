@@ -1,14 +1,11 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetState } from '../../store/slices/user/createHouseSlice'
 import Radio from '../../components/UI/Radio'
 import {
    Box,
    Typography,
    TextField,
-   Button,
    FormControl,
-   FormLabel,
    RadioGroup,
    FormControlLabel,
    Select,
@@ -18,8 +15,13 @@ import {
 } from '@mui/material'
 import { createHouseBase } from '../../store/slices/user/createHouseThunk'
 import Loading from '../Loading'
+import Button from '../../components/UI/Button'
+import { number } from 'yup'
+import { useNavigate } from 'react-router'
+import { showToast } from '../../utils/helpers/showToast'
 
 const CreateHouseForm = () => {
+   const navigate = useNavigate()
    const dispatch = useDispatch()
    const { success, error, loading } = useSelector(
       (state) => state.createHouse || {}
@@ -28,8 +30,8 @@ const CreateHouseForm = () => {
    const [formData, setFormData] = useState({
       imageUrls: [],
       houseType: 'HOUSE',
-      maxGuests: 0,
-      price: 0,
+      maxGuests: number,
+      price: number,
       name: '',
       description: '',
       region: '',
@@ -98,23 +100,11 @@ const CreateHouseForm = () => {
          !formData.address ||
          imageFiles.length === 0
       ) {
-         alert('Пожалуйста, заполните все обязательные поля')
-         return
-      }
-
-      const MAX_FILE_SIZE = 3 * 1024 * 1024 // 3MB
-      const isValidSize = imageFiles.every((file) => file.size <= MAX_FILE_SIZE)
-      if (!isValidSize) {
-         alert('Размер каждого файла должен быть не более 3MB')
-         return
-      }
-
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
-      const isValidType = imageFiles.every((file) =>
-         allowedTypes.includes(file.type)
-      )
-      if (!isValidType) {
-         alert('Разрешены только файлы типа JPEG, JPG или PNG')
+         showToast({
+            title: 'Ошибка!',
+            message: 'Заполните все поля!',
+            type: 'error',
+         })
          return
       }
 
@@ -138,33 +128,32 @@ const CreateHouseForm = () => {
       } catch (error) {
          console.error('Error:', error)
       }
+      if (success) {
+         showToast({
+            title: 'Успешно!',
+            message: 'Вы успешно создали обьявление!',
+            type: 'success',
+         })
+         navigate('/user')
+      }
    }
 
-   const resetForm = () => {
-      dispatch(resetState())
-      setFormData({
-         imageUrls: [],
-         houseType: 'HOUSE',
-         maxGuests: 0,
-         price: 0,
-         name: '',
-         description: '',
-         region: '',
-         city: '',
-         address: '',
-      })
-      setImageFiles([])
-   }
+   const handleImageAdd = () => {
+      const MAX_FILE_SIZE = 3 * 1024 * 1024
+      const isValidSize = imageFiles.every((file) => file.size <= MAX_FILE_SIZE)
+      if (!isValidSize) {
+         alert('Размер каждого файла должен быть не более 3MB')
+         return
+      }
 
-   if (success) {
-      return (
-         <SuccessContainer>
-            <SuccessTitle variant="h5">Дом успешно создан!</SuccessTitle>
-            <SuccessButton onClick={resetForm}>
-               Создать еще один дом
-            </SuccessButton>
-         </SuccessContainer>
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
+      const isValidType = imageFiles.every((file) =>
+         allowedTypes.includes(file.type)
       )
+      if (!isValidType) {
+         alert('Разрешены только файлы типа JPEG, JPG или PNG')
+         return
+      }
    }
 
    if (loading) {
@@ -200,7 +189,7 @@ const CreateHouseForm = () => {
                </FieldLabel>
 
                {imageFiles.length < 4 && (
-                  <ImageUploadContainer>
+                  <ImageUploadContainer onClick={handleImageAdd}>
                      <HiddenFileInput
                         type="file"
                         multiple
@@ -291,10 +280,8 @@ const CreateHouseForm = () => {
                   <StyledTextField
                      type="number"
                      name="maxGuests"
-                     inputProps={{ min: 1 }}
                      value={formData.maxGuests}
                      onChange={handleInputChange}
-                     placeholder="0"
                      fullWidth
                      size="small"
                   />
@@ -302,12 +289,10 @@ const CreateHouseForm = () => {
                <FlexItem>
                   <FieldLabel>Price</FieldLabel>
                   <PriceContainer>
-                     <DollarSign>$</DollarSign>
                      <StyledTextField
-                     
+                        placeholder="$ 0"
                         type="number"
                         name="price"
-                        inputProps={{ min: 0, step: 0.1 }}
                         value={formData.price}
                         onChange={handleInputChange}
                         fullWidth
@@ -323,7 +308,6 @@ const CreateHouseForm = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="Enter listing title"
                   fullWidth
                   size="small"
                />
@@ -335,7 +319,6 @@ const CreateHouseForm = () => {
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  placeholder="Describe your listing"
                   multiline
                   rows={4}
                   fullWidth
@@ -368,7 +351,6 @@ const CreateHouseForm = () => {
                   name="city"
                   value={formData.city}
                   onChange={handleInputChange}
-                  placeholder="Enter town or province"
                   fullWidth
                   size="small"
                />
@@ -380,14 +362,19 @@ const CreateHouseForm = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  placeholder="Enter full address"
                   fullWidth
                   size="small"
                />
             </SectionContainer>
-
-            <SubmitButton type="submit" disabled={loading} loading={loading}>
-               {loading ? 'СОЗДАНИЕ...' : 'SUBMIT'}
+            <SubmitButton>
+               <Button
+                  type="submit"
+                  disabled={loading}
+                  loading={loading}
+                  width={196}
+               >
+                  {loading ? 'СОЗДАНИЕ...' : 'SUBMIT'}
+               </Button>
             </SubmitButton>
          </Box>
       </FormContainer>
@@ -400,7 +387,7 @@ const FormContainer = styled(Box)(() => ({
    maxWidth: '610px',
    margin: '0 auto',
    backgroundColor: 'initial',
-   padding: '20px',
+   padding: '40px 20px 90px 20px',
 }))
 
 const MainTitle = styled(Typography)(() => ({
@@ -515,7 +502,7 @@ const ImagePreview = styled('img')(() => ({
    border: '1px solid #eee',
 }))
 
-const RemoveImageButton = styled(Button)(() => ({
+const RemoveImageButton = styled('button')(() => ({
    position: 'absolute',
    top: '-5px',
    right: '-5px',
@@ -569,14 +556,8 @@ const PriceContainer = styled(Box)(() => ({
    alignItems: 'center',
 }))
 
-const DollarSign = styled(Typography)(() => ({
-   marginRight: '8px',
-   fontWeight: 'bold',
-   color: '#666',
-}))
-
 const StyledTextField = styled(TextField)(() => ({
-
+   '::placeholder': '#C4C4C4',
    '& .MuiOutlinedInput-root': {
       backgroundColor: 'white',
       fontSize: '14px',
@@ -591,19 +572,6 @@ const StyledSelect = styled(Select)(() => ({
    },
 }))
 
-const SubmitButton = styled(Button)(({ loading }) => ({
-   width: '100%',
-   padding: '12px',
-   backgroundColor: loading ? '#ccc' : '#f97316',
-   color: 'white',
-   fontSize: '14px',
-   fontWeight: 'bold',
-   textTransform: 'uppercase',
-   '&:hover': {
-      backgroundColor: loading ? '#ccc' : '#ea580c',
-   },
-   '&:disabled': {
-      backgroundColor: '#ccc',
-      cursor: 'not-allowed',
-   },
+const SubmitButton = styled(Box)(({ loading }) => ({
+   padding: '0px 0px 0px 374px',
 }))

@@ -47,7 +47,7 @@ const UserHeader = ({
                </Box>
 
                {!isAuth && (
-                  <Typography className="leave" onClick={handleLeaveAddClick}>
+                  <Typography className="leave" onClick={handleLeaveAddClick} >
                      leave an ad
                   </Typography>
                )}

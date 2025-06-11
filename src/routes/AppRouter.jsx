@@ -46,9 +46,10 @@ const AppRoutes = () => (
             />
          }
       >
-         <Route  element={<div>Welcome to User Page</div>} />
+         <Route element={<div>Welcome to User Page</div>} />
+
          <Route
-            index
+            path={ROUTES.USER.CREATE_HOUSE}
             element={
                <Suspense fallback={<Loading />}>
                   <CreateHouseForm />
