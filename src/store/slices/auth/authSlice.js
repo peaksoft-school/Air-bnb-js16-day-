@@ -21,7 +21,6 @@ const authSlice = createSlice({
          state.isAuth = false
          state.role = 'GUEST'
          state.email = null
-
       },
 
       resetError: (state) => {

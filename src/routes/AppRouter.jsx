@@ -10,6 +10,7 @@ const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 const Region = lazy(() => import('../pages/user/region/Region'))
 const AllHousing = lazy(() => import('../pages/admin/AllHousing'))
+const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
@@ -53,6 +54,15 @@ const AppRoutes = () => (
             element={
                <Suspense fallback={<Loading />}>
                   <Region />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path="/user/profile"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserProfile />
                </Suspense>
             }
          />

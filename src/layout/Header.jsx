@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
 import {
    AppBar as MuiAppBar,
    Toolbar,
@@ -12,8 +14,6 @@ import Button from '../components/UI/Button'
 import Meatballs from '../components/UI/Meatballs'
 import Air from '../assets/icons/air.svg'
 import { AUTH_ACTIONS } from '../store/slices/auth/authSlice'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router'
 
 const Header = ({ onJoinUs, onProfileClick, onAddLeave, isAuthenticated }) => {
    const menuOptions = [
@@ -28,9 +28,14 @@ const Header = ({ onJoinUs, onProfileClick, onAddLeave, isAuthenticated }) => {
 
       navigate('/')
    }
+
    const handleMenuSelect = (option) => {
+      if (option.action === 'my-profile') {
+         navigate('/user/profile')
+      }
       if (option.action === 'log-out') {
-         handleLogout()
+         dispatch(AUTH_ACTIONS.logOut())
+         navigate('/')
       }
    }
 
