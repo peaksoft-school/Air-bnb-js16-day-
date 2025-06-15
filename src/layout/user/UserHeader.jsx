@@ -16,9 +16,9 @@ import Air from '../../assets/icons/black-air.svg'
 import Checkbox from '../../components/UI/Checkbox'
 import Input from '../../components/UI/Input'
 import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
-import { setSearch } from '../../store/slices/user/regionPageSlice'
 import { useState } from 'react'
 import { USER_OPTIONS } from '../../utils/helpers'
+import { REGION_ACTIONS } from '../../store/slices/user/region/regionSlice'
 
 const UserHeader = ({
    isAuth,
@@ -28,9 +28,10 @@ const UserHeader = ({
    favoriteCount = 9,
    handleLeaveAddClick,
 }) => {
+   const [searchValue, setSearchValue] = useState('')
+
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const [searchValue, setSearchValue] = useState('')
 
    const handleMenuSelect = (option) => {
       if (option.action === 'log-out') {
@@ -40,7 +41,8 @@ const UserHeader = ({
 
    const handleSearchChange = (e) => {
       setSearchValue(e.target.value)
-      dispatch(setSearch(e.target.value))
+
+      dispatch(REGION_ACTIONS.setSearch(e.target.value))
    }
 
    return (
@@ -114,8 +116,7 @@ export default UserHeader
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
    backgroundColor: '#ffffff',
    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
-   padding: '25px 100px',
-   height: '88px',
+   padding: '16px 100px',
 
    '& .toolbar-container': {
       justifyContent: 'space-between',

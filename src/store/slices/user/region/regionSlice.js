@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getHouses } from './regionPageThunk'
+import { REGION_THUNK } from './regionThunk'
 
 const initialState = {
    allHouses: [],
@@ -8,32 +8,37 @@ const initialState = {
    search: '',
 }
 
-const regionPageSlice = createSlice({
-   name: 'regionPage',
+const regionSlice = createSlice({
+   name: 'region',
    initialState,
    reducers: {
       setSearch(state, action) {
          state.search = action.payload
       },
    },
+
    extraReducers: (builder) => {
       builder
-         .addCase(getHouses.pending, (state) => {
+
+         .addCase(REGION_THUNK.getHouses.pending, (state) => {
             state.isLoading = true
             state.error = null
          })
-         .addCase(getHouses.fulfilled, (state, action) => {
+
+         .addCase(REGION_THUNK.getHouses.fulfilled, (state, { payload }) => {
             state.isLoading = false
-            state.allHouses = action.payload.allHouses
+            state.allHouses = payload.allHouses
             state.error = null
          })
-         .addCase(getHouses.rejected, (state, action) => {
+
+         .addCase(REGION_THUNK.getHouses.rejected, (state, { payload }) => {
             state.isLoading = false
-            state.error = action.payload
+            state.error = payload
             state.allHouses = []
          })
    },
 })
 
-export const { setSearch } = regionPageSlice.actions
-export default regionPageSlice.reducer
+const REGION_ACTIONS = regionSlice.actions
+
+export { regionSlice, REGION_ACTIONS }

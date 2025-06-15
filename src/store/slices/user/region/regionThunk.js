@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { axiosInstance } from '../../../configs/axiosInstance'
+import { axiosInstance } from '../../../../configs/axiosInstance'
 
-export const getHouses = createAsyncThunk(
+const getHouses = createAsyncThunk(
    'regionPage/getHouses',
+
    async (params, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get('/api/house/for-users', {
@@ -19,9 +20,12 @@ export const getHouses = createAsyncThunk(
                radius: 1000,
             },
          })
+
          return data
       } catch (error) {
          return rejectWithValue(error.message)
       }
    }
 )
+
+export const REGION_THUNK = { getHouses }

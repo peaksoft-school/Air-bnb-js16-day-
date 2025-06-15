@@ -25,6 +25,7 @@ const Header = ({ onJoinUs, onProfileClick, onAddLeave, isAuthenticated }) => {
 
    const handleLogout = () => {
       dispatch(AUTH_ACTIONS.logOut())
+
       navigate('/')
    }
    const handleMenuSelect = (option) => {

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router'
+import { Routes, Route, Navigate } from 'react-router'
 import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
@@ -8,12 +8,12 @@ const ResetPassword = lazy(
 )
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
-const RegionPage = lazy(() => import('../pages/user/RegionPage'))
+const Region = lazy(() => import('../pages/user/region/Region'))
+const AllHousing = lazy(() => import('../pages/admin/AllHousing'))
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
-import AllHousing from '../pages/admin/AllHousing'
 
 const AppRoutes = () => (
    <Routes>
@@ -46,11 +46,13 @@ const AppRoutes = () => (
             />
          }
       >
+         <Route index element={<Navigate to="region" />} />
+
          <Route
-            index
+            path="region"
             element={
                <Suspense fallback={<Loading />}>
-                  <RegionPage />
+                  <Region />
                </Suspense>
             }
          />
