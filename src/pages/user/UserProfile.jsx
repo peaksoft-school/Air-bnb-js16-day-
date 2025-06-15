@@ -7,53 +7,45 @@ import { ROUTES } from '../../routes/routes'
 import {
    getHouseById,
    getAnnouncementFeedback,
-   getAnnouncementRating,
 } from '../../store/slices/admin/user/userThunk'
-import BreadCrumbs from '../../components/UI/BreadCrumbs'
+import BreadCrumbs from '../../components/UI/Breadcrumbs'
 
 const UserProfile = () => {
    const dispatch = useDispatch()
-   const { user, announcement, feedbacks, rating } = useSelector(
-      (state) => state.userInfo
-   )
-
    const { announcementId, userId } = useParams()
+
+   const { house, feedbacks, rating } = useSelector((state) => state.userInfo)
 
    useEffect(() => {
       if (announcementId) {
          dispatch(getHouseById(announcementId))
          dispatch(getAnnouncementFeedback(announcementId))
-         dispatch(getAnnouncementRating(announcementId))
       }
    }, [dispatch, announcementId])
-   
-
-   
 
    const ANNOUNCEMENT_BREADCRUMBS = [
       {
          label: 'Users',
-         href: ROUTES.ADMIN.USERS,
+         href: ROUTES.USER.PROFILE,
       },
       {
-         label: user?.name || 'User',
-         href: `${ROUTES.ADMIN.USERS}/${userId}`,
+         label: house?.userResponse?.fullName || 'User',
+         href: `${ROUTES.USER.PROFILE}/${userId}`,
       },
       {
-         label: announcement?.title || 'Announcement',
+         label: house?.title || house?.name || 'House',
          href: announcementId,
       },
    ]
-
-   if (!announcement) return <div>Loading...</div>
 
    return (
       <StyledContainer>
          <BreadCrumbs links={ANNOUNCEMENT_BREADCRUMBS} />
          <InnerPage
-            houseInfo={announcement}
+            houseInfo={house}
             feedbacks={feedbacks}
             rating={rating}
+            isMyAnnouncement={false}
          />
       </StyledContainer>
    )

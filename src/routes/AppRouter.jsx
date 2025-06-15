@@ -40,6 +40,7 @@ const AppRoutes = () => (
                Component={
                   <Suspense fallback={<Loading />}>
                      <UserLayout />
+                     
                   </Suspense>
                }
                fallbackPath={'/'}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Avatar, Box, styled, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate } from 'react-router'
 import { showToast } from '../../utils/helpers/showToast'
 
 import Feedback from '../UI/Feedback'
@@ -22,7 +22,7 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
 
    const toggleFeedbackModal = () => {
-      setOpenFeedback((prev) => !prev)
+      setIsFeedbackOpen((prev) => !prev)
    }
 
    const deleteHouse = () => {
@@ -44,93 +44,91 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
    if (!houseInfo) return <div>Loading...</div>
 
    return (
-      <>
-         <StyledContainer>
-            <h1 className="title">{houseInfo.name}</h1>
-            <Box>
-               <Box className="slider-house">
-                  <HouseImageSlider images={houseInfo.imageUrls} />
-                  <Box className="house-info">
-                     <Typography className="house-type">
-                        {houseInfo.type}
-                     </Typography>
-                     <Typography className="house-guests">
-                        {houseInfo.maxGuests} Guests
-                     </Typography>
-                     <Typography className="house-name">
-                        {houseInfo.name}
-                     </Typography>
-                     <Typography className="house-location">
-                        {houseInfo.addressDetail?.address}
-                     </Typography>
-                     <Typography className="house-description">
-                        {houseInfo.description}
-                     </Typography>
+      <StyledContainer>
+         <h1 className="title">{houseInfo.name}</h1>
+         <Box>
+            <Box className="slider-house">
+               <HouseImageSlider images={houseInfo.imageUrls} />
+               <Box className="house-info">
+                  <Typography className="house-type">
+                     {houseInfo.type}
+                  </Typography>
+                  <Typography className="house-guests">
+                     {houseInfo.maxGuests} Guests
+                  </Typography>
+                  <Typography className="house-name">
+                     {houseInfo.name}
+                  </Typography>
+                  <Typography className="house-location">
+                     {houseInfo.addressDetail?.address}
+                  </Typography>
+                  <Typography className="house-description">
+                     {houseInfo.description}
+                  </Typography>
 
-                     <Box className="user-info">
-                        <Avatar
-                           src={houseInfo.userResponse?.image || ''}
-                           alt={houseInfo.userResponse?.fullName || 'Owner'}
-                           className="user-avatar"
-                        />
-                        <Box>
-                           <Typography className="user-name">
-                              {houseInfo.userResponse?.fullName || 'Owner'}
-                           </Typography>
-                           <Typography className="user-email">
-                              {houseInfo.userResponse?.email ||
-                                 'owner@example.com'}
-                           </Typography>
-                        </Box>
+                  <Box className="user-info">
+                     <Avatar
+                        src={houseInfo.userResponse?.image || ''}
+                        alt={houseInfo.userResponse?.fullName || 'Owner'}
+                        className="user-avatar"
+                     />
+                     <Box>
+                        <Typography className="user-name">
+                           {houseInfo.userResponse?.fullName || 'Owner'}
+                        </Typography>
+                        <Typography className="user-email">
+                           {houseInfo.userResponse?.email ||
+                              'owner@example.com'}
+                        </Typography>
                      </Box>
-
-                     {role === 'ADMIN' ? (
-                        <>
-                           <Box className="button-container">
-                              <Button variant="outlined" onClick={deleteHouse}>
-                                 Delete
-                              </Button>
-                              <Button onClick={blockHouse}>
-                                 {blocked ? 'Unblock' : 'Block'}
-                              </Button>
-                           </Box>
-                           <Typography className="blocked-text">
-                              {blocked ? 'This house is currently blocked' : ''}
-                           </Typography>
-                        </>
-                     ) : (
-                        <h1>Здесь будет компонент для оплаты</h1>
-                     )}
                   </Box>
-               </Box>
 
-               <Box className="second-container">
-                  <Box className="feedback-container">
-                     <h1 className="title">Feedback</h1>
-                     {feedbacks.length > 0 ? (
-                        feedbacks.map((item) => (
-                           <Feedback key={item.id} {...item} />
-                        ))
-                     ) : (
-                        <h2 className="title">There are no feedbacks yet</h2>
-                     )}
-                  </Box>
-                  <Rating
-                     rating={rating?.rating || 0}
-                     toggleFeedbackModal={toggleFeedbackModal}
-                  />
-                  <Button onClick={() => setIsFeedbackOpen(true)}>
-                     Оставить отзыв
-                  </Button>
-                  <FeedbackModal
-                     open={isFeedbackOpen}
-                     onClose={() => setIsFeedbackOpen(false)}
-                     houseId={houseInfo.id}
-                  />
+                  {role === 'ADMIN' ? (
+                     <>
+                        <Box className="button-container">
+                           <Button variant="outlined" onClick={deleteHouse}>
+                              Delete
+                           </Button>
+                           <Button onClick={blockHouse}>
+                              {blocked ? 'Unblock' : 'Block'}
+                           </Button>
+                        </Box>
+                        <Typography className="blocked-text">
+                           {blocked ? 'This house is currently blocked' : ''}
+                        </Typography>
+                     </>
+                  ) : (
+                     <h1>Здесь будет компонент для оплаты</h1>
+                  )}
                </Box>
             </Box>
-         </StyledContainer>
-      </>
+
+            <Box className="second-container">
+               <Box className="feedback-container">
+                  <h1 className="title">Feedback</h1>
+                  {feedbacks.length > 0 ? (
+                     feedbacks.map((item) => (
+                        <Feedback key={item.id} {...item} />
+                     ))
+                  ) : (
+                     <h2 className="title">There are no feedbacks yet</h2>
+                  )}
+               </Box>
+               <Rating
+                  rating={rating || 0}
+                  toggleFeedbackModal={toggleFeedbackModal}
+               />
+               <Button onClick={() => setIsFeedbackOpen(true)}>
+                  Оставить отзыв
+               </Button>
+               <FeedbackModal
+                  open={isFeedbackOpen}
+                  onClose={() => setIsFeedbackOpen(false)}
+                  houseId={houseInfo.id}
+               />
+            </Box>
+         </Box>
+      </StyledContainer>
    )
 }
 
