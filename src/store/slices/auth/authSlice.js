@@ -22,7 +22,6 @@ const authSlice = createSlice({
          state.role = 'GUEST'
          state.email = null
 
-         payload.navigate('/')
       },
 
       resetError: (state) => {

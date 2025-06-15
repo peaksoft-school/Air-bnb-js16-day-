@@ -4,10 +4,12 @@ import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
+import { regionSlice } from './slices/user/region/regionSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
    [allHousingSlice.name]: allHousingSlice.reducer,
+   [regionSlice.name]: regionSlice.reducer,
 })
 
 const persistConfig = {
