@@ -11,13 +11,13 @@ import {
    Alert,
    Button,
 } from '@mui/material'
-import { fetchUserProfile } from '../../store/slices/user/userProfileThunk'
-import Card from '../../components/UI/cards/Card'
-import BreadCrumbs from '../../components/UI/BreadCrumbs'
-import DropDown from '../../components/UI/DropDown'
-import Chip from '../../components/UI/Chip'
-import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
+import Card from '../../../components/UI/cards/Card'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
+import DropDown from '../../../components/UI/DropDown'
+import Chip from '../../../components/UI/Chip'
+import { AUTH_ACTIONS } from '../../../store/slices/auth/authSlice'
 import { useNavigate } from 'react-router'
+import { PROFILE_THUNK } from '../../../store/slices/user/profile/profileThunk'
 
 const TABS = [
    { label: 'Bookings', value: 'booking' },
@@ -45,19 +45,23 @@ const typeOptions = [
    { label: 'House', value: 'house' },
 ]
 
-const UserProfile = () => {
-   const navigate = useNavigate()
-   const dispatch = useDispatch()
-   const [activeTab, setActiveTab] = useState('booking')
-   const { userProfile, loading, error } = useSelector((s) => s.userProfile)
-   const user = userProfile?.user
+const Profile = () => {
+   const { userProfile, loading, error } = useSelector((state) => state.profile)
 
+   // const user = userProfile?.user
+
+   const { fullName, email, image } = userProfile.user
+
+   const [activeTab, setActiveTab] = useState('booking')
    const [sort, setSort] = useState('')
    const [type, setType] = useState('')
    const [rating, setRating] = useState('')
 
+   const navigate = useNavigate()
+   const dispatch = useDispatch()
+
    useEffect(() => {
-      dispatch(fetchUserProfile({ choice: activeTab }))
+      dispatch(PROFILE_THUNK.getUserProfile({ choice: activeTab }))
    }, [dispatch, activeTab])
 
    const filteredHouses = (userProfile?.houses || [])
@@ -83,32 +87,38 @@ const UserProfile = () => {
       if (filter === 'type') setType('')
       if (filter === 'rating') setRating('')
    }
+
    const handleLogout = () => {
       dispatch(AUTH_ACTIONS.logOut())
+
       navigate('/')
    }
 
+   const links = [
+      { href: '/user', label: 'Main' },
+      { href: '/user/profile', label: 'Profile' },
+   ]
+
    return (
       <ProfileWrapper>
-         <BreadCrumbs
-            links={[
-               { href: '/user', label: 'Main' },
-               { href: '/user/profile', label: 'Profile' },
-            ]}
-         />
+         <BreadCrumbs links={links} />
+
          <ProfileBox>
             <LeftBox>
                <Typography className="profile-title">PROFILE</Typography>
                <ProfileCard>
                   <Avatar className="avatar">
-                     {user?.fullName?.[0] || 'U'}
+                     {<img src={image} alt="" /> || 'U'}
                   </Avatar>
+
                   <Typography className="profile-name">
-                     Name: {user?.fullName}
+                     Name: {fullName}
                   </Typography>
+
                   <Typography className="profile-email">
-                     Contact: {user?.email}
+                     Contact: {email}
                   </Typography>
+
                   <Button
                      className="logout-btn"
                      color="error"
@@ -118,6 +128,7 @@ const UserProfile = () => {
                   </Button>
                </ProfileCard>
             </LeftBox>
+
             <RightBox>
                <Tabs
                   value={activeTab}
@@ -134,19 +145,21 @@ const UserProfile = () => {
 
                {activeTab === 'announcement' && (
                   <>
-                     <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                     <Box className="drop-downs">
                         <DropDown
                            label="Sort"
                            value={sort}
                            onChange={setSort}
                            options={sortOptions}
                         />
+
                         <DropDown
                            label="Type"
                            value={type}
                            onChange={setType}
                            options={typeOptions}
                         />
+
                         <DropDown
                            label="Sort by ratings"
                            value={rating}
@@ -154,7 +167,8 @@ const UserProfile = () => {
                            options={ratingOptions}
                         />
                      </Box>
-                     <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+
+                     <Box className="sort-content">
                         {sort && (
                            <Chip
                               label={
@@ -163,6 +177,7 @@ const UserProfile = () => {
                               onDelete={() => handleDeleteChip('sort')}
                            />
                         )}
+
                         {type && (
                            <Chip
                               label={
@@ -171,6 +186,7 @@ const UserProfile = () => {
                               onDelete={() => handleDeleteChip('type')}
                            />
                         )}
+
                         {rating && (
                            <Chip
                               label={'★'.repeat(Number(rating))}
@@ -178,6 +194,7 @@ const UserProfile = () => {
                               style={{ color: '#FFD600', fontWeight: 600 }}
                            />
                         )}
+
                         {(sort || type || rating) && (
                            <Button
                               variant="text"
@@ -196,11 +213,11 @@ const UserProfile = () => {
                ) : error ? (
                   <Alert severity="error">{error}</Alert>
                ) : (
-                  <div className="cards-container">
+                  <Box className="cards-container">
                      {filteredHouses.map((house, i) => (
                         <Card key={i} house={house} />
                      ))}
-                  </div>
+                  </Box>
                )}
             </RightBox>
          </ProfileBox>
@@ -208,7 +225,7 @@ const UserProfile = () => {
    )
 }
 
-export default UserProfile
+export default Profile
 
 const ProfileWrapper = styled(Box)(() => ({
    width: '100%',
@@ -221,14 +238,17 @@ const ProfileBox = styled(Box)(() => ({
    justifyContent: 'center',
    gap: '48px',
 }))
+
 const LeftBox = styled(Box)(() => ({
    minWidth: '320px',
+
    '& .profile-title': {
       fontWeight: 600,
       fontSize: '20px',
       marginBottom: '20px',
    },
 }))
+
 const ProfileCard = styled(Box)(() => ({
    background: '#fff',
    border: '1px solid #E0E0E0',
@@ -238,35 +258,53 @@ const ProfileCard = styled(Box)(() => ({
    flexDirection: 'column',
    alignItems: 'center',
    gap: '18px',
+
    '& .avatar': {
       width: '80px',
       height: '80px',
       fontSize: '32px',
       background: '#1976d2',
    },
+
    '& .profile-name, & .profile-email': {
       fontSize: '16px',
       color: '#363636',
       fontWeight: 500,
    },
+
    '& .logout-btn': {
-      width: '80px',
-      marginRight: '19.5em',
-      textTransform: 'none',
+      marginRight: '12rem',
+      textAlign: 'start',
    },
 }))
+
 const RightBox = styled(Box)(() => ({
    flex: 1,
    background: '#fff',
    borderRadius: '12px',
    minHeight: '400px',
+
    '& .tabs': {
       borderBottom: '1px solid #C4C4C4',
       marginBottom: '24px',
+
       '& .MuiTabs-indicator': {
          backgroundColor: '#000',
       },
    },
+
+   '& .drop-downs': {
+      display: 'flex',
+      gap: '16px',
+      marginBottom: '16px',
+   },
+
+   '& .sort-content': {
+      display: 'flex',
+      gap: '8px',
+      marginBottom: '16px',
+   },
+
    '& .cards-container': {
       display: 'flex',
       flexWrap: 'wrap',
