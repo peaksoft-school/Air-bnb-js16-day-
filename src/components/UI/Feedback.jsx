@@ -8,7 +8,7 @@ import {
 } from '@mui/material'
 import LikeIcon from '../../assets/icons/LikeIcon.svg'
 import DisLike from '../../assets/icons/DisLike.svg'
-import IconButton from '../UI/IconButton' // твой кастомный IconButton для лайков
+import IconButton from '../UI/IconButton'
 
 const Feedback = ({
    text,

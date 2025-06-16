@@ -2,38 +2,39 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { Box, styled } from '@mui/material'
-import InnerPage from '../../components/house/InnerPage'
+import InnerPage from '../../components/house/HouseInner'
 import { ROUTES } from '../../routes/routes'
 import {
    getHouseById,
    getAnnouncementFeedback,
 } from '../../store/slices/admin/user/userThunk'
-import BreadCrumbs from '../../components/UI/Breadcrumbs'
+import BreadCrumbs from '../../components/UI/BreadCrumbs'
 
-const UserProfile = () => {
+const UserAnnouncement = () => {
    const dispatch = useDispatch()
-   const { announcementId, userId } = useParams()
+   const { announcementId, userId, id } = useParams()
 
-   const { house, feedbacks, rating } = useSelector((state) => state.userInfo)
+   const userInfo = useSelector((state) => state.userInfo) || {}
+   const { user, announcement, feedbacks, rating } = userInfo
 
    useEffect(() => {
-      if (announcementId) {
-         dispatch(getHouseById(announcementId))
-         dispatch(getAnnouncementFeedback(announcementId))
+      if (id) {
+         dispatch(getHouseById(id))
+         dispatch(getAnnouncementFeedback(id))
       }
-   }, [dispatch, announcementId])
+   }, [dispatch, id])
 
    const ANNOUNCEMENT_BREADCRUMBS = [
       {
          label: 'Users',
-         href: ROUTES.USER.PROFILE,
+         href: ROUTES.USER.DETAIL,
       },
       {
-         label: house?.userResponse?.fullName || 'User',
-         href: `${ROUTES.USER.PROFILE}/${userId}`,
+         label: user?.name || 'User',
+         href: `${ROUTES.USER.DETAIL}/${userId}`,
       },
       {
-         label: house?.title || house?.name || 'House',
+         label: announcement?.title || 'Profile',
          href: announcementId,
       },
    ]
@@ -41,8 +42,9 @@ const UserProfile = () => {
    return (
       <StyledContainer>
          <BreadCrumbs links={ANNOUNCEMENT_BREADCRUMBS} />
+
          <InnerPage
-            houseInfo={house}
+            houseInfo={announcement}
             feedbacks={feedbacks}
             rating={rating}
             isMyAnnouncement={false}
@@ -51,7 +53,7 @@ const UserProfile = () => {
    )
 }
 
-export default UserProfile
+export default UserAnnouncement
 
 const StyledContainer = styled(Box)(() => ({
    padding: '45px 40px',

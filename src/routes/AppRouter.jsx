@@ -13,7 +13,7 @@ import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 import AllHousing from '../pages/admin/AllHousing'
-import UserProfile from '../pages/user/UserProfile'
+import UserAnnouncement from '../pages/user/UserAnnouncement'
 
 const AppRoutes = () => (
    <Routes>
@@ -40,14 +40,14 @@ const AppRoutes = () => (
                Component={
                   <Suspense fallback={<Loading />}>
                      <UserLayout />
-                     
+                     <UserAnnouncement />
                   </Suspense>
                }
                fallbackPath={'/'}
             />
          }
       >
-         <Route path="house/:houseId" element={<UserProfile />} />
+         <Route path={ROUTES.USER.DETAIL} element={<></>} />
       </Route>
 
       <Route
