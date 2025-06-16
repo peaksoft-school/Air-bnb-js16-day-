@@ -1,14 +1,19 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { authReducer } from './slices/auth/authSlice'
-import houseApplicationsReducer from './slices/admin/houseApplicationsSlice'
-
+import { authSlice } from './slices/auth/authSlice'
 import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
+import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
+import { regionSlice } from './slices/user/region/regionSlice'
+import { profileSlice } from './slices/user/profile/profileSlice'
+import houseApplicationsReducer from './slices/admin/houseApplicationsSlice'
 
 const rootReducer = combineReducers({
-  auth: authReducer,
-  houseApplications: houseApplicationsReducer,
+   [authSlice.name]: authSlice.reducer,
+   [allHousingSlice.name]: allHousingSlice.reducer,
+   [profileSlice.name]: profileSlice.reducer,
+   [regionSlice.name]: regionSlice.reducer,
+   houseApplications: houseApplicationsReducer,
 })
 
 const persistConfig = {
@@ -19,11 +24,12 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+   reducer: persistedReducer,
+
+   middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+         serializableCheck: false,
+      }),
 })
 
 const persistor = persistStore(store)

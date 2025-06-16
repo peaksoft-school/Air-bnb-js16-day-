@@ -1,15 +1,14 @@
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
 import { Typography, Box, styled } from '@mui/material'
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import Modal from '../../components/UI/Modal'
 import Button from '../../components/UI/Button'
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { auth } from '../../configs/firebase'
-import { useDispatch } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
-import { useNavigate } from 'react-router'
 
 const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
    const dispatch = useDispatch()
-
    const navigate = useNavigate()
 
    const handleClose = () => setOpen(false)
@@ -24,7 +23,7 @@ const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
          const idToken = await result.user.getIdToken()
 
          await dispatch(
-            AUTH_THUNK.googleSignIn({ idToken, navigate, handleClose })
+            AUTH_THUNK.authWithGoogle({ idToken, navigate, handleClose })
          ).unwrap()
       } catch (error) {
          console.error('Google sign-in error:', error)
@@ -36,6 +35,7 @@ const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
          <JoinUsBox>
             <Box className="first-block">
                <Typography className="joinus-text">JOIN US</Typography>
+
                <Typography className="signin-text">
                   Sign in with Google to start booking available listings!
                </Typography>
@@ -57,6 +57,8 @@ const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
       </Modal>
    )
 }
+
+export default SignUpModal
 
 const JoinUsBox = styled(Box)(({ theme }) => ({
    display: 'flex',
@@ -106,5 +108,3 @@ const JoinUsBox = styled(Box)(({ theme }) => ({
       },
    },
 }))
-
-export default SignUpModal

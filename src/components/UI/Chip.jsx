@@ -1,6 +1,5 @@
-import { Chip as MuiChip } from '@mui/material'
+import { Chip as MuiChip, styled } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear'
-import styled from 'styled-components'
 
 const Chip = ({ onClick, onDelete, label }) => (
    <StyledMuiChip
@@ -15,7 +14,7 @@ export default Chip
 
 const StyledMuiChip = styled(MuiChip)({
    '&.MuiChip-root': {
-      width: '95px',
+      width: '120px',
       height: '35px',
       borderRadius: '1px',
       backgroundColor: '#F3F3F3',
@@ -26,6 +25,7 @@ const StyledMuiChip = styled(MuiChip)({
 
       '&:hover': {
          backgroundColor: '#C4C4C4',
+         cursor: 'pointer',
       },
 
       '&:active': {

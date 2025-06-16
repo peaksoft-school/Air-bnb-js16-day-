@@ -28,8 +28,9 @@ const theme = createTheme({
       },
    },
 })
-const Themes = ({ children }) => {
-   return <ThemeProvider theme={theme}>{children}</ThemeProvider>
-}
+
+const Themes = ({ children }) => (
+   <ThemeProvider theme={theme}>{children}</ThemeProvider>
+)
 
 export default Themes

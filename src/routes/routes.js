@@ -3,6 +3,7 @@ export const ROUTES = {
       FORGOT_PASSWORD: '/forgot-password',
       RESET_PASSWORD: '/reset-password',
    },
+
    GUEST: {
       INDEX: '/',
    },
@@ -22,6 +23,7 @@ export const ROUTES = {
       CART: '/user/cart',
       CHECKOUT: '/user/checkout',
       PAYMENT: '/user/payment',
+      REGION_PAGE: '/user/region-page',
    },
 }
 

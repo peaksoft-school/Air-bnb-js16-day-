@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Box, Grid, Typography, LinearProgress, Alert } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { Box, Grid, Typography, LinearProgress, Alert ,styled} from '@mui/material'
 import Pagination from '@mui/material/Pagination'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
@@ -68,14 +67,7 @@ export default function Application() {
    const options = CardOptions
 
    return (
-      <Box
-         sx={{
-            p: 4,
-            background: '#fafafa',
-            minHeight: '100vh',
-            position: 'relative',
-         }}
-      >
+      <StyledBox >
          <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
             APPLICATION
          </Typography>
@@ -159,7 +151,7 @@ export default function Application() {
                boundaryCount={1}
             />
          </Box>
-      </Box>
+      </StyledBox>
    )
 }
 
@@ -192,4 +184,10 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
          fontSize: 18,
       },
    },
+}))
+const StyledBox = styled(Box)(() => ({
+   p: 4,
+   background: '#fafafa',
+   minHeight: '100vh',
+   position: 'relative',
 }))

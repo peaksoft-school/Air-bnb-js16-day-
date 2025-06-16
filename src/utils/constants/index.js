@@ -8,9 +8,7 @@ const IMAGES_POPULARS = [
    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxvz1T5qIJums7KIaA49cSaFlgpVKzes0Diw&s',
 ]
 
-export { IMAGES_POPULARS }
-
-export const HOUSES = [
+const HOUSES = [
    {
       id: 1,
       title: 'Asman guest house',
@@ -19,6 +17,7 @@ export const HOUSES = [
       price: 26,
       rating: 3.5,
    },
+
    {
       id: 2,
       title: 'Asman guest house',
@@ -27,6 +26,7 @@ export const HOUSES = [
       price: 26,
       rating: 4.8,
    },
+
    {
       id: 3,
       title: 'Asman guest house',
@@ -36,3 +36,5 @@ export const HOUSES = [
       rating: 4.5,
    },
 ]
+
+export { IMAGES_POPULARS, HOUSES }

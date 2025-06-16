@@ -17,7 +17,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import Button from './Button'
+import Button from '../Button'
 
 const Card = ({ imageUrls, price, rating, title, location, guests }) => {
    const [isLiked, setIsLiked] = useState(false)
@@ -49,24 +49,24 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
    }
 
    return (
-      <MuiCard sx={{ maxWidth: 300, margin: 2 }}>
+      <StyledMuiCard>
          <Box
-            sx={{ position: 'relative' }}
+            className="content"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
             <Slider {...settings}>
                {imageUrls.length > 1 ? (
                   <Slider {...settings}>
-                     {imageUrls.map((url, index) => (
-                        <div key={index}>
+                     {imageUrls.map((url, i) => (
+                        <Box key={i}>
                            <CardMedia
                               component="img"
                               height="140"
                               image={url}
                               alt={title}
                            />
-                        </div>
+                        </Box>
                      ))}
                   </Slider>
                ) : (
@@ -81,49 +81,39 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
          </Box>
 
          <CardContent>
-            <Box
-               display="flex"
-               justifyContent="space-between"
-               alignItems="center"
-            >
-               <Typography variant="h6" component="div">
-                  ${price} <span style={{ color: 'gray' }}>/ day</span>
+            <Box className="first-block">
+               <Typography variant="h6">
+                  ${price}
+                  <span className="day-word">/ day</span>
                </Typography>
 
                <StyledRating>
-                  <Typography variant="body2" sx={{ color: 'white' }}>
-                     <StarIcon sx={{ color: '#F7D212', fontSize: '13px' }} />
+                  <Typography className="rating">
+                     <StarIcon className="star-icon" />
                      {rating}
                   </Typography>
                </StyledRating>
             </Box>
 
-            <StyledTitle gutterBottom variant="h5" component="div">
+            <StyledTitle gutterBottom variant="h5">
                {title}
             </StyledTitle>
 
-            <Box display="flex" alignItems="center" gap={1}>
+            <Box className="location-text">
                <LocationOnIcon fontSize="small" color="action" />
 
-               <Typography variant="body2" color="text.secondary">
-                  {location}
-               </Typography>
+               <Typography color="text.secondary">{location}</Typography>
             </Box>
          </CardContent>
 
-         <Box
-            display="flex"
-            justifyContent="space-around"
-            alignItems="center"
-            pb={2}
-         >
-            <Box display="flex" alignItems="center" gap={1}>
-               <Typography fontSize={14} variant="body2" color="text.secondary">
+         <Box className="second-block">
+            <Box className="guest-content">
+               <Typography className="guest" color="text.secondary">
                   {guests} guests
                </Typography>
             </Box>
 
-            <Box display="flex" gap="10px">
+            <Box className="buttons-content">
                <Button width={100}>BOOK</Button>
 
                <IconButton aria-label="like" onClick={handleLike}>
@@ -135,11 +125,57 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                </IconButton>
             </Box>
          </Box>
-      </MuiCard>
+      </StyledMuiCard>
    )
 }
 
 export default Card
+
+const StyledMuiCard = styled(MuiCard)(() => ({
+   maxWidth: '300px',
+
+   '& .content': {
+      position: 'relative',
+   },
+
+   '& .first-block': {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+
+      '& .day-word': {
+         color: 'gray',
+      },
+   },
+
+   '& .location-text': {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+   },
+
+   '& .second-block': {
+      display: 'flex',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      paddingBottom: '16px',
+
+      '& .guest-content': {
+         display: 'flex',
+         alignItems: 'center',
+         gap: '8px',
+
+         '& .guest': {
+            fontSize: '14px',
+         },
+      },
+
+      '& .buttons-content': {
+         display: 'flex',
+         gap: '10px',
+      },
+   },
+}))
 
 const StyledIconButtonBack = styled(IconButton)(() => ({
    position: 'absolute',
@@ -177,6 +213,15 @@ const StyledRating = styled(Box)(() => ({
    alignItems: 'center',
    justifyContent: 'center',
    borderRadius: '2px',
+
+   '& .rating': {
+      color: 'white',
+   },
+
+   '& .star-icon': {
+      color: '#F7D212',
+      fontSize: '13px',
+   },
 }))
 
 const StyledTitle = styled(Typography)(() => ({
