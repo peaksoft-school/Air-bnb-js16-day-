@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { Box, styled } from '@mui/material'
-import InnerPage from '../../components/house/HouseInner'
 import { ROUTES } from '../../routes/routes'
 import {
    getHouseById,
    getAnnouncementFeedback,
 } from '../../store/slices/admin/user/userThunk'
 import BreadCrumbs from '../../components/UI/BreadCrumbs'
+import InnerPage from '../../pages/user/inner/InnerPage'
 
 const UserAnnouncement = () => {
    const dispatch = useDispatch()
@@ -34,7 +34,7 @@ const UserAnnouncement = () => {
          href: `${ROUTES.USER.DETAIL}/${userId}`,
       },
       {
-         label: announcement?.title || 'Profile',
+         label: announcement?.title || 'Announcement',
          href: announcementId,
       },
    ]

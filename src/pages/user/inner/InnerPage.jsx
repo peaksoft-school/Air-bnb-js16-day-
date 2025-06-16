@@ -2,18 +2,18 @@ import { useState } from 'react'
 import { Avatar, Box, styled, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
-import { showToast } from '../../utils/helpers/showToast'
+import { showToast } from '../../../utils/helpers/showToast'
 
-import Feedback from '../UI/Feedback'
-import HouseImageSlider from './HouseImageSlider'
-import Button from '../UI/Button'
-import Rating from '../UI/rating/Rating'
-import FeedbackModal from '../UI/feedback/FeedbackModal'
+import Feedback from '../../../components/UI/Feedback'
+import HouseImageSlider from '../../../components/house/HouseImageSlider'
+import Button from '../../../components/UI/Button'
+import Rating from '../../../components/UI/rating/Rating'
+import FeedbackModal from '../../../components/UI/feedback/FeedbackModal'
 
 import {
    blockedHouses,
    deleteHouseAsync,
-} from '../../store/slices/admin/user/userThunk'
+} from '../../../store/slices/admin/user/userThunk'
 
 const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
    const dispatch = useDispatch()
