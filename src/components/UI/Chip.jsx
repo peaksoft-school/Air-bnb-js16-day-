@@ -14,7 +14,7 @@ export default Chip
 
 const StyledMuiChip = styled(MuiChip)({
    '&.MuiChip-root': {
-      width: '95px',
+      width: '120px',
       height: '35px',
       borderRadius: '1px',
       backgroundColor: '#F3F3F3',
@@ -25,6 +25,7 @@ const StyledMuiChip = styled(MuiChip)({
 
       '&:hover': {
          backgroundColor: '#C4C4C4',
+         cursor: 'pointer',
       },
 
       '&:active': {

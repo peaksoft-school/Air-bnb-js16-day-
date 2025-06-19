@@ -3,7 +3,6 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import {
-   Card as MuiCard,
    CardMedia,
    CardContent,
    Typography,
@@ -20,10 +19,10 @@ import EmptyHouseImage from '../../../assets/images/empty-house.jpg'
 import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
 
 const AdminCard = ({ house }) => {
+   const [hovered, setHovered] = useState(false)
+
    const { imageUrls, price, averageRating, description, address, maxGuests } =
       house
-
-   const [hovered, setHovered] = useState(false)
 
    const CustomPrevArrow = ({ onClick }) => (
       <ArrowButton onClick={onClick} direction="left">
@@ -238,6 +237,7 @@ const ArrowButton = styled(IconButton, {
    backgroundColor: 'rgba(0, 0, 0, 0.5)',
    color: '#fff',
    zIndex: 1,
+
    '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
    },
