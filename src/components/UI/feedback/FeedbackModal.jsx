@@ -15,7 +15,7 @@ import { axiosInstance } from '../../../configs/axiosInstance'
 import { getAnnouncementById } from '../../../store/slices/user/house/houseThunk'
 
 const FeedbackModal = ({ open, onClose, houseId }) => {
-   const images = useSelector((state) => state.addHouseSlice.images)
+   const { images } = useSelector((state) => state.addHouse)
    const dispatch = useDispatch()
    const imageRef = useRef(null)
    const [rating, setRating] = useState(0)
@@ -31,8 +31,7 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
 
    const postFeedback = async () => {
       try {
-         await axiosInstance.post(`/api/feedbacks?houseId=${houseId}`, {
-            images,
+         await axiosInstance.post(`/api/feedback/save`, {
             rating,
             feedback,
          })
@@ -104,23 +103,20 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
             <Box className="input">
                <Typography variant="h6">Feedback</Typography>
                <Input
-                  multiline
-                  minRows={3}
-                  maxRows={6}
-                  placeholder="Share your impressions about this place"
+                  placeholder={'Share your impressions about this place'}
                   onChange={(e) => setFeedback(e.target.value)}
                   value={feedback}
                />
             </Box>
 
-            <Box className="btn-container">
-               <Button className="cancel" variant="cancel" onClick={onClose}>
+            <StyledButtonBox className="btn-container">
+               <Button className="cancel" variant="second" onClick={onClose}>
                   Cancel
                </Button>
                <Button className="public" onClick={postFeedback}>
                   Public
                </Button>
-            </Box>
+            </StyledButtonBox>
          </StyledContainer>
       </Modal>
    )
@@ -239,4 +235,10 @@ const StyledContainer = styled(Box)(({ theme }) => ({
          width: '200px',
       },
    },
+}))
+
+const StyledButtonBox = styled(Box)(({ theme }) => ({
+   display: 'flex',
+   justifyContent: 'space-between',
+   gap: '1rem',
 }))

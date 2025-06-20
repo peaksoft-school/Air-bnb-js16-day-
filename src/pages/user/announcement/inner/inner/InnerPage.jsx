@@ -1,54 +1,28 @@
 import { useState } from 'react'
 import { Avatar, Box, styled, Typography } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
-import { showToast } from '../../../utils/helpers/showToast'
 
-import Feedback from '../../../components/UI/Feedback'
-import HouseImageSlider from '../../../components/house/HouseImageSlider'
-import Button from '../../../components/UI/Button'
-import Rating from '../../../components/UI/rating/Rating'
-import FeedbackModal from '../../../components/UI/feedback/FeedbackModal'
-
-import {
-   blockedHouses,
-   deleteHouseAsync,
-} from '../../../store/slices/admin/user/userThunk'
+import Feedback from '../../../../../components/UI/Feedback'
+import HouseImageSlider from '../../../../../components/house/HouseImageSlider'
+import Button from '../../../../../components/UI/Button'
+import Rating from '../../../../../components/UI/rating/Rating'
+import FeedbackModal from '../../../../../components/UI/feedback/FeedbackModal'
+import Loading from '../../../../Loading'
 
 const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
-   const dispatch = useDispatch()
-   const navigate = useNavigate()
-   const { role } = useSelector((state) => state.auth)
    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
 
    const toggleFeedbackModal = () => {
       setIsFeedbackOpen((prev) => !prev)
    }
 
-   const deleteHouse = () => {
-      dispatch(deleteHouseAsync({ id: houseInfo.id, showToast, navigate }))
-   }
-
-   const blocked = houseInfo?.isBlocked
-
-   const blockHouse = () => {
-      dispatch(
-         blockedHouses({
-            id: houseInfo.id,
-            block: !blocked,
-            showToast,
-         })
-      )
-   }
-
-   if (!houseInfo) return <div>Loading...</div>
+   if (!houseInfo) return <Loading />
 
    return (
       <StyledContainer>
          <h1 className="title">{houseInfo.name}</h1>
          <Box>
             <Box className="slider-house">
-               <HouseImageSlider images={houseInfo.imageUrls} />
+               <HouseImageSlider images={houseInfo.imageUrls || []} />
                <Box className="house-info">
                   <Typography className="house-type">
                      {houseInfo.type}
@@ -60,46 +34,22 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
                      {houseInfo.name}
                   </Typography>
                   <Typography className="house-location">
-                     {houseInfo.addressDetail?.address}
+                     {houseInfo.addressDetail || 'No address provided'}
                   </Typography>
                   <Typography className="house-description">
                      {houseInfo.description}
                   </Typography>
 
                   <Box className="user-info">
-                     <Avatar
-                        src={houseInfo.userResponse?.image || ''}
-                        alt={houseInfo.userResponse?.fullName || 'Owner'}
-                        className="user-avatar"
-                     />
+                     <Avatar className="user-avatar" />
                      <Box>
                         <Typography className="user-name">
-                           {houseInfo.userResponse?.fullName || 'Owner'}
-                        </Typography>
-                        <Typography className="user-email">
-                           {houseInfo.userResponse?.email ||
-                              'owner@example.com'}
+                           User ID: {houseInfo.userId}
                         </Typography>
                      </Box>
                   </Box>
 
-                  {role === 'ADMIN' ? (
-                     <>
-                        <Box className="button-container">
-                           <Button variant="outlined" onClick={deleteHouse}>
-                              Delete
-                           </Button>
-                           <Button onClick={blockHouse}>
-                              {blocked ? 'Unblock' : 'Block'}
-                           </Button>
-                        </Box>
-                        <Typography className="blocked-text">
-                           {blocked ? 'This house is currently blocked' : ''}
-                        </Typography>
-                     </>
-                  ) : (
-                     <h1>Здесь будет компонент для оплаты</h1>
-                  )}
+                  <h1>Payment component will be here</h1>
                </Box>
             </Box>
 
@@ -118,10 +68,9 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
                   rating={rating || 0}
                   toggleFeedbackModal={toggleFeedbackModal}
                />
-               <Button onClick={() => setIsFeedbackOpen(true)}>
-                  Оставить отзыв
-               </Button>
+
                <FeedbackModal
+                  width="500px"
                   open={isFeedbackOpen}
                   onClose={() => setIsFeedbackOpen(false)}
                   houseId={houseInfo.id}
@@ -173,6 +122,7 @@ const StyledContainer = styled(Box)(() => ({
             borderRadius: '50%',
             width: 56,
             height: 56,
+            backgroundColor: '#ccc',
          },
          '& .user-name': {
             fontWeight: 500,

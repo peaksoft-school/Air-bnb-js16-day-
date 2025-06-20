@@ -30,9 +30,9 @@ export const getAnnouncement = createAsyncThunk(
 
 export const getAnnouncementById = createAsyncThunk(
    'house/getAnnouncementById',
-   async (houseId, { rejectWithValue }) => {
+   async (id, { rejectWithValue }) => {
       try {
-         const { data } = await axiosInstance.get(`/api/house/get/${houseId}`)
+         const { data } = await axiosInstance.get(`/api/house/get/${id}`)
          return data
       } catch (error) {
          return rejectWithValue(error.response?.data || error.message)
@@ -56,9 +56,9 @@ export const getModeration = createAsyncThunk(
 
 export const deleteAnnouncement = createAsyncThunk(
    'house/deleteAnnouncement',
-   async (houseId, { dispatch, rejectWithValue }) => {
+   async (id, { dispatch, rejectWithValue }) => {
       try {
-         await axiosInstance.delete(`/api/house/get/${houseId}`)
+         await axiosInstance.delete(`/api/house/get/${id}`)
          return dispatch(
             getAnnouncement({ houseType: '', rating: '', price: '' })
          )

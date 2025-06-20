@@ -13,7 +13,7 @@ const initialState = {
    error: null,
 }
 
-const userInfoSlice = createSlice({
+export const userInfoSlice = createSlice({
    name: 'userInfo',
    initialState,
    reducers: {},
@@ -21,6 +21,7 @@ const userInfoSlice = createSlice({
       builder
          .addCase(getHouseById.pending, (state) => {
             state.isLoading = true
+            state.error = null
          })
          .addCase(getHouseById.fulfilled, (state, action) => {
             state.house = action.payload
@@ -39,5 +40,3 @@ const userInfoSlice = createSlice({
          })
    },
 })
-
-export const userInfoReducer = userInfoSlice.reducer

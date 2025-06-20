@@ -2,20 +2,22 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { Box, styled } from '@mui/material'
-import { ROUTES } from '../../routes/routes'
+import { ROUTES } from '../../../routes/routes'
 import {
    getHouseById,
    getAnnouncementFeedback,
-} from '../../store/slices/admin/user/userThunk'
-import BreadCrumbs from '../../components/UI/BreadCrumbs'
-import InnerPage from '../../pages/user/inner/InnerPage'
+} from '../../../store/slices/admin/user/userThunk'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
+import InnerPage from './inner/InnerPage'
 
 const UserAnnouncement = () => {
    const dispatch = useDispatch()
-   const { announcementId, userId, id } = useParams()
+   const { id } = useParams()
 
    const userInfo = useSelector((state) => state.userInfo) || {}
-   const { user, announcement, feedbacks, rating } = userInfo
+   const { house: announcement, feedbacks, rating } = userInfo
+
+   console.log(announcement, feedbacks, rating)
 
    useEffect(() => {
       if (id) {
@@ -24,29 +26,23 @@ const UserAnnouncement = () => {
       }
    }, [dispatch, id])
 
-   const ANNOUNCEMENT_BREADCRUMBS = [
+   const links = [
+      { href: ROUTES.USER.INDEX, label: 'Main' },
+      { href: ROUTES.USER.REGION_PAGE, label: 'Region' },
       {
-         label: 'Users',
-         href: ROUTES.USER.DETAIL,
-      },
-      {
-         label: user?.name || 'User',
-         href: `${ROUTES.USER.DETAIL}/${userId}`,
-      },
-      {
+         href: ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(':id', id),
          label: announcement?.title || 'Announcement',
-         href: announcementId,
       },
    ]
 
    return (
       <StyledContainer>
-         <BreadCrumbs links={ANNOUNCEMENT_BREADCRUMBS} />
+         <BreadCrumbs links={links} />
 
          <InnerPage
             houseInfo={announcement}
-            feedbacks={feedbacks}
-            rating={rating}
+            feedbacks={feedbacks || []}
+            rating={rating || 0}
             isMyAnnouncement={false}
          />
       </StyledContainer>
