@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Box, styled, Typography, PaginationItem } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import { ROUTES } from '../../../routes/routes'
 import Chip from '../../../components/UI/Chip'
@@ -13,7 +14,6 @@ import Stack from '@mui/material/Stack'
 
 const Region = () => {
    const { allHouses, isLoading, search } = useSelector((state) => state.region)
-
    const [filters, setFilters] = useState({
       region: '',
       popularity: '',
@@ -24,7 +24,7 @@ const Region = () => {
    const [page, setPage] = useState(1)
 
    const dispatch = useDispatch()
-
+   const navigate = useNavigate()
    const pageSize = 16
 
    const total = allHouses?.length || 0
@@ -37,7 +37,6 @@ const Region = () => {
 
    useEffect(() => {
       const hasFilters = Object.values(filters).some((v) => v) || search
-
       if (hasFilters) {
          dispatch(
             REGION_THUNK.getHouses({ ...filters, search, page, size: pageSize })
@@ -54,7 +53,6 @@ const Region = () => {
             label: value,
             displayLabel: value.charAt(0).toUpperCase() + value.slice(1),
          }
-
          setChips((prev) => [
             ...prev.filter((chip) => chip.type !== type),
             newChip,
@@ -62,19 +60,16 @@ const Region = () => {
       } else {
          setChips((prev) => prev.filter((chip) => chip.type !== type))
       }
-
       setFilters((prev) => ({ ...prev, [type]: value }))
    }
 
    const handleChipDelete = (chipToDelete) => {
       setChips((prev) => prev.filter((chip) => chip.type !== chipToDelete.type))
-
       setFilters((prev) => ({ ...prev, [chipToDelete.type]: '' }))
    }
 
    const handleClearAll = () => {
       setChips([])
-
       setFilters({
          region: '',
          popularity: '',
@@ -85,7 +80,6 @@ const Region = () => {
 
    const handlePageChange = (e, value) => {
       setPage(value)
-
       window.scrollTo({ top: 0, behavior: 'smooth' })
    }
 
@@ -124,32 +118,32 @@ const Region = () => {
       { value: 'house', label: 'House' },
    ]
 
-   const oprionPrice = [
+   const optionPrice = [
       { value: 'all', label: 'All' },
       { value: 'low', label: 'Low to high' },
       { value: 'high', label: 'High to low' },
    ]
+
    return (
       <StyledContainer>
          <BreadCrumbs links={links} />
 
-         {search ? (
+         {search && (
             <SearchTitle>
                Search for:{' '}
                <Typography variant="span">"{search.toUpperCase()}"</Typography>
                {total > 0 && <Typography variant="span"> ({total})</Typography>}
             </SearchTitle>
-         ) : null}
+         )}
 
          {isNothingFound ? (
             <NothingFoundWrapper>
                <NothingFoundTitle>Results for "{search}"</NothingFoundTitle>
-
                <NothingFoundText>
                   It appears that no listings have yet been created for
                   <Typography variant="span">"{search}"</Typography>.
                   <br />
-                  Be the first person to create a
+                  Be the first person to create a{' '}
                   <a href="#">listing in this area!</a>
                </NothingFoundText>
             </NothingFoundWrapper>
@@ -172,25 +166,22 @@ const Region = () => {
                         options={optionRegion}
                         label="Region"
                      />
-
                      <Select
                         value={filters.popularity}
                         onChange={(e) => handleFilterChange('popularity', e)}
                         options={optionPopularity}
                         label="Sort by"
                      />
-
                      <Select
                         value={filters.houseType}
                         onChange={(e) => handleFilterChange('houseType', e)}
                         options={optionHouseType}
                         label="Filter by home type"
                      />
-
                      <Select
                         value={filters.priceSort}
                         onChange={(e) => handleFilterChange('priceSort', e)}
-                        options={oprionPrice}
+                        options={optionPrice}
                         label="Filter by price"
                      />
                   </FilterContainer>
@@ -221,6 +212,14 @@ const Region = () => {
                         title={house.description}
                         location={house.address}
                         guests={house.maxGuests}
+                        onClick={() =>
+                           navigate(
+                              ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
+                                 ':id',
+                                 house.id
+                              )
+                           )
+                        }
                      />
                   ))}
                </CardsContainer>

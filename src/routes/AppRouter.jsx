@@ -11,12 +11,15 @@ const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 const Region = lazy(() => import('../pages/user/region/Region'))
 const AllHousing = lazy(() => import('../pages/admin/AllHousing'))
 const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
+const UserAnnouncement = lazy(
+   () => import('../pages/user/anouncement/UserAnnouncement')
+)
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 
-const AppRoutes = () => (
+const AppRouter = () => (
    <Routes>
       <Route
          path="/"
@@ -59,10 +62,19 @@ const AppRoutes = () => (
          />
 
          <Route
-            path="/user/profile"
+            path="profile"
             element={
                <Suspense fallback={<Loading />}>
                   <UserProfile />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path="announcement/:id"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserAnnouncement />
                </Suspense>
             }
          />
@@ -122,4 +134,4 @@ const AppRoutes = () => (
    </Routes>
 )
 
-export default AppRoutes
+export default AppRouter

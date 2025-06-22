@@ -1,6 +1,6 @@
 import { Box, styled, Typography } from '@mui/material'
 import GeoIcon from '../../assets/icons/geo.svg'
-import StarIcon from '../../assets/icons/star.svg'
+import StarIcon from '../../assets/icons/FullStar.svg'
 import { HOUSES } from '../../utils/constants/Index'
 
 const PopularHouse = () => (
