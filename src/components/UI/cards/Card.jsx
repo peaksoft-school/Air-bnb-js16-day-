@@ -19,11 +19,24 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Button from '../Button'
 
-const Card = ({ imageUrls, price, rating, title, location, guests }) => {
+import emptyhouse from '../../../assets/images/empty-house.jpg'
+
+const Card = ({
+   imageUrls,
+   price,
+   rating,
+   title,
+   location,
+   guests,
+   onClick,
+}) => {
    const [isLiked, setIsLiked] = useState(false)
    const [hovered, setHovered] = useState(false)
 
-   const handleLike = () => setIsLiked(!isLiked)
+   const handleLike = (e) => {
+      e.stopPropagation()
+      setIsLiked(!isLiked)
+   }
 
    const CustomPrevArrow = ({ onClick }) => (
       <StyledIconButtonBack onClick={onClick}>
@@ -37,47 +50,47 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
       </StyledIconButtonForward>
    )
 
+   const imagesToShow = imageUrls.length > 0 ? imageUrls : [emptyhouse]
+
    const settings = {
-      dots: imageUrls.length > 1,
+      dots: imagesToShow.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls.length > 1,
+      arrows: imagesToShow.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
 
    return (
-      <StyledMuiCard>
+      <StyledMuiCard onClick={onClick}>
          <Box
             className="content"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            <Slider {...settings}>
-               {imageUrls.length > 1 ? (
-                  <Slider {...settings}>
-                     {imageUrls.map((url, i) => (
-                        <Box key={i}>
-                           <CardMedia
-                              component="img"
-                              height="140"
-                              image={url}
-                              alt={title}
-                           />
-                        </Box>
-                     ))}
-                  </Slider>
-               ) : (
-                  <CardMedia
-                     component="img"
-                     height="140"
-                     image={imageUrls[0]}
-                     alt={title}
-                  />
-               )}
-            </Slider>
+            {imageUrls.length > 1 ? (
+               <Slider {...settings}>
+                  {imageUrls.map((url, i) => (
+                     <Box key={i}>
+                        <CardMedia
+                           component="img"
+                           height="140"
+                           image={url}
+                           alt={title}
+                        />
+                     </Box>
+                  ))}
+               </Slider>
+            ) : (
+               <CardMedia
+                  component="img"
+                  height="140"
+                  image={imageUrls[0]}
+                  alt={title}
+               />
+            )}
          </Box>
 
          <CardContent>
@@ -133,6 +146,14 @@ export default Card
 
 const StyledMuiCard = styled(MuiCard)(() => ({
    maxWidth: '300px',
+   height: '350px',
+
+   cursor: 'pointer',
+   transition: 'transform 0.2s ease-in-out',
+
+   '&:hover': {
+      transform: 'scale(1.02)',
+   },
 
    '& .content': {
       position: 'relative',
