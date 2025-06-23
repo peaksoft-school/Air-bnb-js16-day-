@@ -6,7 +6,7 @@ export const fetchAllUsers = createAsyncThunk(
 
    async (_, { rejectWithValue }) => {
       try {
-         const { data } = await axiosInstance.get('/api/user')
+         const { data } = await axiosInstance.get('/api/user/getAll')
 
          return data
       } catch (err) {
@@ -33,9 +33,7 @@ export const deleteUser = createAsyncThunk(
    'user/deleteUser',
    async (userId, { rejectWithValue }) => {
       try {
-         await axiosInstance.delete('/api/user/delete', {
-            data: { userId },
-         })
+         await axiosInstance.delete(`/api/user/deleteUser/${userId}`)
          return userId
       } catch (err) {
          return rejectWithValue(err.response?.data || err.message)
@@ -47,9 +45,7 @@ export const deleteHouse = createAsyncThunk(
    'user/deleteHouse',
    async (houseId, { rejectWithValue }) => {
       try {
-         await axiosInstance.delete('/api/house/delete', {
-            data: { houseId },
-         })
+         await axiosInstance.delete(`/api/house/delete/${houseId}`)
          return houseId
       } catch (err) {
          return rejectWithValue(err.response?.data || err.message)
@@ -60,9 +56,7 @@ export const blockAllAnnoucement = createAsyncThunk(
    'blockAllAnnoucement',
    async (userId, { rejectWithValue }) => {
       try {
-         await axiosInstance.put('/api/house/block-allAnnouncement', {
-            userId,
-         })
+         await axiosInstance.put(`/api/house/block-allAnnouncement/${userId}`)
          return userId
       } catch (error) {
          return rejectWithValue(err.response?.data || error.message)
