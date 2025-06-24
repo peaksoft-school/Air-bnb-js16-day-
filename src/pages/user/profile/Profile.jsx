@@ -28,7 +28,8 @@ import {
 const Profile = () => {
    const { userProfile, loading, error } = useSelector((state) => state.profile)
 
-   const { fullName, email, image } = userProfile?.user
+   const user = userProfile?.user || {}
+   const { fullName, email, image } = user
 
    const [activeTab, setActiveTab] = useState('booking')
    const [sort, setSort] = useState('')
