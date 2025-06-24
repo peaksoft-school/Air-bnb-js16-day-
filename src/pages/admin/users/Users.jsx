@@ -16,7 +16,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import Loading from '../../Loading'
-import { USERS_THUNKS } from '../../../store/slices/admin/users/userThunk'
+import { USERS_THUNKS } from '../../../store/slices/admin/users/usersThunk'
 
 const Users = () => {
    const { users, loading, error } = useSelector((state) => state.users)
@@ -69,8 +69,10 @@ const Users = () => {
                         <StyledTableCell>{i + 1}</StyledTableCell>
                         <StyledTableCell>{user.fullName}</StyledTableCell>
                         <StyledTableCell>{user.email}</StyledTableCell>
-                        <StyledTableCell>{user.bookingHouses}</StyledTableCell>
-                        <StyledTableCell>{user.application}</StyledTableCell>
+                        <StyledTableCell>{user.bookingsCount}</StyledTableCell>
+                        <StyledTableCell>
+                           {user.announcementCount}
+                        </StyledTableCell>
                         <StyledTableCell>
                            <IconButton
                               onClick={(e) => handleDelete(e, user.id)}

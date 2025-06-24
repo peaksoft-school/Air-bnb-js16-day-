@@ -12,9 +12,9 @@ import {
    CircularProgress,
    Alert,
 } from '@mui/material'
-import AdminCard from '../AdminCard'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
-import { USERS_THUNKS } from '../../../store/slices/admin/users/userThunk'
+import AdminCard from '../../../pages/admin/AdminCard'
+import BreadCrumbs from '../../UI/BreadCrumbs'
+import { USERS_THUNKS } from '../../../store/slices/admin/users/usersThunk'
 import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
 
 const UserDetail = () => {
@@ -38,7 +38,7 @@ const UserDetail = () => {
 
    const links = [
       { href: '/admin/users', label: 'Users' },
-      { href: `/users/${id}`, label: `User ${id}` },
+      { href: `/users/${id}`, label: ` ${user.fullName}` },
    ]
 
    const handleDeleteHouse = (houseId) => {
@@ -59,7 +59,7 @@ const UserDetail = () => {
                   <Box className="contact-user">
                      <Avatar
                         className="avatar"
-                        src={user.image}
+                        src={user?.image}
                         aria-label="User avatar"
                      />
 
@@ -70,7 +70,7 @@ const UserDetail = () => {
                            </Typography>
 
                            <Typography className="contact-name">
-                              {user.fullName}
+                              {user?.fullName}
                            </Typography>
                         </Box>
 
@@ -80,7 +80,7 @@ const UserDetail = () => {
                            </Typography>
 
                            <Typography className="contact-name">
-                              {user.email}
+                              {user?.email}
                            </Typography>
                         </Box>
                      </Box>
@@ -106,7 +106,7 @@ const UserDetail = () => {
             {loading ? (
                <CircularProgress />
             ) : error ? (
-               <Alert severity="error">{error}</Alert>
+               <Alert severity="info">Ничего нет !</Alert>
             ) : activeTab === 'booking' ? (
                <Box className="cards-container">
                   {userProfile?.houses.map((house, i) => (
@@ -121,7 +121,7 @@ const UserDetail = () => {
             ) : (
                <>
                   <Button
-                     onClick={handleBlockAll(user?.id)}
+                     onClick={() => handleBlockAll(user?.id)}
                      disabled={user?.isBlocked}
                      className="block-button"
                   >
@@ -146,9 +146,10 @@ const UserDetail = () => {
 }
 
 const UsersBox = styled(Box)(() => ({
+   width: '100%',
+   height: '100%',
    display: 'flex',
    gap: '47px',
-   padding: '46px 0px 193px 0',
    justifyContent: 'center',
 
    '& .box-users': {
@@ -211,7 +212,7 @@ const ContactBox = styled(Box)(() => ({
 }))
 
 const HousesBox = styled(Box)(() => ({
-   marginTop: '96px',
+   marginTop: '115px',
    width: '900px',
 
    '& .tabs': {
@@ -226,7 +227,7 @@ const HousesBox = styled(Box)(() => ({
    '& .block-button': {
       position: 'absolute',
       left: '137px',
-      top: '580px',
+      top: '670px',
       width: '292px',
       height: '37px',
       borderRadius: '2px',

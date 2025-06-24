@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { USERS_THUNKS } from './userThunk'
+import { USERS_THUNKS } from './usersThunk'
 
 const initialState = {
    users: [],
@@ -8,7 +8,7 @@ const initialState = {
    error: null,
 }
 
-const userSlice = createSlice({
+const usersSlice = createSlice({
    name: 'users',
    initialState,
    reducers: {},
@@ -102,4 +102,4 @@ const userSlice = createSlice({
    },
 })
 
-export default userSlice
+export { usersSlice }
