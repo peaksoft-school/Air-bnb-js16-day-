@@ -15,6 +15,7 @@ const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
+import AnnouncementDetailPage from '../pages/user/announcement/AnnouncementDetailPage'
 
 const AppRoutes = () => (
    <Routes>
@@ -63,6 +64,14 @@ const AppRoutes = () => (
             element={
                <Suspense fallback={<Loading />}>
                   <UserProfile />
+               </Suspense>
+            }
+         />
+          <Route
+            path="/user/announcement-page"
+            element={
+               <Suspense fallback={<Loading />}>
+                  < AnnouncementDetailPage/>
                </Suspense>
             }
          />

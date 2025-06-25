@@ -25,6 +25,10 @@ export const ROUTES = {
       PAYMENT: '/user/payment',
       REGION_PAGE: '/user/region-page',
    },
+
+   ANNOUNCEMENT: {
+      DETAIL: '/announcement/:id',
+   },
 }
 
 export const ROLES = {

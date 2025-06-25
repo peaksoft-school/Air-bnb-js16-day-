@@ -99,6 +99,8 @@ const Profile = () => {
       { href: '/user/profile', label: 'Profile' },
    ]
 
+   const handleClick = (id) => navigate(`/announcement/${1}`)
+
    return (
       <ProfileWrapper>
          <BreadCrumbs links={links} />
@@ -215,7 +217,11 @@ const Profile = () => {
                ) : (
                   <Box className="cards-container">
                      {filteredHouses.map((house, i) => (
-                        <Card key={i} house={house} />
+                        <Card
+                           key={i}
+                           house={house}
+                           onClick={() => handleClick(house.id)}
+                        />
                      ))}
                   </Box>
                )}
