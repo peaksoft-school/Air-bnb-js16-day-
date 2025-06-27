@@ -11,13 +11,13 @@ import {
    Alert,
    Button,
 } from '@mui/material'
-import Card from '../../../components/UI/cards/Card'
 import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import DropDown from '../../../components/UI/DropDown'
 import Chip from '../../../components/UI/Chip'
 import { AUTH_ACTIONS } from '../../../store/slices/auth/authSlice'
 import { useNavigate } from 'react-router'
 import { PROFILE_THUNK } from '../../../store/slices/user/profile/profileThunk'
+import AdminCard from '../../../components/UI/cards/AdminCard'
 
 const TABS = [
    { label: 'Bookings', value: 'booking' },
@@ -214,7 +214,7 @@ const Profile = () => {
                ) : (
                   <Box className="cards-container">
                      {filteredHouses.map((house, i) => (
-                        <Card key={i} house={house} />
+                        <AdminCard key={i} house={house} />
                      ))}
                   </Box>
                )}

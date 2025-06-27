@@ -37,12 +37,12 @@ const AdminCard = ({ house }) => {
    )
 
    const settings = {
-      dots: imageUrls.length > 1,
+      dots: imageUrls?.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls.length > 1,
+      arrows: imageUrls?.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -53,7 +53,7 @@ const AdminCard = ({ house }) => {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            {imageUrls.length > 1 ? (
+            {imageUrls?.length > 1 ? (
                <Slider {...settings}>
                   {imageUrls.map((url, i) => (
                      <Box key={i}>
@@ -71,9 +71,7 @@ const AdminCard = ({ house }) => {
                   component="img"
                   height="140"
                   image={
-                     imageUrls.length === 0
-                        ? `${EmptyHouseImage}`
-                        : imageUrls[0]
+                     imageUrls?.length === 0 ? `${EmptyHouseImage}` : imageUrls
                   }
                   alt={description}
                />

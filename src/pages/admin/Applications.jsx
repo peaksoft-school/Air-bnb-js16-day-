@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { Box, Grid, Typography, LinearProgress, Alert ,styled} from '@mui/material'
+import {
+   Box,
+   Grid,
+   Typography,
+   Alert,
+   styled,
+} from '@mui/material'
 import Pagination from '@mui/material/Pagination'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,6 +14,10 @@ import { fetchApplications } from '../../store/slices/admin/houseApplicationsThu
 import { resetApplications } from '../../store/slices/admin/houseApplicationsSlice'
 import { CardOptions } from '../../utils/helpers/options'
 import Loading from '../Loading'
+import {
+   acceptOrDeleteHouse,
+   acceptOrRejectHouse,
+} from '../../store/slices/admin/assept/asseptInRejectThunk'
 
 const CARDS_PER_PAGE = 18
 
@@ -66,8 +76,22 @@ export default function Application() {
 
    const options = CardOptions
 
+   const handleAccept = (houseId) => {
+      dispatch(
+         acceptOrRejectHouse({ houseId, isAccepted: true, rejectInfo: '' })
+      )
+   }
+
+   const handleReject = (houseId, reason) => {
+      dispatch(
+         acceptOrRejectHouse({ houseId, isAccepted: false, rejectInfo: reason })
+      )
+   }
+   const handleDelete = (houseId) => {
+      dispatch(acceptOrDeleteHouse(houseId))
+   }
    return (
-      <StyledBox >
+      <StyledBox>
          <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
             APPLICATION
          </Typography>
@@ -129,9 +153,9 @@ export default function Application() {
                                  key={index}
                                  house={house}
                                  options={options}
-                                 onDelete={(houseId) =>
-                                    handleDeleteHouse(houseId)
-                                 }
+                                 onAccept={handleAccept}
+                                 onReject={handleReject}
+                                 onDelete={handleDelete}
                               />
                            </Grid>
                         )

@@ -38,12 +38,12 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
    )
 
    const settings = {
-      dots: imageUrls.length > 1,
+      dots: imageUrls?.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls.length > 1,
+      arrows: imageUrls?.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -56,9 +56,9 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
             onMouseLeave={() => setHovered(false)}
          >
             <Slider {...settings}>
-               {imageUrls.length > 1 ? (
+               {imageUrls?.length > 1 ? (
                   <Slider {...settings}>
-                     {imageUrls.map((url, i) => (
+                     {imageUrls?.map((url, i) => (
                         <Box key={i}>
                            <CardMedia
                               component="img"
@@ -73,7 +73,7 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                   <CardMedia
                      component="img"
                      height="140"
-                     image={imageUrls[0]}
+                     image={imageUrls}
                      alt={title}
                   />
                )}
