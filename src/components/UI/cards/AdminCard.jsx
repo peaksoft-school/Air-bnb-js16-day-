@@ -55,7 +55,7 @@ const AdminCard = ({ house }) => {
          >
             {imageUrls?.length > 1 ? (
                <Slider {...settings}>
-                  {imageUrls.map((url, i) => (
+                  {imageUrls?.map((url, i) => (
                      <Box key={i}>
                         <CardMedia
                            component="img"

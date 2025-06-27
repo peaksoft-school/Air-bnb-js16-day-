@@ -52,19 +52,18 @@ const AdminCard = ({ house, options, onDelete, onAccept, onReject }) => {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            {images && imageUrls.length > 1 ? (
+            {images?.length > 1 ? (
                <Slider {...settings}>
-                  {images &&
-                     imageUrls.map((url, index) => (
-                        <div key={index}>
-                           <CardMedia
-                              component="img"
-                              height="136"
-                              image={url}
-                              alt={description}
-                           />
-                        </div>
-                     ))}
+                  {images?.map((url, index) => (
+                     <div key={index}>
+                        <CardMedia
+                           component="img"
+                           height="136"
+                           image={url}
+                           alt={description}
+                        />
+                     </div>
+                  ))}
                </Slider>
             ) : (
                <CardMedia

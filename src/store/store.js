@@ -7,6 +7,7 @@ import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
 import { regionSlice } from './slices/user/region/regionSlice'
 import { profileSlice } from './slices/user/profile/profileSlice'
 import houseApplicationsReducer from './slices/admin/houseApplicationsSlice'
+import { usersSlice } from './slices/admin/users/usersSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -14,11 +15,13 @@ const rootReducer = combineReducers({
    [profileSlice.name]: profileSlice.reducer,
    [regionSlice.name]: regionSlice.reducer,
    houseApplications: houseApplicationsReducer,
+   [usersSlice.name]:usersSlice.reducer
 })
 
 const persistConfig = {
-  key: 'AIR-BNB',
-  storage,
+   key: 'AIR-BNB',
+   storage,
+   whitelist: ['auth'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

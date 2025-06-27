@@ -17,33 +17,13 @@ import Chip from '../../../components/UI/Chip'
 import { AUTH_ACTIONS } from '../../../store/slices/auth/authSlice'
 import { useNavigate } from 'react-router'
 import { PROFILE_THUNK } from '../../../store/slices/user/profile/profileThunk'
+import {
+   PROFILE_RATING_OPTIONS,
+   PROFILE_SORT_OPTIONS,
+   PROFILE_TABS,
+   PROFILE_TYPE_OPTIONS,
+} from '../../../utils/helpers'
 import AdminCard from '../../../components/UI/cards/AdminCard'
-
-const TABS = [
-   { label: 'Bookings', value: 'booking' },
-   { label: 'My announcement', value: 'announcement' },
-   { label: 'On moderation', value: 'on moderation' },
-]
-
-const sortOptions = [
-   { label: 'All', value: '' },
-   { label: 'High to low', value: 'high' },
-   { label: 'Low to high', value: 'low' },
-]
-const ratingOptions = [
-   { label: 'All', value: '' },
-   { label: '★★★★★', value: 5 },
-   { label: '★★★★', value: 4 },
-   { label: '★★★', value: 3 },
-   { label: '★★', value: 2 },
-   { label: '★', value: 1 },
-]
-
-const typeOptions = [
-   { label: 'All', value: '' },
-   { label: 'Apartement', value: 'apartement' },
-   { label: 'House', value: 'house' },
-]
 
 const Profile = () => {
    const { userProfile, loading, error } = useSelector((state) => state.profile)
@@ -137,33 +117,31 @@ const Profile = () => {
                   variant="standard"
                   className="tabs"
                >
-                  {TABS.map((tab) => (
+                  {PROFILE_TABS.map((tab) => (
                      <Tab key={tab.value} label={tab.label} value={tab.value} />
                   ))}
                </Tabs>
 
-               {activeTab === 'announcement' && (
+               {activeTab === 'announcement' && filteredHouses.length > 0 && (
                   <>
                      <Box className="drop-downs">
                         <DropDown
                            label="Sort"
                            value={sort}
                            onChange={setSort}
-                           options={sortOptions}
+                           options={PROFILE_SORT_OPTIONS}
                         />
-
                         <DropDown
                            label="Type"
                            value={type}
                            onChange={setType}
-                           options={typeOptions}
+                           options={PROFILE_TYPE_OPTIONS}
                         />
-
                         <DropDown
                            label="Sort by ratings"
                            value={rating}
                            onChange={setRating}
-                           options={ratingOptions}
+                           options={PROFILE_RATING_OPTIONS}
                         />
                      </Box>
 
@@ -176,7 +154,6 @@ const Profile = () => {
                               onDelete={() => handleDeleteChip('sort')}
                            />
                         )}
-
                         {type && (
                            <Chip
                               label={
@@ -185,7 +162,6 @@ const Profile = () => {
                               onDelete={() => handleDeleteChip('type')}
                            />
                         )}
-
                         {rating && (
                            <Chip
                               label={'★'.repeat(Number(rating))}
@@ -193,11 +169,10 @@ const Profile = () => {
                               style={{ color: '#FFD600', fontWeight: 600 }}
                            />
                         )}
-
                         {(sort || type || rating) && (
                            <Button
                               variant="text"
-                              sx={{ textDecoration: 'underline', minWidth: 0 }}
+                              className="clear-all-btn"
                               onClick={handleClearAll}
                            >
                               Clear all
@@ -213,9 +188,13 @@ const Profile = () => {
                   <Alert severity="error">{error}</Alert>
                ) : (
                   <Box className="cards-container">
-                     {filteredHouses.map((house, i) => (
-                        <AdminCard key={i} house={house} />
-                     ))}
+                     {filteredHouses.length === 0 ? (
+                        <Box className="empty-message">No houses found</Box>
+                     ) : (
+                        filteredHouses.map((house) => (
+                           <AdminCard key={house.id || house.title} house={house} />
+                        ))
+                     )}
                   </Box>
                )}
             </RightBox>
@@ -308,5 +287,17 @@ const RightBox = styled(Box)(() => ({
       display: 'flex',
       flexWrap: 'wrap',
       gap: '20px',
+   },
+
+   '& .empty-message': {
+      padding: '24px',
+      color: '#888',
+      fontSize: '16px',
+      fontWeight: 500,
+   },
+
+   '& .clear-all-btn': {
+      textDecoration: 'underline',
+      minWidth: 0,
    },
 }))

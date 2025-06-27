@@ -1,8 +1,14 @@
 import { useState } from 'react'
 import { IconButton, Menu, MenuItem, styled } from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import { color } from 'framer-motion'
 
-function Meatballs({ options = [], onSelect, icon = <MoreHorizIcon /> }) {
+const Meatballs = ({
+   options = [],
+   onSelect,
+   icon = <MoreHorizIcon className="dots" />,
+   color = false,
+}) => {
    const [anchorEl, setAnchorEl] = useState(null)
 
    const open = Boolean(anchorEl)
@@ -19,7 +25,9 @@ function Meatballs({ options = [], onSelect, icon = <MoreHorizIcon /> }) {
 
    return (
       <>
-         <StyledOnMeatballs onClick={handleClick}>{icon}</StyledOnMeatballs>
+         <StyledOnMeatballs onClick={handleClick} colorU={color}>
+            {icon}
+         </StyledOnMeatballs>
 
          <Menu
             anchorEl={anchorEl}
@@ -38,6 +46,10 @@ function Meatballs({ options = [], onSelect, icon = <MoreHorizIcon /> }) {
 
 export default Meatballs
 
-const StyledOnMeatballs = styled(IconButton)(() => ({
-   color: 'rgb(149, 136, 136)',
+const StyledOnMeatballs = styled(IconButton)(({ colorU }) => ({
+   color: colorU ? '#C4C4C4' : 'rgba(255, 255, 255, 1)',
+
+   '& .dots': {
+      color: '#C4C4C4',
+   },
 }))

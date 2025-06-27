@@ -20,6 +20,7 @@ const Region = () => {
       houseType: '',
       priceSort: '',
    })
+
    const [chips, setChips] = useState([])
    const [page, setPage] = useState(1)
 
@@ -95,6 +96,7 @@ const Region = () => {
 
    const links = [
       { href: ROUTES.USER.INDEX, label: 'Main' },
+
       {
          href: ROUTES.USER.REGION_PAGE,
          label: filters.region || 'Region',
