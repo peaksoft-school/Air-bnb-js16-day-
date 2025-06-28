@@ -59,7 +59,7 @@ const UserHeader = ({
                </Box>
 
                {!isAuth && (
-                  <Typography className="leave" onClick={handleLeaveAddClick} >
+                  <Typography className="leave" onClick={handleLeaveAddClick}>
                      leave an ad
                   </Typography>
                )}
@@ -84,11 +84,20 @@ const UserHeader = ({
                </Box>
 
                <Box className="favorites-container">
-                  <Button onClick={isAuth ? onAddLeave : onJoinUs} width={196}>
-                     {isAuth ? 'SUBMIT AN AD' : 'JOIN US'}
-                  </Button>
+                  {isAuth ? (
+                     <Button width={196} onClick={handleLeaveAddClick}>
+                        SUBMIT AN AD
+                     </Button>
+                  ) : (
+                     <Button
+                        onClick={isAuth ? onAddLeave : onJoinUs}
+                        width={196}
+                     >
+                        JOIN US
+                     </Button>
+                  )}
 
-                  {!isAuth && (
+                  {isAuth && (
                      <>
                         <Typography>FAVORITE({favoriteCount})</Typography>
 

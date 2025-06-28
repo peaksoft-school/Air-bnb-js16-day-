@@ -1,0 +1,83 @@
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { axiosInstance } from '../../../../configs/axiosInstance'
+
+const getAllUsers = createAsyncThunk(
+   'users/getAllUsers',
+
+   async (_, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.get('/api/user/getAll')
+
+         return data
+      } catch (err) {
+         return rejectWithValue(err.response?.data || err.message)
+      }
+   }
+)
+
+const getUserProfile = createAsyncThunk(
+   'user/getUserProfile',
+
+   async ({ choice, id, navigate }, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.get('/api/user/profile', {
+            params: { choice },
+         })
+
+         navigate(`/admin/users/${id}`)
+
+         return { data: response.data, choice }
+      } catch (err) {
+         return rejectWithValue(err.response?.data || err.message)
+      }
+   }
+)
+
+const deleteUser = createAsyncThunk(
+   'user/deleteUser',
+
+   async (userId, { rejectWithValue }) => {
+      try {
+         await axiosInstance.delete(`/api/user/deleteUser/${userId}`)
+
+         return userId
+      } catch (err) {
+         return rejectWithValue(err.response?.data || err.message)
+      }
+   }
+)
+
+const deleteHouse = createAsyncThunk(
+   'user/deleteHouse',
+
+   async (houseId, { rejectWithValue }) => {
+      try {
+         await axiosInstance.delete(`/api/house/delete/${houseId}`)
+
+         return houseId
+      } catch (err) {
+         return rejectWithValue(err.response?.data || err.message)
+      }
+   }
+)
+
+const blockAllAnnoucement = createAsyncThunk(
+   'blockAllAnnoucement',
+   async (userId, { rejectWithValue }) => {
+      try {
+         await axiosInstance.put(`/api/house/block-allAnnouncement/${userId}`)
+
+         return userId
+      } catch (error) {
+         return rejectWithValue(err.response?.data || error.message)
+      }
+   }
+)
+
+export const USERS_THUNKS = {
+   getAllUsers,
+   getUserProfile,
+   deleteUser,
+   deleteHouse,
+   blockAllAnnoucement,
+}

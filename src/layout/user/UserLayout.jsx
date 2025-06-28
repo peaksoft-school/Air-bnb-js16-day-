@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router'
 
 const UserLayout = () => {
    const navigate = useNavigate()
-   const { isAuth } = useSelector((state) => state.auth.isAuth)
-   const handleLeaveAddClick = () => {
+   const isAuth = useSelector((state) => state.auth.isAuth)
+   const handleLeaveAddClick = (e) => {
+      e.stopPropagation()
       navigate('/user/create-house')
    }
    return (

@@ -11,7 +11,8 @@ export const ROUTES = {
    ADMIN: {
       INDEX: '/admin',
       USERS: '/admin/users',
-      ALLHOUSING: '/admin/allhousing',
+      USER_DETAIL: '/admin/users/:id',
+      ALLHOUSING: '/admin/all-housing',
       APPLICATION: '/admin/application',
    },
 
@@ -24,7 +25,7 @@ export const ROUTES = {
       CHECKOUT: '/user/checkout',
       PAYMENT: '/user/payment',
       CREATE_HOUSE: '/user/create-house',
-      REGION_PAGE: '/user/region-page',
+      REGION_PAGE: '/user/region',
    },
 }
 

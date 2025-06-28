@@ -8,10 +8,10 @@ const getHouses = createAsyncThunk(
       try {
          const { data } = await axiosInstance.get('/api/house/for-users', {
             params: {
-               region: params.region || 'all',
-               popularity: params.popularity || 'all',
-               houseType: params.houseType || 'all',
-               priceSort: params.priceSort || 'all',
+               region: params.region || 'All',
+               popularity: params.popularity || 'All',
+               houseType: params.houseType || 'All',
+               priceSort: params.priceSort || 'All',
                search: params.search || '',
                page: params.page,
                size: params.size,

@@ -7,7 +7,6 @@ import {
    TextField,
    FormControl,
    RadioGroup,
-   FormControlLabel,
    Select,
    MenuItem,
    Alert,
@@ -40,11 +39,12 @@ const CreateHouseForm = () => {
    })
 
    const [imageFiles, setImageFiles] = useState([])
+   const [imageError, setImageError] = useState('')
 
    const regions = [
       'BISHKEK',
       'CHUY',
-      'ISSYK_KUL',
+      'YSYKKOL',
       'NARYN',
       'TALAS',
       'OSH',
@@ -61,10 +61,27 @@ const CreateHouseForm = () => {
    }
 
    const handleImageUpload = (e) => {
+      setImageError('')
+
       const files = Array.from(e.target.files)
+
       if (files.length + imageFiles.length > 4) {
-         alert('Максимум 4 фотографии')
+         setImageError('Максимум 4 фотографии')
          return
+      }
+
+      const MAX_FILE_SIZE = 3 * 1024 * 1024
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
+
+      for (let file of files) {
+         if (file.size > MAX_FILE_SIZE) {
+            setImageError('Размер каждого файла должен быть не более 3MB')
+            return
+         }
+         if (!allowedTypes.includes(file.type)) {
+            setImageError('Разрешены только файлы JPEG, JPG или PNG')
+            return
+         }
       }
 
       setImageFiles((prev) => [...prev, ...files])
@@ -89,6 +106,7 @@ const CreateHouseForm = () => {
          imageUrls: newUrls,
       }))
    }
+
    const handleSubmit = async (e) => {
       e.preventDefault()
 
@@ -124,6 +142,10 @@ const CreateHouseForm = () => {
             formDataToSend.append('images', file)
          })
 
+         for (let [key, value] of formDataToSend.entries()) {
+            console.log(key, value)
+         }
+
          await dispatch(createHouseBase(formDataToSend)).unwrap()
       } catch (error) {
          console.error('Error:', error)
@@ -136,25 +158,16 @@ const CreateHouseForm = () => {
          })
          navigate('/user')
       }
-   }
-
-   const handleImageAdd = () => {
-      const MAX_FILE_SIZE = 3 * 1024 * 1024
-      const isValidSize = imageFiles.every((file) => file.size <= MAX_FILE_SIZE)
-      if (!isValidSize) {
-         alert('Размер каждого файла должен быть не более 3MB')
-         return
-      }
-
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
-      const isValidType = imageFiles.every((file) =>
-         allowedTypes.includes(file.type)
-      )
-      if (!isValidType) {
-         alert('Разрешены только файлы типа JPEG, JPG или PNG')
-         return
+      if (error) {
+         showToast({
+            title: 'Ошибка!',
+            message: 'Ошибка при создании дома!',
+            type: 'error',
+         })
       }
    }
+
+   const handleImageAdd = () => {}
 
    if (loading) {
       return (
@@ -172,12 +185,6 @@ const CreateHouseForm = () => {
             In this form, we'll collect some basic and additional information
             about your listing.
          </SubTitle>
-
-         {error && (
-            <Alert severity="error" sx={{ marginBottom: '20px' }}>
-               {typeof error === 'string' ? error : 'Ошибка при создании дома'}
-            </Alert>
-         )}
 
          <Box component="form" onSubmit={handleSubmit}>
             <SectionContainer>
@@ -218,6 +225,12 @@ const CreateHouseForm = () => {
                         </UploadSubtext>
                      </Box>
                   </ImageUploadContainer>
+               )}
+
+               {imageError && (
+                  <Alert severity="error" sx={{ marginTop: '10px' }}>
+                     {imageError}
+                  </Alert>
                )}
 
                {imageFiles.length > 0 && (
@@ -408,31 +421,6 @@ const SubTitle = styled(Typography)(() => ({
    lineHeight: '100%',
 }))
 
-const SuccessContainer = styled(Box)(() => ({
-   padding: '20px',
-   textAlign: 'center',
-   backgroundColor: '#f0f9ff',
-   border: '1px solid #0ea5e9',
-   borderRadius: '8px',
-   margin: '20px',
-}))
-
-const SuccessTitle = styled(Typography)(() => ({
-   color: '#0ea5e9',
-   marginBottom: '10px',
-   fontWeight: 'bold',
-}))
-
-const SuccessButton = styled(Button)(() => ({
-   backgroundColor: '#f97316',
-   color: 'white',
-   padding: '10px 20px',
-   fontWeight: 'bold',
-   '&:hover': {
-      backgroundColor: '#ea580c',
-   },
-}))
-
 const SectionContainer = styled(Box)(() => ({
    marginBottom: '20px',
 }))
@@ -445,6 +433,7 @@ const FieldLabel = styled(Typography)(() => ({
 }))
 
 const ImageUploadContainer = styled(Box)(() => ({
+   width: '400px',
    height: '135px',
    display: 'flex',
    alignItems: 'center',
@@ -455,11 +444,11 @@ const ImageUploadContainer = styled(Box)(() => ({
 
 const HiddenFileInput = styled('input')(() => ({
    position: 'absolute',
-   top: 0,
-   left: 0,
-   width: '100%',
-   height: '100%',
-   opacity: 0,
+   top: 270,
+   left: 500,
+   width: '400px',
+   opacity: '0',
+   height: '135px',
    cursor: 'pointer',
 }))
 
@@ -523,22 +512,6 @@ const RemoveImageButton = styled('button')(() => ({
 const RadioContainer = styled(Box)(() => ({
    display: 'flex',
    gap: '15px',
-}))
-
-const HouseRadioLabel = styled(FormControlLabel)(() => ({
-   '& .MuiFormControlLabel-label': {
-      display: 'flex',
-      alignItems: 'center',
-      fontSize: '14px',
-   },
-}))
-
-const OrangeDot = styled(Box)(() => ({
-   width: '8px',
-   height: '8px',
-   backgroundColor: '#f97316',
-   borderRadius: '50%',
-   marginRight: '8px',
 }))
 
 const FlexContainer = styled(Box)(() => ({

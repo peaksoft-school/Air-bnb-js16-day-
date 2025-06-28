@@ -20,6 +20,7 @@ const Region = () => {
       houseType: '',
       priceSort: '',
    })
+
    const [chips, setChips] = useState([])
    const [page, setPage] = useState(1)
 
@@ -48,7 +49,7 @@ const Region = () => {
    }, [filters, search, page, dispatch])
 
    const handleFilterChange = (type, value) => {
-      if (value && value !== 'all') {
+      if (value && value !== 'All') {
          const newChip = {
             type,
             label: value,
@@ -95,6 +96,7 @@ const Region = () => {
 
    const links = [
       { href: ROUTES.USER.INDEX, label: 'Main' },
+
       {
          href: ROUTES.USER.REGION_PAGE,
          label: filters.region || 'Region',
@@ -113,21 +115,21 @@ const Region = () => {
    ]
 
    const optionPopularity = [
-      { value: 'all', label: 'All' },
+      { value: 'All', label: 'All' },
       { value: 'popular', label: 'Popular' },
       { value: 'latest', label: 'The latest' },
    ]
 
    const optionHouseType = [
-      { value: 'all', label: 'All' },
+      { value: 'All', label: 'All' },
       { value: 'apartment', label: 'Apartment' },
       { value: 'house', label: 'House' },
    ]
 
    const oprionPrice = [
-      { value: 'all', label: 'All' },
-      { value: 'low', label: 'Low to high' },
-      { value: 'high', label: 'High to low' },
+      { value: 'All', label: 'All' },
+      { value: 'low_to_high', label: 'Low to high' },
+      { value: 'high_to_low', label: 'High to low' },
    ]
    return (
       <StyledContainer>

@@ -3,20 +3,21 @@ import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
+const AllHousing = lazy(() => import('../pages/admin/all-housing/AllHousing'))
+const Users = lazy(() => import('../pages/admin/users/Users'))
+const UserDetail = lazy(() => import('../components/admin/users/UserDetail'))
 const ResetPassword = lazy(
    () => import('../pages/reset-password/ResetPassword')
 )
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 const Region = lazy(() => import('../pages/user/region/Region'))
-const AllHousing = lazy(() => import('../pages/admin/AllHousing'))
 const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
+const CreateHouseForm = lazy(() => import('../pages/user/CreateHouse'))
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
-
-import CreateHouseForm from '../pages/user/createHouse'
 
 const AppRoutes = () => (
    <Routes>
@@ -49,7 +50,6 @@ const AppRoutes = () => (
             />
          }
       >
-
          <Route
             path={ROUTES.USER.CREATE_HOUSE}
             element={
@@ -105,10 +105,27 @@ const AppRoutes = () => (
          />
 
          <Route
+            path={ROUTES.ADMIN.USERS}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <Users />
+               </Suspense>
+            }
+         />
+         <Route
             path={ROUTES.ADMIN.ALLHOUSING}
             element={
                <Suspense fallback={<Loading />}>
                   <AllHousing />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USER_DETAIL}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserDetail />
                </Suspense>
             }
          />
