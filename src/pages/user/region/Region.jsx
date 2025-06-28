@@ -10,6 +10,7 @@ import { REGION_THUNK } from '../../../store/slices/user/region/regionThunk'
 import Loading from '../../Loading'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
+import { useNavigate } from 'react-router'
 
 const Region = () => {
    const { allHouses, isLoading, search } = useSelector((state) => state.region)
@@ -24,6 +25,7 @@ const Region = () => {
    const [page, setPage] = useState(1)
 
    const dispatch = useDispatch()
+   const navigate = useNavigate()
 
    const pageSize = 16
 
@@ -221,6 +223,14 @@ const Region = () => {
                         title={house.description}
                         location={house.address}
                         guests={house.maxGuests}
+                        onClick={() =>
+                           navigate(
+                              ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
+                                 ':id',
+                                 house.id
+                              )
+                           )
+                        }
                      />
                   ))}
                </CardsContainer>

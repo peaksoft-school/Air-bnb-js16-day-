@@ -31,7 +31,7 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
 
    const postFeedback = async () => {
       try {
-         await axiosInstance.post(`/api/feedback/save?houseId=${houseId}`, {
+         await axiosInstance.post(`/api/feedback/save/${houseId}`, {
             images,
             rating,
             feedback,

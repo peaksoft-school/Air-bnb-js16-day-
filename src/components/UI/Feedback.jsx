@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
    Avatar,
    Box,
@@ -8,22 +8,54 @@ import {
 } from '@mui/material'
 import LikeIcon from '../../assets/icons/LikeIcon.svg'
 import DisLike from '../../assets/icons/DisLike.svg'
-import IconButton from '../UI/IconButton' 
+import IconButton from '../UI/IconButton'
 
 const Feedback = ({
    text,
    rating,
    images,
-   likeCount,
-   dislikeCount,
+   likeCount = 0,
+   dislikeCount = 0,
    userFeedbackResponse,
    createdAt,
 }) => {
    const [showFullText, setShowFullText] = useState(false)
+   const [likes, setLikes] = useState(likeCount)
+   const [dislikes, setDislikes] = useState(dislikeCount)
+   const [liked, setLiked] = useState(false)
+   const [disliked, setDisliked] = useState(false)
 
    if (!userFeedbackResponse) return null
 
    const toggleText = () => setShowFullText((prev) => !prev)
+
+   const handleLike = () => {
+      if (liked) {
+         setLikes((prev) => prev - 1)
+         setLiked(false)
+      } else {
+         setLikes((prev) => prev + 1)
+         setLiked(true)
+         if (disliked) {
+            setDislikes((prev) => prev - 1)
+            setDisliked(false)
+         }
+      }
+   }
+
+   const handleDislike = () => {
+      if (disliked) {
+         setDislikes((prev) => prev - 1)
+         setDisliked(false)
+      } else {
+         setDislikes((prev) => prev + 1)
+         setDisliked(true)
+         if (liked) {
+            setLikes((prev) => prev - 1)
+            setLiked(false)
+         }
+      }
+   }
 
    return (
       <StyledContainer>
@@ -74,11 +106,13 @@ const Feedback = ({
                {new Date(createdAt).toLocaleDateString()}
             </Typography>
             <Box className="action-cont">
-               <IconButton className="like">
-                  <img src={LikeIcon} alt="like" width={20} /> {likeCount}
+               <IconButton className="like" onClick={handleLike}>
+                  <img src={LikeIcon} alt="like" width={20} />
+                  {likes}
                </IconButton>
-               <IconButton className="like">
-                  <img src={DisLike} alt="dislike" width={20} /> {dislikeCount}
+               <IconButton className="like" onClick={handleDislike}>
+                  <img src={DisLike} alt="dislike" width={20} />
+                  {dislikes}
                </IconButton>
             </Box>
          </Box>

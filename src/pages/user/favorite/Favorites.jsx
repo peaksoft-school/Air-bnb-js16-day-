@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { styled, Typography, Box } from '@mui/material'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { getFavorites } from '../../../store/slices/user/favorite/favoriteThunk'
 import nodata from '../../../assets/images/no-data.png'
 import Card from '../../../components/UI/cards/Card'
@@ -9,6 +9,8 @@ import { ROUTES } from '../../../routes/routes'
 
 const Favorites = () => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
+
    const { favorites, isLoading } = useSelector((state) => state.favorite)
 
    useEffect(() => {
@@ -109,7 +111,7 @@ const StyledPath = styled(Typography)({
    fontSize: '16px',
    fontWeight: '400',
    fontFamily: 'Inter',
-   padding: ' 2.75rem 2.50rem',
+   padding: '2.75rem 2.50rem',
    color: 'gray',
 
    '& .path-favorite': {

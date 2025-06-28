@@ -6,13 +6,19 @@ import Button from '../Button'
 const Rating = ({ rating = {}, toggleFeedbackModal }) => {
    const { role } = useSelector((state) => state.auth)
 
+   const total = rating.total_feedback || 1
+
    const RATINGS = [
-      { label: 5, progress: rating.rating_5_count || 0 },
-      { label: 4, progress: rating.rating_4_count || 0 },
-      { label: 3, progress: rating.rating_3_count || 0 },
-      { label: 2, progress: rating.rating_2_count || 0 },
-      { label: 1, progress: rating.rating_1_count || 0 },
-   ]
+      { label: 5, count: rating.rating_5_count || 0 },
+      { label: 4, count: rating.rating_4_count || 0 },
+      { label: 3, count: rating.rating_3_count || 0 },
+      { label: 2, count: rating.rating_2_count || 0 },
+      { label: 1, count: rating.rating_1_count || 0 },
+   ].map(({ label, count }) => ({
+      label,
+      count,
+      progress: Math.round((count / total) * 100),
+   }))
 
    return (
       <StyledContainer>
@@ -22,13 +28,15 @@ const Rating = ({ rating = {}, toggleFeedbackModal }) => {
                <img src={FullStarIcon} alt="fullStarIcon" />
             </RatingCont>
             <RatingChartBarContainer>
-               {RATINGS.map(({ label, progress }) => (
+               {RATINGS.map(({ label, progress, count }) => (
                   <RatingChartBar key={label}>
                      <RatingLabel>{label}</RatingLabel>
                      <RatingProgressCont>
                         <RatingProgress progress={progress} />
                      </RatingProgressCont>
-                     <RatingLabel>{progress}%</RatingLabel>
+                     <RatingLabel>
+                        {progress}% ({count})
+                     </RatingLabel>
                   </RatingChartBar>
                ))}
             </RatingChartBarContainer>
@@ -77,6 +85,9 @@ const RatingCont = styled(Box)(() => ({
 
 const RatingChartBarContainer = styled(Box)(() => ({
    color: '#363636',
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '8px',
 }))
 
 const RatingChartBar = styled(Box)(() => ({
@@ -87,7 +98,9 @@ const RatingChartBar = styled(Box)(() => ({
 }))
 
 const RatingLabel = styled(Typography)(() => ({
-   width: '10px',
+   minWidth: '60px',
+   textAlign: 'right',
+   fontSize: '14px',
 }))
 
 const RatingProgressCont = styled(Box)(() => ({
