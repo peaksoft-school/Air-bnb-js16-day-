@@ -15,33 +15,31 @@ const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
 
    const handleGoogleSignIn = async () => {
       try {
-      const provider = new GoogleAuthProvider()
-      provider.addScope('email')
-      provider.addScope('profile')
+         const provider = new GoogleAuthProvider()
+         provider.addScope('email')
+         provider.addScope('profile')
 
-      const result = await signInWithPopup(auth, provider)
-      const idToken = await result.user.getIdToken()
+         const result = await signInWithPopup(auth, provider)
+         const idToken = await result.user.getIdToken()
 
-      await dispatch(
-         AUTH_THUNK.authWithGoogle({ 
-            idToken, 
-            navigate,
-            onSuccess: () => {
-               const selectedRegion = localStorage.getItem('selectedRegion')
-               if (selectedRegion) {
-                  navigate('/user/region', { 
-                     state: { selectedRegion } 
-                  })
-               } else {
-                  navigate('/user')
-               }
-            },
-            handleClose 
-         })
-      ).unwrap()
-   } catch (error) {
-      console.error('Google sign-in error:', error)
-   }
+         await dispatch(
+            AUTH_THUNK.authWithGoogle({
+               idToken,
+               navigate,
+               onSuccess: () => {
+                  const selectedRegion = localStorage.getItem('selectedRegion')
+                  if (selectedRegion) {
+                     navigate('/user/region')
+                  } else {
+                     navigate('/user')
+                  }
+               },
+               handleClose,
+            })
+         ).unwrap()
+      } catch (error) {
+         console.error('Google sign-in error:', error)
+      }
    }
 
    return (
@@ -51,7 +49,7 @@ const SignUpModal = ({ open, setOpen, onAdminLoginClick }) => {
                <Typography className="joinus-text">JOIN US</Typography>
 
                <Typography className="signin-text">
-                  {localStorage.getItem('selectedRegion') 
+                  {localStorage.getItem('selectedRegion')
                      ? 'Sign in with Google to view properties in selected region!'
                      : 'Sign in with Google to start booking available listings!'}
                </Typography>

@@ -12,8 +12,13 @@ const PopularApartments = ({ handleAllClick, handleMoreClick }) => {
    const { landing, error } = useSelector((state) => state.landing)
 
    useEffect(() => {
-      dispatch(getLandingPageReguest({ houseStatus: 'true' }))
+      dispatch(getLandingPageReguest({ houseStatus: 'popular' }))
    }, [dispatch])
+
+   // Добавляем логирование для отладки
+   console.log('PopularApartments - landing:', landing)
+   console.log('PopularApartments - landing type:', typeof landing)
+   console.log('PopularApartments - isArray:', Array.isArray(landing))
 
    if (error) return <div>{error}</div>
 
@@ -28,34 +33,38 @@ const PopularApartments = ({ handleAllClick, handleMoreClick }) => {
             </StyledTextContainer>
 
             <StyledHotelContainer>
-               {landing.slice(1, 2).map((apartment) => (
-                  <StyledImageContainer key={apartment.id}>
-                     <StyledImg
-                        src={apartment.imageUrls[0] || Rectangle}
-                        alt={apartment.name}
-                     />
-                     <StyledDistance>
-                        <StyledDistanceTexts>
-                           <StyledHotelText>{apartment.name}</StyledHotelText>
-                           <StyledApartamentsText>
-                              {apartment.description}
-                           </StyledApartamentsText>
-                        </StyledDistanceTexts>
-                        <StyledDistanceTexts>
-                           <StyledTextLocation>
-                              <LocationOnIcon
-                                 fontSize="inherit"
-                                 className="location-icon"
-                              />
-                              <Typography>{apartment.address}</Typography>
-                           </StyledTextLocation>
-                           <StyledMoreText onClick={handleMoreClick}>
-                              Read more
-                           </StyledMoreText>
-                        </StyledDistanceTexts>
-                     </StyledDistance>
-                  </StyledImageContainer>
-               ))}
+               {landing &&
+                  Array.isArray(landing) &&
+                  landing.slice(1, 2).map((apartment) => (
+                     <StyledImageContainer key={apartment.id}>
+                        <StyledImg
+                           src={apartment.imageUrls[0] || Rectangle}
+                           alt={apartment.name}
+                        />
+                        <StyledDistance>
+                           <StyledDistanceTexts>
+                              <StyledHotelText>
+                                 {apartment.name}
+                              </StyledHotelText>
+                              <StyledApartamentsText>
+                                 {apartment.description}
+                              </StyledApartamentsText>
+                           </StyledDistanceTexts>
+                           <StyledDistanceTexts>
+                              <StyledTextLocation>
+                                 <LocationOnIcon
+                                    fontSize="inherit"
+                                    className="location-icon"
+                                 />
+                                 <Typography>{apartment.address}</Typography>
+                              </StyledTextLocation>
+                              <StyledMoreText onClick={handleMoreClick}>
+                                 Read more
+                              </StyledMoreText>
+                           </StyledDistanceTexts>
+                        </StyledDistance>
+                     </StyledImageContainer>
+                  ))}
                <StyledSliderContainer>
                   <ImageCarousel images={IMAGES_POPULARS} />
                </StyledSliderContainer>

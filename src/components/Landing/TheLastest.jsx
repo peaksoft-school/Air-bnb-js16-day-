@@ -12,7 +12,7 @@ const TheLastest = ({ handleAllClick, handleMoreClick }) => {
    const { landing, error } = useSelector((state) => state.landing)
 
    useEffect(() => {
-      dispatch(getLandingPageReguest({ houseStatus: 'true' }))
+      dispatch(getLandingPageReguest({ houseStatus: 'latest' }))
    }, [dispatch])
 
    if (error) return <div>{error}</div>
@@ -29,36 +29,40 @@ const TheLastest = ({ handleAllClick, handleMoreClick }) => {
             </StyledTextContainer>
 
             <StyledHotelContainer>
-               {landing.slice(5, 6).map((apartment) => (
-                  <StyledImageContainer key={apartment.id}>
-                     <StyledImg
-                        src={apartment.imageUrls[0] || Rectangle}
-                        alt={apartment.name}
-                     />
-                     <StyledDistance>
-                        <StyledDistanceTexts>
-                           <StyledHotelText>{apartment.name}</StyledHotelText>
-                           <StyledApartamentsText>
-                              {apartment.description}
-                           </StyledApartamentsText>
-                        </StyledDistanceTexts>
-                        <StyledDistanceTexts>
-                           <StyledTextLocation>
-                              <LocationOnIcon
-                                 fontSize="inherit"
-                                 className="location-icon"
-                              />
-                              <Typography className="location-name">
-                                 {apartment.address}
-                              </Typography>
-                           </StyledTextLocation>
-                           <StyledMoreText onClick={handleMoreClick}>
-                              Read more
-                           </StyledMoreText>
-                        </StyledDistanceTexts>
-                     </StyledDistance>
-                  </StyledImageContainer>
-               ))}
+               {landing &&
+                  Array.isArray(landing) &&
+                  landing.slice(5, 6).map((apartment) => (
+                     <StyledImageContainer key={apartment.id}>
+                        <StyledImg
+                           src={apartment.imageUrls[0] || Rectangle}
+                           alt={apartment.name}
+                        />
+                        <StyledDistance>
+                           <StyledDistanceTexts>
+                              <StyledHotelText>
+                                 {apartment.name}
+                              </StyledHotelText>
+                              <StyledApartamentsText>
+                                 {apartment.description}
+                              </StyledApartamentsText>
+                           </StyledDistanceTexts>
+                           <StyledDistanceTexts>
+                              <StyledTextLocation>
+                                 <LocationOnIcon
+                                    fontSize="inherit"
+                                    className="location-icon"
+                                 />
+                                 <Typography className="location-name">
+                                    {apartment.address}
+                                 </Typography>
+                              </StyledTextLocation>
+                              <StyledMoreText onClick={handleMoreClick}>
+                                 Read more
+                              </StyledMoreText>
+                           </StyledDistanceTexts>
+                        </StyledDistance>
+                     </StyledImageContainer>
+                  ))}
                <StyledSliderContainer>
                   <ImageCarousel
                      images={IMAGES_POPULARS}

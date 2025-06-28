@@ -1,7 +1,6 @@
 import { Box, styled, Typography } from '@mui/material'
 import GeoIcon from '../../assets/icons/geo.svg'
 import StarIcon from '../../assets/icons/star.svg'
-import { HOUSES } from '../../utils/constants/Index'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLandingPageReguest } from '../../store/slices/user/Landing/LandingThunk'
 import { useEffect } from 'react'
@@ -11,7 +10,7 @@ const PopularHouse = () => {
    const { landing, error } = useSelector((state) => state.landing)
 
    useEffect(() => {
-      dispatch(getLandingPageReguest({ houseStatus: 'true' }))
+      dispatch(getLandingPageReguest({ houseStatus: 'popular' }))
    }, [dispatch])
 
    if (error) return <div>{error}</div>
@@ -35,42 +34,44 @@ const PopularHouse = () => {
             </StyledDiv>
 
             <StyledBox>
-               {landing.slice(2, 5).map((apartment) => (
-                  <StyledCardBox key={apartment.id}>
-                     <ImageWrapper>
-                        <StyledImg
-                           src={apartment.imageUrls[0]}
-                           alt={apartment.name}
-                        />
+               {landing &&
+                  Array.isArray(landing) &&
+                  landing.slice(2, 5).map((apartment) => (
+                     <StyledCardBox key={apartment.id}>
+                        <ImageWrapper>
+                           <StyledImg
+                              src={apartment.imageUrls[0]}
+                              alt={apartment.name}
+                           />
 
-                        <RatingTag>
-                           <img src={StarIcon} alt="star" />
+                           <RatingTag>
+                              <img src={StarIcon} alt="star" />
 
-                           <Typography variant="span">
-                              {apartment.rating}
+                              <Typography variant="span">
+                                 {apartment.rating}
+                              </Typography>
+                           </RatingTag>
+                        </ImageWrapper>
+
+                        <Box className="card-content">
+                           <Typography variant="h3">
+                              {apartment.description}
                            </Typography>
-                        </RatingTag>
-                     </ImageWrapper>
 
-                     <Box className="card-content">
-                        <Typography variant="h3">
-                           {apartment.description}
-                        </Typography>
+                           <Typography>
+                              <StyledSecondImg src={GeoIcon} alt="geo" />
+                              {apartment.address}
+                           </Typography>
+                        </Box>
 
                         <Typography>
-                           <StyledSecondImg src={GeoIcon} alt="geo" />
-                           {apartment.address}
+                           <Typography variant="span">
+                              ${apartment.price}
+                           </Typography>{' '}
+                           / day
                         </Typography>
-                     </Box>
-
-                     <Typography>
-                        <Typography variant="span">
-                           ${apartment.price}
-                        </Typography>{' '}
-                        / day
-                     </Typography>
-                  </StyledCardBox>
-               ))}
+                     </StyledCardBox>
+                  ))}
             </StyledBox>
          </StyledSecondBox>
       </StyledMainBox>

@@ -6,6 +6,7 @@ const initialState = {
    isLoading: false,
    error: null,
    search: '',
+   selectedRegion: '',
 }
 
 const regionSlice = createSlice({
@@ -14,6 +15,14 @@ const regionSlice = createSlice({
    reducers: {
       setSearch(state, action) {
          state.search = action.payload
+      },
+      setSelectedRegion(state, action) {
+         console.log('setSelectedRegion reducer - payload:', action.payload)
+         state.selectedRegion = action.payload
+         console.log(
+            'setSelectedRegion reducer - new state:',
+            state.selectedRegion
+         )
       },
    },
 

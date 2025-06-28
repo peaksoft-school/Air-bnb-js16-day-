@@ -6,7 +6,7 @@ export const getLandingPageReguest = createAsyncThunk(
    async (houseStatus, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            '/api/house/latest-or-popular',
+            '/api/auth/latest-or-popular',
             {
                params: houseStatus,
             }
