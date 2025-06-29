@@ -23,6 +23,7 @@ const Region = () => {
       houseType: '',
       priceSort: '',
    })
+
    const [chips, setChips] = useState([])
    const [page, setPage] = useState(1)
 
@@ -123,6 +124,7 @@ const Region = () => {
 
    const links = [
       { href: ROUTES.USER.INDEX, label: 'Main' },
+
       {
          href: ROUTES.USER.REGION_PAGE,
          label: filters.region || 'Region',
@@ -141,22 +143,20 @@ const Region = () => {
    ]
 
    const optionPopularity = [
-      { value: 'all', label: 'All' },
       { value: 'popular', label: 'Popular' },
-      { value: 'latest', label: 'The latest' },
+      { value: 'the_lastest', label: 'The latest' },
    ]
 
    const optionHouseType = [
-      { value: 'all', label: 'All' },
-      { value: 'apartment', label: 'Apartment' },
-      { value: 'house', label: 'House' },
+      { value: 'APARTMENT', label: 'Apartment' },
+      { value: 'HOUSE', label: 'House' },
    ]
 
    const oprionPrice = [
-      { value: 'all', label: 'All' },
       { value: 'low_to_high', label: 'Low to high' },
       { value: 'high_to_low', label: 'High to low' },
    ]
+
    return (
       <StyledContainer>
          <BreadCrumbs links={links} />
