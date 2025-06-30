@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage'
 import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
 import { regionSlice } from './slices/user/region/regionSlice'
 import { profileSlice } from './slices/user/profile/profileSlice'
+import { usersSlice } from './slices/admin/users/usersSlice'
 import { favoriteSlice } from './slices/user/favorite/favoriteSlise'
 import { userInfoReducer } from './slices/admin/user/userInfoSlice'
 import { addHouseSlice } from './slices/user/addHouse/addHouseSlice'
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
    [allHousingSlice.name]: allHousingSlice.reducer,
    [profileSlice.name]: profileSlice.reducer,
    [regionSlice.name]: regionSlice.reducer,
+   [usersSlice.name]: usersSlice.reducer,
    [favoriteSlice.name]: favoriteSlice.reducer,
     userInfo: userInfoReducer,
     addHouseSlice: addHouseSlice.reducer,
@@ -23,6 +25,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
    key: 'AIR-BNB',
    storage,
+   whitelist: ['auth'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

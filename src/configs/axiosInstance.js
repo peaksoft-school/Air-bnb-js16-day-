@@ -18,7 +18,7 @@ export const injectStore = (store) => {
 
 axiosInstance.interceptors.request.use(
    (config) => {
-      const { token } = customStore?.getState()?.auth
+      const { token } = customStore.getState()?.auth
 
       if (token) {
          config.headers.Authorization = `Bearer ${token}`
@@ -33,7 +33,9 @@ axiosInstance.interceptors.request.use(
 )
 
 axiosInstance.interceptors.response.use(
-   (response) => response,
+   (response) => {
+      return Promise.resolve(response)
+   },
 
    (error) => {
       if (error.response?.status === 401) {

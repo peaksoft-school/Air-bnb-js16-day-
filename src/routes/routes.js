@@ -11,7 +11,8 @@ export const ROUTES = {
    ADMIN: {
       INDEX: '/admin',
       USERS: '/admin/users',
-      ALLHOUSING: '/admin/allhousing',
+      USER_DETAIL: '/admin/users/:id',
+      ALLHOUSING: '/admin/all-housing',
       APPLICATION: '/admin/application',
    },
 
