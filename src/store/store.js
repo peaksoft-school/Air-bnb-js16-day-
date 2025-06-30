@@ -8,6 +8,7 @@ import { regionSlice } from './slices/user/region/regionSlice'
 import { profileSlice } from './slices/user/profile/profileSlice'
 import { userInfoReducer } from './slices/admin/user/userInfoSlice'
 import { addHouseSlice } from './slices/user/addHouse/addHouseSlice'
+import { paymentSlice } from './slices/user/payment/paymentSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
    [regionSlice.name]: regionSlice.reducer,
    userInfo: userInfoReducer,
    addHouseSlice: addHouseSlice.reducer,
+   [paymentSlice.name]: paymentSlice.reducer,
 })
 
 const persistConfig = {

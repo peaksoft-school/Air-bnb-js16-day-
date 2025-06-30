@@ -37,13 +37,23 @@ const Card = ({
    }
 
    const CustomPrevArrow = ({ onClick }) => (
-      <StyledIconButtonBack onClick={onClick}>
+      <StyledIconButtonBack
+         onClick={(e) => {
+            e.stopPropagation()
+            if (onClick) onClick(e)
+         }}
+      >
          <ArrowBackIosNewIcon />
       </StyledIconButtonBack>
    )
 
    const CustomNextArrow = ({ onClick }) => (
-      <StyledIconButtonForward onClick={onClick}>
+      <StyledIconButtonForward
+         onClick={(e) => {
+            e.stopPropagation()
+            if (onClick) onClick(e)
+         }}
+      >
          <ArrowForwardIosIcon />
       </StyledIconButtonForward>
    )

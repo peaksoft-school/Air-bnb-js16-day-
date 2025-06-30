@@ -8,10 +8,10 @@ const getHouses = createAsyncThunk(
       try {
          const { data } = await axiosInstance.get('/api/house/for-users', {
             params: {
-               region: params.region || 'all',
-               popularity: params.popularity || 'all',
-               houseType: params.houseType || 'all',
-               priceSort: params.priceSort || 'all',
+               region: params.region || undefined,
+               popularity: params.popularity || undefined,
+               houseType: params.houseType || undefined,
+               priceSort: params.priceSort || undefined,
                search: params.search || '',
                page: params.page,
                size: params.size,
@@ -21,7 +21,7 @@ const getHouses = createAsyncThunk(
             },
          })
 
-         return data
+         return data  
       } catch (error) {
          return rejectWithValue(error.message)
       }

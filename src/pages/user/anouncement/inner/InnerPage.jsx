@@ -7,6 +7,7 @@ import Rating from '../../../../components/UI/rating/Rating'
 import FeedbackModal from '../../../../components/UI/feedback/FeedbackModal'
 import Loading from '../../../Loading'
 import Button from '../../../../components/UI/Button'
+import Payment from '../../payment/Payment'
 
 const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
@@ -49,7 +50,12 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
                      </Box>
                   </Box>
 
-                  <h1>Payment component will be here</h1>
+                  <Payment
+                     houseId={houseInfo.id}
+                     key={houseInfo.id}
+                     pricePerDay={houseInfo.price}
+                     userId={houseInfo.userId}
+                  />
                </Box>
             </Box>
 
