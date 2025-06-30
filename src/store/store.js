@@ -23,6 +23,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
    key: 'AIR-BNB',
    storage,
+   whitelist: ['auth'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
