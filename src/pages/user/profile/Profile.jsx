@@ -45,31 +45,12 @@ const Profile = () => {
 
    const filteredHouses = (userProfile?.houses || [])
       .filter((house) => {
-         // Фильтр по типу (ищем в description или других полях)
          if (type && type !== '') {
-            const description = house.description?.toLowerCase() || ''
-            const title = house.title?.toLowerCase() || ''
-            const filterType = type.toLowerCase()
-
-            console.log('Type filter debug:', {
-               description,
-               title,
-               filterType,
-               descriptionIncludes: description.includes(filterType),
-               titleIncludes: title.includes(filterType),
-            })
-
-            // Ищем тип в description или title
-            if (
-               !description.includes(filterType) &&
-               !title.includes(filterType)
-            ) {
-               console.log('Type filter failed for house:', house)
+            if (house.houseType?.toLowerCase() !== type.toLowerCase()) {
                return false
             }
          }
 
-         // Фильтр по рейтингу
          if (rating && rating !== '') {
             const houseRating = Math.round(house.rating || 0)
             const filterRating = Number(rating)
@@ -94,15 +75,6 @@ const Profile = () => {
          }
          return 0
       })
-
-   // Отладочная информация
-   useEffect(() => {
-      console.log('=== FILTER DEBUG ===')
-      console.log('Current type filter:', type)
-      console.log('All houses:', userProfile?.houses)
-      console.log('Filtered houses:', filteredHouses)
-      console.log('====================')
-   }, [type, userProfile?.houses, filteredHouses])
 
    const handleClearAll = () => {
       setSort('')

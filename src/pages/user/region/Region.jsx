@@ -249,6 +249,7 @@ const Region = () => {
                         title={house.description}
                         location={house.address}
                         guests={house.maxGuests}
+                        favorite={house.favorite}
                      />
                   ))}
                </CardsContainer>

@@ -19,7 +19,15 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Button from '../Button'
 
-const Card = ({ imageUrls, price, rating, title, location, guests }) => {
+const Card = ({
+   imageUrls,
+   price,
+   rating,
+   title,
+   location,
+   guests,
+   favorite,
+}) => {
    const [isLiked, setIsLiked] = useState(false)
    const [hovered, setHovered] = useState(false)
 
@@ -117,7 +125,7 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                <Button width={100}>BOOK</Button>
 
                <IconButton aria-label="like" onClick={handleLike}>
-                  {isLiked ? (
+                  {favorite ? (
                      <FavoriteIcon color="warning" />
                   ) : (
                      <FavoriteBorderIcon color="warning" />
