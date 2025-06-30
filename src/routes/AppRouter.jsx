@@ -1,18 +1,22 @@
-import { Routes, Route } from 'react-router'
+import { Routes, Route, Navigate } from 'react-router'
 import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
+const AllHousing = lazy(() => import('../pages/admin/all-housing/AllHousing'))
+const Users = lazy(() => import('../pages/admin/users/Users'))
+const UserDetail = lazy(() => import('../components/admin/users/UserDetail'))
 const ResetPassword = lazy(
    () => import('../pages/reset-password/ResetPassword')
 )
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
+const Region = lazy(() => import('../pages/user/region/Region'))
+const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
-import AllHousing from '../pages/admin/AllHousing'
 
 import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
 import Application from '../pages/admin/user-page/Application'
@@ -48,7 +52,25 @@ const AppRoutes = () => (
             />
          }
       >
-         <Route index element={<div>Welcome to User Page</div>} />
+         <Route index element={<Navigate to="region" />} />
+
+         <Route
+            path="region"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <Region />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path="/user/profile"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserProfile />
+               </Suspense>
+            }
+         />
       </Route>
 
       <Route
@@ -66,6 +88,7 @@ const AppRoutes = () => (
          }
       >
          <Route
+            index
             path={ROUTES.ADMIN.APPLICATION}
             element={
                <Suspense fallback={<Loading />}>
@@ -86,13 +109,28 @@ const AppRoutes = () => (
          <Route
             path={ROUTES.ADMIN.USERS}
             element={
-               <div>
-                  <h1>User Profile</h1>
-               </div>
+               <Suspense fallback={<Loading />}>
+                  <Users />
+               </Suspense>
+            }
+         />
+         <Route
+            path={ROUTES.ADMIN.ALLHOUSING}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AllHousing />
+               </Suspense>
             }
          />
 
-         <Route path="allhousing" element={<AllHousing />} />
+         <Route
+            path={ROUTES.ADMIN.USER_DETAIL}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserDetail />
+               </Suspense>
+            }
+         />
       </Route>
 
       <Route

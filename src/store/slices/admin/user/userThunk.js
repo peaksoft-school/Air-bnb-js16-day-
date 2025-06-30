@@ -32,7 +32,7 @@ export const getAnnouncementFeedback = createAsyncThunk(
    async (houseId, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            `/api/feedback/getAll/${houseId}`
+            `/api/feedback/all/${houseId}`
          )
 
          return data
@@ -47,7 +47,7 @@ export const getAnnouncementRating = createAsyncThunk(
    async (id, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            `/api/feedbacks/${id}/ratings`
+            `/api/feedbacks/all${id}/ratings`
          )
 
          return data

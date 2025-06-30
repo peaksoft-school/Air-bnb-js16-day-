@@ -11,8 +11,6 @@ import { resetApplications } from '../../../store/slices/admin/user/houseApplica
 import Loading from '../../Loading'
 import { CardOptions } from '../../../utils/helpers/options'
 
-import { getHouseById } from '../../../store/slices/admin/user/userThunk'
-import { ROUTES } from '../../../routes/routes'
 import { useNavigate } from 'react-router'
 
 const CARDS_PER_PAGE = 18
@@ -74,15 +72,7 @@ export default function Application() {
    const options = CardOptions
 
    const handleClick = async (id) => {
-      // try {
-      // Сначала делаем запрос
-      // await dispatch(getHouseById(id)).unwrap()
       navigate(`/admin/application/${id}`)
-      // Только после успешного запроса переходим
-      // } catch (error) {
-      //    console.error('Ошибка при получении данных', error)
-      //    // Можно показать ошибку пользователю
-      // }
    }
 
    return (
@@ -193,7 +183,7 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
    minHeight: 48,
    '& .MuiPagination-ul': {
       justifyContent: 'center',
-      gap: 8,
+      gap: '20px',
    },
    '& .MuiPaginationItem-root': {
       fontWeight: 600,

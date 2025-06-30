@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
 import {
    AppBar as MuiAppBar,
    Toolbar,
@@ -11,12 +13,31 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '../components/UI/Button'
 import Meatballs from '../components/UI/Meatballs'
 import Air from '../assets/icons/air.svg'
+import { AUTH_ACTIONS } from '../store/slices/auth/authSlice'
 
 const Header = ({ onJoinUs, onProfileClick, onAddLeave, isAuthenticated }) => {
    const menuOptions = [
       { label: 'My profile', action: 'my-profile' },
       { label: 'Log out', action: 'log-out' },
    ]
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+
+   const handleLogout = () => {
+      dispatch(AUTH_ACTIONS.logOut())
+
+      navigate('/')
+   }
+
+   const handleMenuSelect = (option) => {
+      if (option.action === 'my-profile') {
+         navigate('/user/profile')
+      }
+      if (option.action === 'log-out') {
+         dispatch(AUTH_ACTIONS.logOut())
+         navigate('/')
+      }
+   }
 
    return (
       <AppBar position="static">
@@ -43,6 +64,7 @@ const Header = ({ onJoinUs, onProfileClick, onAddLeave, isAuthenticated }) => {
                      <Meatballs
                         icon={<ExpandMoreIcon className="expend-icon" />}
                         options={menuOptions}
+                        onSelect={handleMenuSelect}
                      />
                   </Box>
                ) : (
