@@ -18,8 +18,9 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Meatballs from '../../components/UI/Meatballs'
 
-const AdminCard = ({ house, options, onDelete, onNavigate }) => {
-   const { price, rating, address, guests, description, images } = house
+const AdminCard = ({ house, options, onDelete }) => {
+   const { price, rating, address, guests, description, images, imageUrls } =
+      house
 
    const [hovered, setHovered] = useState(false)
 
@@ -42,40 +43,41 @@ const AdminCard = ({ house, options, onDelete, onNavigate }) => {
    )
 
    const settings = {
-      dots: images?.length > 1,
+      dots: images && imageUrls.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: images?.length > 1,
+      arrows: images && imageUrls.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
 
    return (
-      <StyledCard onClick={onNavigate}>
+      <StyledCard>
          <ImageContainer
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            {images?.length > 1 ? (
+            {images && imageUrls.length > 1 ? (
                <Slider {...settings}>
-                  {images?.map((url, index) => (
-                     <div key={index}>
-                        <CardMedia
-                           component="img"
-                           height="136"
-                           image={url}
-                           alt={description}
-                        />
-                     </div>
-                  ))}
+                  {images &&
+                     imageUrls.map((url, index) => (
+                        <div key={index}>
+                           <CardMedia
+                              component="img"
+                              height="136"
+                              image={url}
+                              alt={description}
+                           />
+                        </div>
+                     ))}
                </Slider>
             ) : (
                <CardMedia
                   component="img"
                   height="136"
-                  image={images[0]}
+                  image={images && imageUrls[0]}
                   alt={description}
                />
             )}
@@ -125,7 +127,6 @@ const AdminCard = ({ house, options, onDelete, onNavigate }) => {
       </StyledCard>
    )
 }
-
 export default AdminCard
 
 const StyledCard = styled(MuiCard)(() => ({

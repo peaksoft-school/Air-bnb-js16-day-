@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import {
    Box,
@@ -20,11 +20,14 @@ import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
 const UserDetail = () => {
    const { userProfile, loading, error } = useSelector((state) => state.users)
 
+   console.log(userProfile.houses)
+
    const [activeTab, setActiveTab] = useState('booking')
 
    const { id } = useParams()
 
    const dispatch = useDispatch()
+   const navigate = useNavigate()
 
    const user = userProfile?.user
 
@@ -43,6 +46,10 @@ const UserDetail = () => {
 
    const handleDeleteHouse = (houseId) => {
       dispatch(deleteHouse(houseId))
+   }
+
+   const handleNavigate = (houseId) => {
+      navigate(`/admin/users/${id}/announcement/${houseId}`)
    }
 
    return (
@@ -87,6 +94,13 @@ const UserDetail = () => {
                   </Box>
                )}
             </ContactBox>
+            <Button
+               onClick={() => handleBlockAll(user?.id)}
+               disabled={user}
+               className="block-button"
+            >
+               {user ? 'Blocked' : 'Block All Announcements'}
+            </Button>
          </Box>
 
          <HousesBox>
@@ -105,29 +119,22 @@ const UserDetail = () => {
 
             {loading ? (
                <CircularProgress />
-            ) : error ? (
+            ) : userProfile?.houses?.length === 0 ? (
                <Alert severity="info">Ничего нет !</Alert>
             ) : activeTab === 'booking' ? (
                <Box className="cards-container">
-                  {userProfile?.houses.map((house, i) => (
+                  {userProfile?.houses?.map((house, i) => (
                      <AdminCard
                         key={i}
                         house={house}
                         options={ADMIN_CARD_OPTIONS}
                         onDelete={(houseId) => handleDeleteHouse(houseId)}
+                        onNavigate={() => handleNavigate(house.houseId)}
                      />
                   ))}
                </Box>
             ) : (
                <>
-                  <Button
-                     onClick={() => handleBlockAll(user?.id)}
-                     disabled={user?.isBlocked}
-                     className="block-button"
-                  >
-                     {user?.isBlocked ? 'Blocked' : 'Block All'}
-                  </Button>
-
                   <Box className="cards-container">
                      {userProfile?.houses.map((house, i) => (
                         <AdminCard
@@ -135,6 +142,7 @@ const UserDetail = () => {
                            house={house}
                            options={ADMIN_CARD_OPTIONS}
                            onDelete={(houseId) => handleDeleteHouse(houseId)}
+                           onNavigate={() => handleNavigate(house.houseId)}
                         />
                      ))}
                   </Box>

@@ -22,7 +22,18 @@ const getHouses = createAsyncThunk(
 
 
          const { data } = await axiosInstance.get('/api/house/for-users', {
-            params: requestParams,
+            params: {
+               region: params.region || undefined,
+               popularity: params.popularity || undefined,
+               houseType: params.houseType || undefined,
+               priceSort: params.priceSort || undefined,
+               search: params.search || '',
+               page: params.page,
+               size: params.size,
+               lat: 0,
+               lng: 0,
+               radius: 1000,
+            },
          })
 
          return data

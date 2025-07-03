@@ -20,9 +20,9 @@ const getUserProfile = createAsyncThunk(
 
    async ({ choice, id, navigate }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get('/api/user/profile', {
-            params: { choice },
-         })
+         const response = await axiosInstance.get(
+            `/api/user/profile/${id}?choice=${choice}`
+         )
 
          navigate(`/admin/users/${id}`)
 
