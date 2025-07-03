@@ -8,6 +8,7 @@ import persistStore from 'redux-persist/es/persistStore'
 import persistReducer from 'redux-persist/es/persistReducer'
 import storage from 'redux-persist/lib/storage'
 import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
+import { LandingSlice } from './slices/user/Landing/landingSlice'
 import { regionSlice } from './slices/user/region/regionSlice'
 import { profileSlice } from './slices/user/profile/profileSlice'
 import { usersSlice } from './slices/admin/users/usersSlice'
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
    applicationSlice: houseApplicationsReducer,
    [authSlice.name]: authSlice.reducer,
    [allHousingSlice.name]: allHousingSlice.reducer,
+   landing: LandingSlice.reducer,
    [profileSlice.name]: profileSlice.reducer,
    [regionSlice.name]: regionSlice.reducer,
    [usersSlice.name]: usersSlice.reducer,

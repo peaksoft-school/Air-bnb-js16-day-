@@ -21,8 +21,10 @@ import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
 const AdminCard = ({ house }) => {
    const [hovered, setHovered] = useState(false)
 
-   const { imageUrls, price, rating, description, address, maxGuests } =
+   const { images , price, rating, description, address, maxGuests } =
       house
+
+      const imageUrls = images
       
 
    const CustomPrevArrow = ({ onClick }) => (

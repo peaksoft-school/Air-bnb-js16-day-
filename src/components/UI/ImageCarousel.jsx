@@ -9,24 +9,22 @@ const ImageCarousel = ({ images, isButtonBlack, isBlackCount, left }) => {
    const [currentIndex, setCurrentIndex] = useState(0)
 
    const handleNext = () => {
-      setCurrentImages(([second]) => {
+      setCurrentImages(([first, second]) => {
+         const secondIndex = images.indexOf(second)
          const nextIndex =
-            images.indexOf(second) + 1 === images.length
-               ? 0
-               : images.indexOf(second) + 1
+            secondIndex + 1 === images.length ? 0 : secondIndex + 1
 
-         setCurrentIndex(nextIndex)
+         setCurrentIndex(secondIndex)
 
          return [second, images[nextIndex]]
       })
    }
 
    const handlePrev = () => {
-      setCurrentImages(([first]) => {
+      setCurrentImages(([first, second]) => {
+         const firstIndex = images.indexOf(first)
          const prevIndex =
-            images.indexOf(first) - 1 < 0
-               ? images.length - 1
-               : images.indexOf(first) - 1
+            firstIndex - 1 < 0 ? images.length - 1 : firstIndex - 1
 
          setCurrentIndex(prevIndex)
 
@@ -101,11 +99,11 @@ const MotionImage = styled(motion.img)`
    object-fit: cover;
 `
 
-const Controls = styled(Box)(({ Paddingleft }) => ({
+const Controls = styled(Box)(({ paddingleft }) => ({
    display: 'flex',
    alignItems: 'center',
    gap: '25px',
-   padding: Paddingleft === 'left' ? '0px 0px 0px 31px' : '0px 0px 0px 15px',
+   padding: paddingleft === 'left' ? '0px 0px 0px 31px' : '0px 0px 0px 15px',
 }))
 
 const StyledCountText = styled(Typography)(({ isBlackCoun }) => ({
