@@ -79,8 +79,7 @@ export default function Application() {
       <>
          <Box
             sx={{
-               p: 4,
-               background: '#fafafa',
+               background: '#F7F7F7',
                minHeight: '100vh',
                position: 'relative',
             }}
@@ -177,14 +176,16 @@ export default function Application() {
 }
 
 const StyledPagination = styled(Pagination)(({ theme }) => ({
-   background: '#fafafa',
+   background: '#F7F7F7',
    borderRadius: '8px',
    padding: '10px 0',
    minHeight: 48,
+
    '& .MuiPagination-ul': {
       justifyContent: 'center',
       gap: '20px',
    },
+
    '& .MuiPaginationItem-root': {
       fontWeight: 600,
       fontSize: 18,
@@ -192,14 +193,17 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
       minWidth: 36,
       minHeight: 36,
       borderRadius: 8,
+
       '&.Mui-selected': {
          color: '#DD8A08',
          background: 'transparent',
       },
+
       '&:hover': {
          background: 'transparent',
          color: '#DD8A08',
       },
+
       '&.MuiPaginationItem-ellipsis': {
          color: '#BDBDBD',
          fontSize: 18,

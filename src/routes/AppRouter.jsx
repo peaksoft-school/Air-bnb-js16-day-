@@ -98,7 +98,17 @@ const AppRoutes = () => (
          />
 
          <Route
-            path="/admin/application/:id"
+            index
+            path={ROUTES.ADMIN.APPLICATION_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementHouse />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USEER_ANNOUNCMENT_BY_ID}
             element={
                <Suspense fallback={<Loading />}>
                   <AnnouncementHouse />
@@ -114,20 +124,21 @@ const AppRoutes = () => (
                </Suspense>
             }
          />
-         <Route
-            path={ROUTES.ADMIN.ALLHOUSING}
-            element={
-               <Suspense fallback={<Loading />}>
-                  <AllHousing />
-               </Suspense>
-            }
-         />
 
          <Route
             path={ROUTES.ADMIN.USER_DETAIL}
             element={
                <Suspense fallback={<Loading />}>
                   <UserDetail />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.ALLHOUSING}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AllHousing />
                </Suspense>
             }
          />

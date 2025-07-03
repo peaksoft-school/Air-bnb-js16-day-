@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../../configs/axiosInstance'
+import { USERS_THUNKS } from '../users/usersThunk'
 
 export const getUser = createAsyncThunk(
    'user/getUser',
@@ -72,15 +73,13 @@ export const getAllFavorites = createAsyncThunk(
 
 export const deleteHouseAsync = createAsyncThunk(
    'user/deleteHouse',
-   async (
-      { id, showToast, getUserHouses, navigate },
-      { rejectWithValue, dispatch }
-   ) => {
+   async ({ id, showToast, navigate }, { rejectWithValue, dispatch }) => {
       try {
-         await axiosInstance.delete(`/api/house/delete/${id}`)
+         await axiosInstance.delete(`/api/house/houses/${id}`)
 
          if (navigate) {
             navigate(-1)
+            dispatch(USERS_THUNKS.getUserProfile({ choice: 'booking', id }))
          }
 
          showToast({
@@ -88,10 +87,6 @@ export const deleteHouseAsync = createAsyncThunk(
             message: 'Successfully deleted',
             type: 'success',
          })
-         if (getUserHouses) {
-            return getUserHouses()
-         }
-         return dispatch(getHouseById(id))
       } catch (error) {
          showToast({
             title: 'Delete',
@@ -105,18 +100,13 @@ export const deleteHouseAsync = createAsyncThunk(
 
 export const blockedHouses = createAsyncThunk(
    'user/blockedHouses',
-   async (
-      { id, block, showToast, getUserHouses },
-      { rejectWithValue, dispatch }
-   ) => {
+   async ({ id, showToast, getUserHouses }, { rejectWithValue, dispatch }) => {
       try {
-         const { data } = await axiosInstance.post(
-            `/api/house/block/${id}?blockOrUnblock=${block}`
-         )
+         const { data } = await axiosInstance.put(`/api/house/block/${id}`)
 
          showToast({
             title: 'Block',
-            message: data.message,
+            message: data,
             type: 'success',
          })
          if (getUserHouses) {
