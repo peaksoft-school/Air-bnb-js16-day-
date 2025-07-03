@@ -1,57 +1,82 @@
 import { Box, styled, Typography } from '@mui/material'
 import GeoIcon from '../../assets/icons/geo.svg'
 import StarIcon from '../../assets/icons/star.svg'
-import { HOUSES } from '../../utils/constants/Index'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLandingPageReguest } from '../../store/slices/user/Landing/LandingThunk'
+import { useEffect } from 'react'
 
-const PopularHouse = () => (
-   <StyledMainBox>
-      <StyledSecondBox>
-         <StyledDiv>
-            <Box>
-               <Typography variant="h2">Popular House</Typography>
+const PopularHouse = () => {
+   const dispatch = useDispatch()
+   const { landing, error } = useSelector((state) => state.landing)
 
-               <Typography>
-                  Helping you make the best decisions in buying, selling, &
-                  renting your last minute locations.
-               </Typography>
-            </Box>
+   useEffect(() => {
+      dispatch(getLandingPageReguest({ houseStatus: 'popular' }))
+   }, [dispatch])
 
-            <Box>
-               <StyledTypography>View all</StyledTypography>
-            </Box>
-         </StyledDiv>
+   if (error) return <div>{error}</div>
 
-         <StyledBox>
-            {HOUSES.map(({ id, image, title, rating, address, price }) => (
-               <StyledCardBox key={id}>
-                  <ImageWrapper>
-                     <StyledImg src={image} alt={title} />
-
-                     <RatingTag>
-                        <img src={StarIcon} alt="star" />
-
-                        <Typography variant="span">{rating}</Typography>
-                     </RatingTag>
-                  </ImageWrapper>
-
-                  <Box className="card-content">
-                     <Typography variant="h3">{title}</Typography>
-
-                     <Typography>
-                        <StyledSecondImg src={GeoIcon} alt="geo" />
-                        {address}
-                     </Typography>
-                  </Box>
+   return (
+      <StyledMainBox>
+         <StyledSecondBox>
+            <StyledDiv>
+               <Box>
+                  <Typography variant="h2">Popular House</Typography>
 
                   <Typography>
-                     <Typography variant="span">${price}</Typography> / day
+                     Helping you make the best decisions in buying, selling, &
+                     renting your last minute locations.
                   </Typography>
-               </StyledCardBox>
-            ))}
-         </StyledBox>
-      </StyledSecondBox>
-   </StyledMainBox>
-)
+               </Box>
+
+               <Box>
+                  <StyledTypography>View all</StyledTypography>
+               </Box>
+            </StyledDiv>
+
+            <StyledBox>
+               {landing &&
+                  Array.isArray(landing) &&
+                  landing.slice(2, 5).map((apartment) => (
+                     <StyledCardBox key={apartment.id}>
+                        <ImageWrapper>
+                           <StyledImg
+                              src={apartment.imageUrls[0]}
+                              alt={apartment.name}
+                           />
+
+                           <RatingTag>
+                              <img src={StarIcon} alt="star" />
+
+                              <Typography variant="span">
+                                 {apartment.rating}
+                              </Typography>
+                           </RatingTag>
+                        </ImageWrapper>
+
+                        <Box className="card-content">
+                           <Typography variant="h3">
+                              {apartment.description}
+                           </Typography>
+
+                           <Typography>
+                              <StyledSecondImg src={GeoIcon} alt="geo" />
+                              {apartment.address}
+                           </Typography>
+                        </Box>
+
+                        <Typography>
+                           <Typography variant="span">
+                              ${apartment.price}
+                           </Typography>{' '}
+                           / day
+                        </Typography>
+                     </StyledCardBox>
+                  ))}
+            </StyledBox>
+         </StyledSecondBox>
+      </StyledMainBox>
+   )
+}
 
 export default PopularHouse
 

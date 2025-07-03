@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Radio from '../../components/UI/Radio'
 import {
@@ -18,6 +18,7 @@ import Button from '../../components/UI/Button'
 import { number } from 'yup'
 import { useNavigate } from 'react-router'
 import { showToast } from '../../utils/helpers/showToast'
+import { resetState } from '../../store/slices/user/createHouseSlice'
 
 const CreateHouseForm = () => {
    const navigate = useNavigate()
@@ -51,6 +52,29 @@ const CreateHouseForm = () => {
       'JALAL_ABAD',
       'BATKEN',
    ]
+
+   useEffect(() => {
+      dispatch(resetState())
+   }, [dispatch])
+
+   useEffect(() => {
+      if (success) {
+         showToast({
+            title: 'Успешно!',
+            message: 'Вы успешно создали обьявление!',
+            type: 'success',
+         })
+         navigate('/user')
+         dispatch(resetState())
+      }
+      if (error) {
+         showToast({
+            title: 'Ошибка!',
+            message: 'Ошибка при создании дома!',
+            type: 'error',
+         })
+      }
+   }, [success, error, navigate, dispatch])
 
    const handleInputChange = (e) => {
       const { name, value } = e.target
@@ -149,21 +173,6 @@ const CreateHouseForm = () => {
          await dispatch(createHouseBase(formDataToSend)).unwrap()
       } catch (error) {
          console.error('Error:', error)
-      }
-      if (success) {
-         showToast({
-            title: 'Успешно!',
-            message: 'Вы успешно создали обьявление!',
-            type: 'success',
-         })
-         navigate('/user')
-      }
-      if (error) {
-         showToast({
-            title: 'Ошибка!',
-            message: 'Ошибка при создании дома!',
-            type: 'error',
-         })
       }
    }
 

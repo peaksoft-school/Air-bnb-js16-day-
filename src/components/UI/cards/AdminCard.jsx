@@ -21,8 +21,9 @@ import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
 const AdminCard = ({ house }) => {
    const [hovered, setHovered] = useState(false)
 
-   const { imageUrls, price, averageRating, description, address, maxGuests } =
+   const { imageUrls, price, rating, description, address, maxGuests } =
       house
+      
 
    const CustomPrevArrow = ({ onClick }) => (
       <ArrowButton onClick={onClick} direction="left">
@@ -90,7 +91,7 @@ const AdminCard = ({ house }) => {
                   <Typography className="rating-number">
                      <StarIcon className="rating-icon" />
 
-                     {averageRating}
+                     {rating}
                   </Typography>
                </StyledRating>
             </Box>
