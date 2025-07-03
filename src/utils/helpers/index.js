@@ -32,7 +32,7 @@ const PROFILE_RATING_OPTIONS = [
 
 const PROFILE_TYPE_OPTIONS = [
    { label: 'All', value: '' },
-   { label: 'Apartement', value: 'apartement' },
+   { label: 'Apartment', value: 'apartment' },
    { label: 'House', value: 'house' },
 ]
 
