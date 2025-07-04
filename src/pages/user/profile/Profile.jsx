@@ -11,7 +11,8 @@ import {
    Alert,
    Button,
 } from '@mui/material'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
+import Card from '../../../components/UI/cards/UserCard'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 import DropDown from '../../../components/UI/DropDown'
 import Chip from '../../../components/UI/Chip'
 import { AUTH_ACTIONS } from '../../../store/slices/auth/authSlice'
@@ -45,13 +46,34 @@ const Profile = () => {
 
    const filteredHouses = (userProfile?.houses || [])
       .filter((house) => {
-         if (type && house.type !== type) return false
-         if (rating && Math.round(house.rating) !== Number(rating)) return false
+         if (type && type !== '') {
+            if (house.houseType?.toLowerCase() !== type.toLowerCase()) {
+               return false
+            }
+         }
+
+         if (rating && rating !== '') {
+            const houseRating = Math.round(house.rating || 0)
+            const filterRating = Number(rating)
+
+            if (houseRating !== filterRating) {
+               return false
+            }
+         }
+
          return true
       })
       .sort((a, b) => {
-         if (sort === 'high') return b.price - a.price
-         if (sort === 'low') return a.price - b.price
+         if (sort === 'high') {
+            const priceA = Number(a.price) || 0
+            const priceB = Number(b.price) || 0
+            return priceB - priceA
+         }
+         if (sort === 'low') {
+            const priceA = Number(a.price) || 0
+            const priceB = Number(b.price) || 0
+            return priceA - priceB
+         }
          return 0
       })
 
@@ -122,7 +144,7 @@ const Profile = () => {
                   ))}
                </Tabs>
 
-               {activeTab === 'announcement' && filteredHouses.length > 0 && (
+               {activeTab === 'announcement' && (
                   <>
                      <Box className="drop-downs">
                         <DropDown
@@ -156,9 +178,7 @@ const Profile = () => {
                         )}
                         {type && (
                            <Chip
-                              label={
-                                 type.charAt(0).toUpperCase() + type.slice(1)
-                              }
+                              label={type}
                               onDelete={() => handleDeleteChip('type')}
                            />
                         )}

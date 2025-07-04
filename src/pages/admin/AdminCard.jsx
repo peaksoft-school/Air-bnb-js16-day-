@@ -17,8 +17,15 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Meatballs from '../../components/UI/Meatballs'
 
-const AdminCard = ({ house, options, onDelete, onAccept, onReject }) => {
-   const { price, rating, address, guests, description, images, imageUrls } =
+const AdminCard = ({
+   house,
+   options,
+   onDelete,
+   onNavigate,
+   onAccept,
+   onReject,
+}) => {
+   const { price, rating, address, maxGuests, description, images, imageUrls } =
       house
 
    const [hovered, setHovered] = useState(false)
@@ -47,7 +54,7 @@ const AdminCard = ({ house, options, onDelete, onAccept, onReject }) => {
    }
 
    return (
-      <StyledCard>
+      <StyledCard onClick={onNavigate}>
          <ImageContainer
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
@@ -106,7 +113,7 @@ const AdminCard = ({ house, options, onDelete, onAccept, onReject }) => {
             </Row>
             <ActionRow>
                <Typography fontSize={14} variant="body2" color="text.secondary">
-                  {guests} guests
+                  {maxGuests} guests
                </Typography>
                <Meatballs
                   options={options}

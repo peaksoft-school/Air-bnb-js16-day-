@@ -17,7 +17,9 @@ const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
-import Application from '../pages/admin/Applications'
+
+import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
+import Application from '../pages/admin/user-page/Application'
 
 const AppRoutes = () => (
    <Routes>
@@ -90,8 +92,27 @@ const AppRoutes = () => (
             path={ROUTES.ADMIN.APPLICATION}
             element={
                <Suspense fallback={<Loading />}>
-                     <Application/>
-                  </Suspense>
+                  <Application />
+               </Suspense>
+            }
+         />
+
+         <Route
+            index
+            path={ROUTES.ADMIN.APPLICATION_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementHouse />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USEER_ANNOUNCMENT_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementHouse />
+               </Suspense>
             }
          />
 
@@ -103,20 +124,21 @@ const AppRoutes = () => (
                </Suspense>
             }
          />
-         <Route
-            path={ROUTES.ADMIN.ALLHOUSING}
-            element={
-               <Suspense fallback={<Loading />}>
-                  <AllHousing />
-               </Suspense>
-            }
-         />
 
          <Route
             path={ROUTES.ADMIN.USER_DETAIL}
             element={
                <Suspense fallback={<Loading />}>
                   <UserDetail />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.ALLHOUSING}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AllHousing />
                </Suspense>
             }
          />

@@ -1,11 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-   Box,
-   Grid,
-   Typography,
-   Alert,
-   styled,
-} from '@mui/material'
+import { Box, Grid, Typography, Alert, styled } from '@mui/material'
 import Pagination from '@mui/material/Pagination'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,11 +12,13 @@ import {
    acceptOrDeleteHouse,
    acceptOrRejectHouse,
 } from '../../store/slices/admin/assept/asseptInRejectThunk'
+import { useNavigate } from 'react-router'
 
 const CARDS_PER_PAGE = 18
 
 export default function Application() {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const {
       applications: cards,
       loading,
@@ -90,6 +86,8 @@ export default function Application() {
    const handleDelete = (houseId) => {
       dispatch(acceptOrDeleteHouse(houseId))
    }
+
+   const handleNavigate = (id) => navigate(`/admin/application/${id}`)
    return (
       <StyledBox>
          <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
@@ -153,6 +151,7 @@ export default function Application() {
                                  key={index}
                                  house={house}
                                  options={options}
+                                 onNavigate={() => handleNavigate(house.id)}
                                  onAccept={handleAccept}
                                  onReject={handleReject}
                                  onDelete={handleDelete}
