@@ -12,7 +12,7 @@ import {
    Button,
 } from '@mui/material'
 import Card from '../../../components/UI/cards/UserCard'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 import DropDown from '../../../components/UI/DropDown'
 import Chip from '../../../components/UI/Chip'
 import { AUTH_ACTIONS } from '../../../store/slices/auth/authSlice'
@@ -24,6 +24,7 @@ import {
    PROFILE_TABS,
    PROFILE_TYPE_OPTIONS,
 } from '../../../utils/helpers'
+import AdminCard from '../../../components/UI/cards/AdminCard'
 
 const Profile = () => {
    const { userProfile, loading, error } = useSelector((state) => state.profile)
@@ -211,7 +212,7 @@ const Profile = () => {
                         <Box className="empty-message">No houses found</Box>
                      ) : (
                         filteredHouses.map((house) => (
-                           <Card key={house.id || house.title} house={house} />
+                           <AdminCard key={house.id || house.title} house={house} />
                         ))
                      )}
                   </Box>

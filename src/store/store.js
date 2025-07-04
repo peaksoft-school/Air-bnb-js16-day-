@@ -2,7 +2,6 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { userInfoReducer } from './slices/admin/user/userInfoSlice'
 import { addHouseSlice } from './slices/user/addHouse/addHouseSlice'
 import { houseSlice } from './slices/user/house/houseSlice'
-import houseApplicationsReducer from './slices/admin/user/houseApplicationsSlice'
 
 import persistStore from 'redux-persist/es/persistStore'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -11,6 +10,7 @@ import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
 import { LandingSlice } from './slices/user/Landing/landingSlice'
 import { regionSlice } from './slices/user/region/regionSlice'
 import { profileSlice } from './slices/user/profile/profileSlice'
+import houseApplicationsReducer from './slices/admin/houseApplicationsSlice'
 import { usersSlice } from './slices/admin/users/usersSlice'
 import { authSlice } from './slices/auth/authSlice'
 
@@ -24,7 +24,8 @@ const rootReducer = combineReducers({
    landing: LandingSlice.reducer,
    [profileSlice.name]: profileSlice.reducer,
    [regionSlice.name]: regionSlice.reducer,
-   [usersSlice.name]: usersSlice.reducer,
+   houseApplications: houseApplicationsReducer,
+   [usersSlice.name]:usersSlice.reducer
 })
 
 const persistConfig = {

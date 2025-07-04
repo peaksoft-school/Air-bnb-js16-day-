@@ -13,7 +13,7 @@ import {
    Alert,
 } from '@mui/material'
 import AdminCard from '../../../pages/admin/AdminCard'
-import BreadCrumbs from '../../UI/BreadCrumbs'
+import BreadCrumbs from '../../UI/Breadcrumbs'
 import { USERS_THUNKS } from '../../../store/slices/admin/users/usersThunk'
 import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
 
