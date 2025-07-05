@@ -7,32 +7,30 @@ import {
    fetchFavoritesByHouseId,
    fetchBookingsByHouseId,
    deleteHouseById,
-   updateHouseById,
 } from '../../../store/slices/user/profile/announcementDetail/announcementDetailThunk'
 import {
    Box,
    Typography,
-   Button,
    Card,
-   CardMedia,
-   CardContent,
    Avatar,
    Grid,
-   Rating,
+   Rating as MuiRating,
    Modal,
-   TextField,
-   IconButton,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import StarIcon from '@mui/icons-material/Star'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 
+import EditHouseForm from './EditHouseForm'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
+import HouseImageSlider from '../../../components/house/HouseImageSlider'
+import Feedback from '../../../components/UI/Feedback'
+import Rating from '../../../components/UI/rating/Rating'
+import Button from '../../../components/UI/Button'
+import Loading from '../../Loading'
 
-export default function AnnouncementDetailPage() {
+const AnnouncementDetailPage = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
+
    const {
       house,
       feedback,
@@ -40,17 +38,21 @@ export default function AnnouncementDetailPage() {
       bookings,
       updateSuccess,
       deleteSuccess,
+      loading,
    } = useSelector((s) => s.announcementDetail)
+
    const [editOpen, setEditOpen] = useState(false)
    const [editData, setEditData] = useState({})
    const [showAllFeedback, setShowAllFeedback] = useState(false)
-   const id = 1
+   const { id } = useParams()
 
    useEffect(() => {
-      dispatch(fetchHouseById(id))
-      dispatch(fetchFeedbackByHouseId(id))
-      dispatch(fetchFavoritesByHouseId(id))
-      dispatch(fetchBookingsByHouseId(id))
+      if (id) {
+         dispatch(fetchHouseById(id))
+         dispatch(fetchFeedbackByHouseId(id))
+         dispatch(fetchFavoritesByHouseId(id))
+         dispatch(fetchBookingsByHouseId(id))
+      }
    }, [id, dispatch])
 
    useEffect(() => {
@@ -64,7 +66,7 @@ export default function AnnouncementDetailPage() {
             description: house.description,
             region: house.state,
             city: house.city || '',
-            address: house.addressDetail,
+            address: house.address,
             imageUrls: house.imageUrls,
          })
       }
@@ -72,10 +74,10 @@ export default function AnnouncementDetailPage() {
 
    useEffect(() => {
       if (updateSuccess) setEditOpen(false)
-      if (deleteSuccess) navigate('/profile')
+      if (deleteSuccess) navigate('/user/profile')
    }, [updateSuccess, deleteSuccess, navigate])
 
-   if (!house) return <Typography>Loading...</Typography>
+   if (loading || !house) return <Loading />
 
    const feedbackList = feedback?.feedbackResponses || []
    const ratingStats = feedback?.ratingResponse || {}
@@ -83,139 +85,87 @@ export default function AnnouncementDetailPage() {
       ? feedbackList
       : feedbackList.slice(0, 3)
 
-   const handleEdit = () => setEditOpen(true)
-   const handleEditChange = (e) =>
-      setEditData({ ...editData, [e.target.name]: e.target.value })
-   const handleEditSubmit = (e) => {
-      e.preventDefault()
-      dispatch(updateHouseById(editData))
-   }
-   const handleDelete = () => {
-      if (window.confirm('Delete this house?'))
-         dispatch(deleteHouseById(house.id))
-   }
-
    return (
       <StyledBox>
-         <Box
-            sx={{
-               maxWidth: 1200,
-               margin: '0 auto',
-               background: '#fff',
-               borderRadius: 4,
-               p: 4,
-            }}
-         >
-            <Typography sx={{ color: '#bdbdbd', mb: 2 }}>
-               Main / {house.state} / Hotel / Profile / {house.name}
-            </Typography>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-               {house.name}
-            </Typography>
-            <Grid container spacing={4}>
-               <Grid item xs={12} md={6}>
-                  <MainImage>
-                     <CardMedia
-                        component="img"
-                        image={house.imageUrls?.[0]}
-                        alt={house.name}
-                        sx={{
-                           width: '100%',
-                           height: '100%',
-                           objectFit: 'cover',
-                        }}
-                     />
-                  </MainImage>
-                  <Box sx={{ display: 'flex', mb: 2 }}>
-                     {house.imageUrls?.slice(0, 3).map((img, idx) => (
-                        <SmallImage key={idx}>
-                           <CardMedia
-                              component="img"
-                              image={img}
-                              alt={`img-${idx}`}
-                              sx={{
-                                 width: '100%',
-                                 height: '100%',
-                                 objectFit: 'cover',
-                              }}
-                           />
-                        </SmallImage>
-                     ))}
+         <Box className="container">
+            <BreadCrumbs
+               links={[
+                  { href: '/user', label: 'Main' },
+                  { href: `/user/profile`, label: 'Profile' },
+                  {
+                     href: `/user/profile/announcement/${house.id}`,
+                     label: house.name,
+                  },
+               ]}
+            />
+            <Typography className="main-title">{house.name}</Typography>
+            <Box />
+            <Box sx={{ display: 'flex', gap: '68px' }}>
+               <HouseImageSlider images={house.imageUrls} />
+               <Grid className="house-info">
+                  <Box className="tags">
+                     <Tag>{house.type}</Tag>
+                     <Tag>{house.maxGuests} Guests</Tag>
                   </Box>
-               </Grid>
-               <Grid item xs={12} md={6}>
-                  <Box sx={{ mb: 2 }}>
-                     <Button size="small" variant="outlined" sx={{ mr: 1 }}>
-                        Apartment
-                     </Button>
-                     <Button size="small" variant="outlined">
-                        2 Guests
-                     </Button>
-                  </Box>
-                  <Typography variant="h6">{house.name}</Typography>
-                  <Typography sx={{ color: '#bdbdbd', mb: 1 }}>
-                     {house.addressDetail}
+                  <Typography className="house-name">{house.name}</Typography>
+                  <Typography className="house-location">
+                     {house.address}
                   </Typography>
-                  <Typography sx={{ mb: 2 }}>{house.description}</Typography>
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                     <ActionButton
-                        startIcon={<DeleteIcon />}
-                        onClick={handleDelete}
+                  <Typography className="house-description">
+                     {house.description}
+                  </Typography>
+                  <Box className="action-btns">
+                     <Button
+                        variant="second"
+                        onClick={() => dispatch(deleteHouseById(house.id))}
                      >
                         DELETE
-                     </ActionButton>
-                     <ActionButton
-                        startIcon={<EditIcon />}
-                        onClick={handleEdit}
+                     </Button>
+                     <Button
+                        variant="primary"
+                        onClick={() => setEditOpen(true)}
                      >
                         EDIT
-                     </ActionButton>
+                     </Button>
                   </Box>
                </Grid>
-            </Grid>
+            </Box>
 
-            {/* BOOKED */}
-            <SectionTitle>BOOKED</SectionTitle>
+            <SectionTitle className='SectionTitle'>BOOKED</SectionTitle>
             <Grid container spacing={2}>
                {bookings?.map((b, idx) => (
-                  <Grid item xs={12} md={4} key={idx}>
-                     <Card sx={{ p: 2, borderRadius: 2 }}>
-                        <Typography variant="h6">
+                  <Grid item xs={1} md={3.8} key={idx}>
+                     <Card className="booked-card">
+                        <Typography className="booked-price">
                            ${house.price}{' '}
-                           <span style={{ color: '#bdbdbd', fontWeight: 400 }}>
-                              / day
-                           </span>
+                           <span className="booked-day">/ day</span>
                         </Typography>
-                        <Box
-                           sx={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              mt: 1,
-                           }}
-                        >
+                        <hr />
+                        <Box className="booked-dates">
                            <Box>
-                              <Typography variant="body2" color="textSecondary">
+                              <Typography className="booked-label">
                                  Check in
                               </Typography>
-                              <Typography>{b.checkIn || '02.02.22'}</Typography>
+                              <Typography>{b.checkin || '02.02.22'}</Typography>
                            </Box>
                            <Box>
-                              <Typography variant="body2" color="textSecondary">
+                              <Typography className="booked-label">
                                  Check out
                               </Typography>
                               <Typography>
-                                 {b.checkOut || '02.02.22'}
+                                 {b.checkout || '02.02.22'}
                               </Typography>
                            </Box>
                         </Box>
-                        <UserInfo sx={{ mt: 2 }}>
-                           <Avatar src={b.user?.imageUrl} />
-                           <Box sx={{ ml: 1 }}>
-                              <Typography fontWeight={600}>
-                                 {b.user?.fullName || 'Anna Annova'}
+
+                        <UserInfo>
+                           <Avatar src={b.imageUrl} />
+                           <Box className="user-info-text">
+                              <Typography className="user-name">
+                                 {b.fullName}
                               </Typography>
-                              <Typography fontSize={14} color="#bdbdbd">
-                                 {b.user?.email || 'anna@gmail.com'}
+                              <Typography className="user-email">
+                                 {b.email}
                               </Typography>
                            </Box>
                         </UserInfo>
@@ -224,94 +174,31 @@ export default function AnnouncementDetailPage() {
                ))}
             </Grid>
 
-            {/* IN FAVORITES */}
-            <SectionTitle>IN FAVORITES</SectionTitle>
-            <Box sx={{ display: 'flex', gap: 4 }}>
+            <SectionTitle className='SectionTitle'>IN FAVORITES</SectionTitle>
+            <Box className="favorites-list">
                {favorites?.map((fav, idx) => (
-                  <UserInfo key={idx}>
+                  <UserFavotites key={idx}>
                      <Avatar src={fav.imageUrl} />
-                     <Box sx={{ ml: 1 }}>
-                        <Typography fontWeight={600}>{fav.fullName}</Typography>
-                        <Typography fontSize={14} color="#bdbdbd">
+                     <Box className="user-info-text">
+                        <Typography className="user-name">
+                           {fav.fullName}
+                        </Typography>
+                        <Typography className="user-email">
                            {fav.email}
                         </Typography>
-                        <Typography fontSize={14} color="#bdbdbd">
+                        <Typography className="user-date">
                            {fav.addedAt}
                         </Typography>
                      </Box>
-                  </UserInfo>
+                  </UserFavotites>
                ))}
             </Box>
 
-            {/* FEEDBACK */}
-            <SectionTitle>FEEDBACK</SectionTitle>
+            <SectionTitle className='SectionTitle'>FEEDBACK</SectionTitle>
             <Grid container>
                <Grid item xs={12} md={8}>
-                  {feedbackToShow.map((fb, idx) => (
-                     <FeedbackCard key={fb.id}>
-                        <UserInfo>
-                           <Avatar src={fb.userFeedbackResponse?.image} />
-                           <Box sx={{ ml: 1 }}>
-                              <Typography fontWeight={600}>
-                                 {fb.userFeedbackResponse?.fullName}
-                              </Typography>
-                           </Box>
-                           <Rating
-                              value={fb.rating}
-                              readOnly
-                              size="small"
-                              sx={{ ml: 2 }}
-                           />
-                           <Typography
-                              fontSize={14}
-                              color="#bdbdbd"
-                              sx={{ ml: 1 }}
-                           >
-                              ({fb.rating})
-                           </Typography>
-                        </UserInfo>
-                        <Typography sx={{ mb: 1 }}>{fb.text}</Typography>
-                        {fb.images?.length > 0 && (
-                           <FeedbackImages>
-                              {fb.images.map((img, i) => (
-                                 <SmallImage key={i}>
-                                    <CardMedia
-                                       component="img"
-                                       image={img}
-                                       alt={`fb-img-${i}`}
-                                       sx={{
-                                          width: '100%',
-                                          height: '100%',
-                                          objectFit: 'cover',
-                                       }}
-                                    />
-                                 </SmallImage>
-                              ))}
-                           </FeedbackImages>
-                        )}
-                        <Typography
-                           fontSize={12}
-                           color="#bdbdbd"
-                           sx={{ mt: 1 }}
-                        >
-                           {fb.createdAt}
-                        </Typography>
-                        <Box
-                           sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 2,
-                              mt: 1,
-                           }}
-                        >
-                           <Typography fontSize={14}>
-                              👍 {fb.likeCount}
-                           </Typography>
-                           <Typography fontSize={14}>
-                              👎 {fb.dislikeCount}
-                           </Typography>
-                        </Box>
-                     </FeedbackCard>
+                  {feedbackToShow.map((item) => (
+                     <Feedback key={item.id} {...item} />
                   ))}
                   {feedbackList.length > 3 && !showAllFeedback && (
                      <ShowMore onClick={() => setShowAllFeedback(true)}>
@@ -323,203 +210,185 @@ export default function AnnouncementDetailPage() {
                         Show less
                      </ShowMore>
                   )}
-                  <Button fullWidth variant="outlined" sx={{ mt: 2 }}>
-                     LEAVE FEEDBACK
-                  </Button>
+                  <Button variant="outlined">ADD FEEDBACK</Button>
                </Grid>
                <Grid item xs={12} md={4}>
                   <FeedbackStats>
-                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <Typography variant="h5">
-                           {ratingStats.rating?.toFixed(1) || '0.0'}
-                        </Typography>
-                        <StarIcon sx={{ color: '#FBB03B', ml: 1 }} />
-                     </Box>
-                     {[5, 4, 3, 2, 1].map((star) => (
-                        <Box
-                           key={star}
-                           sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              mb: 0.5,
-                           }}
-                        >
-                           <Typography sx={{ width: 16 }}>{star}</Typography>
-                           <Box
-                              sx={{
-                                 flex: 1,
-                                 mx: 1,
-                                 height: 6,
-                                 bgcolor: '#eee',
-                                 borderRadius: 2,
-                                 position: 'relative',
-                              }}
-                           >
-                              <Box
-                                 sx={{
-                                    width: `${(ratingStats.ratingCount?.[`additionalProp${6 - star}`] || 0) * 20}%`,
-                                    height: '100%',
-                                    bgcolor: '#FBB03B',
-                                    borderRadius: 2,
-                                    position: 'absolute',
-                                    left: 0,
-                                    top: 0,
-                                 }}
-                              />
-                           </Box>
-                           <Typography sx={{ width: 32 }}>
-                              {ratingStats.ratingCount?.[
-                                 `additionalProp${6 - star}`
-                              ] || 0}
-                              %
-                           </Typography>
-                        </Box>
-                     ))}
+                     <Rating rating={ratingStats?.rating || 0} />
                   </FeedbackStats>
                </Grid>
             </Grid>
          </Box>
 
-         {/* Edit Modal */}
-         <EditModal open={editOpen} onClose={() => setEditOpen(false)}>
-            <EditForm component="form" onSubmit={handleEditSubmit}>
-               <Typography variant="h6">Edit House</Typography>
-               <TextField
-                  label="Name"
-                  name="name"
-                  value={editData.name || ''}
-                  onChange={handleEditChange}
-                  required
+         <Modal open={editOpen} onClose={() => setEditOpen(false)}>
+            <Box
+               sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '90%',
+                  maxWidth: '800px',
+                  maxHeight: '90vh',
+                  overflow: 'auto',
+                  bgcolor: 'background.paper',
+                  borderRadius: 2,
+                  boxShadow: 24,
+                  outline: 'none',
+               }}
+            >
+               <EditHouseForm
+                  initialData={{
+                     houseId: house.id,
+                     houseType: house.type,
+                     maxGuests: house.maxGuests,
+                     price: house.price,
+                     name: house.name,
+                     description: house.description,
+                     region: house.region,
+                     city: house.city,
+                     address: house.address,
+                     imageUrls: house.imageUrls,
+                  }}
+                  onClose={() => setEditOpen(false)}
+                  onSuccess={() => setEditOpen(false)}
                />
-               <TextField
-                  label="Description"
-                  name="description"
-                  value={editData.description || ''}
-                  onChange={handleEditChange}
-                  required
-               />
-               <TextField
-                  label="Price"
-                  name="price"
-                  type="number"
-                  value={editData.price || ''}
-                  onChange={handleEditChange}
-                  required
-               />
-               <TextField
-                  label="Max Guests"
-                  name="maxGuests"
-                  type="number"
-                  value={editData.maxGuests || ''}
-                  onChange={handleEditChange}
-                  required
-               />
-               <TextField
-                  label="Address"
-                  name="address"
-                  value={editData.address || ''}
-                  onChange={handleEditChange}
-                  required
-               />
-               <Box
-                  sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}
-               >
-                  <Button onClick={() => setEditOpen(false)}>Cancel</Button>
-                  <Button type="submit" variant="contained" color="primary">
-                     Save
-                  </Button>
-               </Box>
-            </EditForm>
-         </EditModal>
+            </Box>
+         </Modal>
       </StyledBox>
    )
 }
 
-const StyledBox = styled(Box)(({ theme }) => ({
-    background: '#fafafa',
-    minHeight: '100vh',
-    padding: '32px 0',
- }))
- 
- const MainImage = styled(Card)(({ theme }) => ({
-    width: 500,
-    height: 350,
-    marginBottom: 16,
-    borderRadius: 12,
-    overflow: 'hidden',
- }))
- 
- const SmallImage = styled(Card)(({ theme }) => ({
-    width: 120,
-    height: 80,
-    marginRight: 8,
-    borderRadius: 8,
-    overflow: 'hidden',
-    display: 'inline-block',
- }))
- 
- const SectionTitle = styled(Typography)(({ theme }) => ({
-    fontWeight: 600,
-    fontSize: 20,
-    margin: '32px 0 16px 0',
- }))
- 
- const UserInfo = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: 8,
- }))
- 
- const FeedbackCard = styled(Card)(({ theme }) => ({
-    marginBottom: 16,
-    padding: 16,
-    borderRadius: 12,
-    background: '#fff',
- }))
- 
- const FeedbackImages = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    marginTop: 8,
- }))
- 
- const FeedbackStats = styled(Box)(({ theme }) => ({
-    background: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginLeft: 32,
-    minWidth: 220,
- }))
- 
- const ActionButton = styled(Button)(({ theme }) => ({
-    background: '#FBB03B',
-    color: '#fff',
-    marginRight: 16,
-    '&:hover': {
-       background: '#FFA000',
-    },
- }))
- 
- const EditModal = styled(Modal)(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
- }))
- 
- const EditForm = styled(Box)(({ theme }) => ({
-    background: '#fff',
-    padding: 32,
-    borderRadius: 12,
-    minWidth: 400,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 16,
- }))
- 
- const ShowMore = styled(Typography)(({ theme }) => ({
-    color: '#222',
-    textAlign: 'center',
-    textDecoration: 'underline',
-    cursor: 'pointer',
-    margin: '16px 0',
- }))
- 
+const StyledBox = styled(Box)(() => ({
+   background: '#fafafa',
+   padding: '40px 100px',
+
+   '& .container': {},
+   '& .breadcrumbs': {
+      color: '#bdbdbd',
+      fontSize: 16,
+   },
+   '& .main-title': {
+      marginBottom: 16,
+      fontSize: 20,
+      textTransform: 'uppercase',
+      marginBottom: '30px',
+   },
+   '& .house-name': {
+      fontSize: '20px',
+      fontWeight: 600,
+      marginBottom: '10px',
+   },
+   '& .house-location': {
+      color: '#888',
+      margin: '0 0 20px 0',
+      fontSize: '16px',
+   },
+   '& .house-description': {
+      width: '100%',
+      margin: '0 0 20px 0',
+      fontSize: '16px',
+      wordBreak: 'break-all',
+   },
+   '& .SectionTitle': {
+      fontWeight: 500,
+      fontSize: 20,
+      margin: '32px 0 16px 0',
+   },
+   '& .action-btns': {
+      display: 'flex',
+      gap: '20px',
+   },
+   '& .house-info': {
+      flex: 1,
+   },
+   '& .tags': {
+      marginBottom: '16px',
+   },
+   '& .booked-card': {
+      width: 400,
+      heigth: 227,
+      padding: '20px',
+      borderRadius: '12px',
+      background: '#fff',
+      display: 'flex',
+      flexDirection: 'column',
+   },
+   '& .booked-price': {
+      fontSize: '18px',
+      fontWeight: 600,
+      marginBottom: '12px',
+      textAlign: 'center',
+   },
+   '& .booked-day': {
+      fontSize: '14px',
+      color: '#888',
+   },
+   '& .booked-dates': {
+      display: 'flex',
+      gap: '20px',
+      marginBottom: '16px',
+      justifyContent: 'space-between',
+      padding: '20px 0',
+   },
+   '& .booked-label': {
+      fontSize: '12px',
+      color: '#888',
+      marginBottom: '4px',
+   },
+   '& .favorites-list': {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '30px',
+   },
+}))
+
+const Tag = styled('span')(() => ({
+   display: 'inline-block',
+   background: '#fff0f6',
+   border: '1px solid #ffcbe0',
+   padding: '6px 8px',
+   marginRight: 12,
+   marginBottom: 8,
+   fontSize: 14,
+   borderRadius: 4,
+   color: '#222',
+   textTransform: 'capitalize',
+}))
+
+const SectionTitle = styled(Typography)(() => ({
+   fontWeight: 600,
+   fontSize: 20,
+   margin: '32px 0 16px 0',
+}))
+
+const UserFavotites = styled(Box)(() => ({
+   display: 'flex',
+   alignItems: 'center',
+   marginBottom: 8,
+   gap: '16px',
+}))
+
+const UserInfo = styled(Box)(() => ({
+   display: 'flex',
+   alignItems: 'center',
+   marginBottom: 8,
+   gap: '16px',
+}))
+
+const FeedbackStats = styled(Box)(() => ({
+   borderRadius: 12,
+   padding: 16,
+   marginLeft: 32,
+   minWidth: 220,
+}))
+
+const ShowMore = styled(Typography)(() => ({
+   color: '#222',
+   textAlign: 'center',
+   textDecoration: 'underline',
+   cursor: 'pointer',
+   margin: '16px 0',
+}))
+
+export default AnnouncementDetailPage

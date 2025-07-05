@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, styled } from '@mui/material'
-import { ALL_HOUSING_THUNK } from '../../store/slices/admin/all-housing/allHousingThunk'
-import AdminCard from '../../components/UI/cards/AdminCard'
-import DropDown from '../../components/UI/DropDown'
+import { ALL_HOUSING_THUNK } from '../../../store/slices/admin/all-housing/allHousingThunk'
+import AdminCard from '../../../components/UI/cards/AdminCard'
+import DropDown from '../../../components/UI/DropDown'
 import {
    BOOKING_FILTER_OPTIONS,
    POPULAR_SORT_OPTIONS,
    HOUSE_TYPE_OPTIONS,
    PRICE_FILTER_OPTIONS,
-} from '../../utils/constants/admin'
-import Loading from '../Loading'
+} from '../../../utils/constants/admin'
+import Loading from '../../Loading'
 
 const AllHousing = () => {
    const [filterOption, setFilterOption] = useState('All')
@@ -96,12 +96,12 @@ const AllHousing = () => {
 
             {!loading &&
                !error &&
-               housing.length > 0 &&
-               housing.map((house) => (
+               housing?.length > 0 &&
+               housing?.map((house) => (
                   <AdminCard key={house.id} house={house} />
                ))}
 
-            {!loading && !error && housing.length === 0 && (
+            {!loading && !error && housing?.length === 0 && (
                <Typography>Not found.</Typography>
             )}
          </StyledCardBox>
@@ -137,6 +137,6 @@ const StyledCardBox = styled(Box)(() => ({
    flexWrap: 'wrap',
    justifyContent: 'start',
    alignItems: 'center',
-   gap: '20px',
+   gap: '10px',
    marginTop: '40px',
 }))

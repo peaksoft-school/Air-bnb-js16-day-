@@ -44,7 +44,7 @@ const AdminHeader = () => {
                      Users
                   </NavLink>
 
-                  <NavLink to="allhousing" className="nav-text">
+                  <NavLink to="all-housing" className="nav-text">
                      All housing
                   </NavLink>
                </Box>

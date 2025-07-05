@@ -19,7 +19,15 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Button from '../Button'
 
-const Card = ({ imageUrls, price, rating, title, location, guests }) => {
+const Card = ({
+   imageUrls,
+   price,
+   rating,
+   title,
+   location,
+   guests,
+   favorite,
+}) => {
    const [isLiked, setIsLiked] = useState(false)
    const [hovered, setHovered] = useState(false)
 
@@ -38,12 +46,12 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
    )
 
    const settings = {
-      dots: imageUrls.length > 1,
+      dots: imageUrls?.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls.length > 1,
+      arrows: imageUrls?.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -56,9 +64,9 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
             onMouseLeave={() => setHovered(false)}
          >
             <Slider {...settings}>
-               {imageUrls.length > 1 ? (
+               {imageUrls?.length > 1 ? (
                   <Slider {...settings}>
-                     {imageUrls.map((url, i) => (
+                     {imageUrls?.map((url, i) => (
                         <Box key={i}>
                            <CardMedia
                               component="img"
@@ -73,7 +81,7 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                   <CardMedia
                      component="img"
                      height="140"
-                     image={imageUrls[0]}
+                     image={imageUrls}
                      alt={title}
                   />
                )}
@@ -117,7 +125,7 @@ const Card = ({ imageUrls, price, rating, title, location, guests }) => {
                <Button width={100}>BOOK</Button>
 
                <IconButton aria-label="like" onClick={handleLike}>
-                  {isLiked ? (
+                  {favorite ? (
                      <FavoriteIcon color="warning" />
                   ) : (
                      <FavoriteBorderIcon color="warning" />

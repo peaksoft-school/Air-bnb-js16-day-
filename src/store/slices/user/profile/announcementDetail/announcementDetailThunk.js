@@ -63,7 +63,7 @@ export const deleteHouseById = createAsyncThunk(
    'announcementDetail/deleteHouseById',
    async (id, { rejectWithValue }) => {
       try {
-         await axiosInstance.delete(`/api/house/delete/${id}`)
+         await axiosInstance.delete(`/api/house/houses/${id}`)
          return id
       } catch (err) {
          return rejectWithValue(err.response?.data || err.message)
@@ -76,9 +76,15 @@ export const updateHouseById = createAsyncThunk(
    'announcementDetail/updateHouseById',
    async (payload, { rejectWithValue }) => {
       try {
+         console.log('🚀 Sending update request to /api/house/update')
+         console.log('📦 Payload:', JSON.stringify(payload, null, 2))
+
          const { data } = await axiosInstance.put('/api/house/update', payload)
+
+         console.log('✅ Update response:', JSON.stringify(data, null, 2))
          return data
       } catch (err) {
+         console.error('❌ Update error:', err.response?.data || err.message)
          return rejectWithValue(err.response?.data || err.message)
       }
    }

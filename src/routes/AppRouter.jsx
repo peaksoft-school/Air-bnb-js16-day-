@@ -3,19 +3,25 @@ import { lazy, Suspense } from 'react'
 
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
+const AllHousing = lazy(() => import('../pages/admin/all-housing/AllHousing'))
+const Users = lazy(() => import('../pages/admin/users/Users'))
+const UserDetail = lazy(() => import('../components/admin/users/UserDetail'))
 const ResetPassword = lazy(
    () => import('../pages/reset-password/ResetPassword')
 )
 const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 const Region = lazy(() => import('../pages/user/region/Region'))
-const AllHousing = lazy(() => import('../pages/admin/AllHousing'))
 const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 import AnnouncementDetailPage from '../pages/user/announcement/AnnouncementDetailPage'
+
+import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
+import Application from '../pages/admin/user-page/Application'
+import AppicationHouse from '../pages/admin/user-page/AppicationHouse'
 
 const AppRoutes = () => (
    <Routes>
@@ -67,11 +73,11 @@ const AppRoutes = () => (
                </Suspense>
             }
          />
-          <Route
-            path="/user/announcement-page"
+         <Route
+            path="/user/profile/announcement/:id"
             element={
                <Suspense fallback={<Loading />}>
-                  < AnnouncementDetailPage/>
+                  <AnnouncementDetailPage />
                </Suspense>
             }
          />
@@ -95,9 +101,46 @@ const AppRoutes = () => (
             index
             path={ROUTES.ADMIN.APPLICATION}
             element={
-               <div>
-                  <h1>application</h1>
-               </div>
+               <Suspense fallback={<Loading />}>
+                  <Application />
+               </Suspense>
+            }
+         />
+
+         <Route
+            index
+            path={ROUTES.ADMIN.APPLICATION_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AppicationHouse />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USEER_ANNOUNCMENT_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementHouse />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USERS}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <Users />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USER_DETAIL}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserDetail />
+               </Suspense>
             }
          />
 
