@@ -7,13 +7,16 @@ import Chip from '../../../components/UI/Chip'
 import Select from '../../../components/UI/DropDown'
 import Card from '../../../components/UI/cards/Card'
 import { REGION_THUNK } from '../../../store/slices/user/region/regionThunk'
+import { REGION_ACTIONS } from '../../../store/slices/user/region/regionSlice'
 import Loading from '../../Loading'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
 import { useNavigate } from 'react-router'
 
 const Region = () => {
-   const { allHouses, isLoading, search } = useSelector((state) => state.region)
+   const { allHouses, isLoading, search, selectedRegion } = useSelector(
+      (state) => state.region
+   )
 
    const [filters, setFilters] = useState({
       region: '',
@@ -35,19 +38,36 @@ const Region = () => {
    const totalPages = Math.ceil(totalCount / pageSize)
 
    useEffect(() => {
-      dispatch(REGION_THUNK.getHouses({ page: 1, size: 16 }))
-   }, [dispatch])
+      if (selectedRegion) {
+         console.log('Setting selected region:', selectedRegion)
+         setFilters((prev) => ({ ...prev, region: selectedRegion }))
+
+         const regionChip = {
+            type: 'region',
+            label: selectedRegion,
+            displayLabel:
+               selectedRegion.charAt(0).toUpperCase() + selectedRegion.slice(1),
+         }
+         setChips([regionChip])
+      }
+   }, [selectedRegion])
 
    useEffect(() => {
       const hasFilters = Object.values(filters).some((v) => v) || search
+      console.log('Loading houses with filters:', filters, 'search:', search)
 
-      if (hasFilters) {
-         dispatch(
-            REGION_THUNK.getHouses({ ...filters, search, page, size: pageSize })
-         )
-      } else {
-         dispatch(REGION_THUNK.getHouses({ page, size: pageSize }))
-      }
+      const timeoutId = setTimeout(() => {
+         if (hasFilters) {
+            const params = { ...filters, search, page, size: pageSize }
+            console.log('Dispatching with params:', params)
+            dispatch(REGION_THUNK.getHouses(params))
+         } else {
+            console.log('Dispatching without filters')
+            dispatch(REGION_THUNK.getHouses({ page, size: pageSize }))
+         }
+      }, 100)
+
+      return () => clearTimeout(timeoutId)
    }, [filters, search, page, dispatch])
 
    const handleFilterChange = (type, value) => {
@@ -73,6 +93,11 @@ const Region = () => {
       setChips((prev) => prev.filter((chip) => chip.type !== chipToDelete.type))
 
       setFilters((prev) => ({ ...prev, [chipToDelete.type]: '' }))
+
+      if (chipToDelete.type === 'region') {
+         dispatch(REGION_ACTIONS.setSelectedRegion(''))
+         localStorage.removeItem('selectedRegion')
+      }
    }
 
    const handleClearAll = () => {
@@ -84,6 +109,9 @@ const Region = () => {
          houseType: '',
          priceSort: '',
       })
+
+      dispatch(REGION_ACTIONS.setSelectedRegion(''))
+      localStorage.removeItem('selectedRegion')
    }
 
    const handlePageChange = (e, value) => {
@@ -107,32 +135,30 @@ const Region = () => {
 
    const optionRegion = [
       { value: 'NARYN', label: 'Naryn' },
-      { value: 'bishkek', label: 'Bishkek' },
-      { value: 'batken', label: 'Batken' },
-      { value: 'jalalabat', label: 'Jalalabat' },
+      { value: 'BISHKEK', label: 'Bishkek' },
+      { value: 'BATKEN', label: 'Batken' },
+      { value: 'jalalabat', label: 'Jalal-Abad' },
       { value: 'YSYKKOL', label: 'Issyk-Kul' },
-      { value: 'talas', label: 'Talas' },
+      { value: 'TALAS', label: 'Talas' },
       { value: 'CHUY', label: 'Chui' },
-      { value: 'Osh', label: 'Osh' },
+      { value: 'OSH', label: 'Osh' },
    ]
 
    const optionPopularity = [
-      { value: 'all', label: 'All' },
       { value: 'popular', label: 'Popular' },
-      { value: 'latest', label: 'The latest' },
+      { value: 'the_lastest', label: 'The latest' },
    ]
 
    const optionHouseType = [
-      { value: 'all', label: 'All' },
-      { value: 'apartment', label: 'Apartment' },
-      { value: 'house', label: 'House' },
+      { value: 'APARTMENT', label: 'Apartment' },
+      { value: 'HOUSE', label: 'House' },
    ]
 
    const oprionPrice = [
-      { value: 'all', label: 'All' },
-      { value: 'low', label: 'Low to high' },
-      { value: 'high', label: 'High to low' },
+      { value: 'low_to_high', label: 'Low to high' },
+      { value: 'high_to_low', label: 'High to low' },
    ]
+
    return (
       <StyledContainer>
          <BreadCrumbs links={links} />
@@ -225,6 +251,7 @@ const Region = () => {
                         title={house.description}
                         location={house.address}
                         guests={house.maxGuests}
+                        favorite={house.favorite}
                         onClick={() =>
                            navigate(
                               ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(

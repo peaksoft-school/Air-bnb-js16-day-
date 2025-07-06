@@ -91,7 +91,7 @@ const UserHeader = ({
                      {isAuth ? 'SUBMIT AN AD' : 'JOIN US'}
                   </Button>
 
-                  {!isAuth && (
+                  {isAuth && (
                      <>
                         <Typography
                            onClick={goToFavorites}

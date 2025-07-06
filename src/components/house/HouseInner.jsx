@@ -16,13 +16,14 @@ import { showToast } from '../../utils/helpers/showToast'
 const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
+
    const { role } = useSelector((state) => state.auth)
+
    const { houseId, id } = useParams()
+
    const [openFeedback, setOpenFeedback] = useState(false)
 
-   const toggleFeedbackModal = () => {
-      setOpenFeedback((prev) => !prev)
-   }
+   const toggleFeedbackModal = () => setOpenFeedback((prev) => !prev)
 
    const deleteHouse = () => {
       dispatch(deleteHouseAsync({ id: houseInfo.id, showToast, navigate }))
@@ -34,7 +35,6 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
       dispatch(
          blockedHouses({
             id: houseInfo.id,
-            block: !blocked,
             showToast,
          })
       )
@@ -42,13 +42,17 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
 
    if (!houseInfo) return <div>Loading...</div>
 
+   const location = window.location.pathname.split('/')[2]
+
    return (
       <>
          <StyledContainer>
             <h1 className="title">{houseInfo.name}</h1>
+
             <Box>
                <Box className="slider-house">
                   <HouseImageSlider images={houseInfo.imageUrls} />
+
                   <Box className="house-info">
                      <Typography className="house-type">
                         {houseInfo.type}
@@ -60,7 +64,7 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
                         {houseInfo.name}
                      </Typography>
                      <Typography className="house-location">
-                        {houseInfo.addressDetail?.address}
+                        {houseInfo.addressDetail}
                      </Typography>
                      <Typography className="house-description">
                         {houseInfo.description}
@@ -84,42 +88,60 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
                      </Box>
 
                      {role === 'ADMIN' ? (
-                        <>
-                           <Box className="button-container">
-                              <Button variant="outlined" onClick={deleteHouse}>
-                                 Delete
-                              </Button>
-                              <Button onClick={blockHouse}>
-                                 {blocked ? 'Unblock' : 'Block'}
-                              </Button>
-                           </Box>
-                           <Typography className="blocked-text">
-                              {blocked ? 'This house is currently blocked' : ''}
-                           </Typography>
-                        </>
+                        location === 'users' ? (
+                           <>
+                              <Box className="button-container">
+                                 <Button variant="second" onClick={deleteHouse}>
+                                    Delete
+                                 </Button>
+
+                                 <Button onClick={blockHouse}>
+                                    {blocked ? 'Unblock' : 'Block'}
+                                 </Button>
+                              </Box>
+
+                              <Typography className="blocked-text">
+                                 {blocked
+                                    ? 'This house is currently blocked'
+                                    : ''}
+                              </Typography>
+                           </>
+                        ) : (
+                           <>
+                              <Box className="button-container">
+                                 <Button variant="second" onClick={deleteHouse}>
+                                    Reject
+                                 </Button>
+
+                                 <Button onClick={blockHouse}>Accept</Button>
+                              </Box>
+                           </>
+                        )
                      ) : (
                         <h1>Здесь будет компонент для оплаты</h1>
                      )}
                   </Box>
                </Box>
 
-               <Box className="second-container">
-                  <Box className="feedback-container">
-                     <h1 className="title">Feedback</h1>
-                     {feedbacks.length > 0 ? (
-                        feedbacks.map((item) => (
-                           <Feedback key={item.id} {...item} />
-                        ))
-                     ) : (
-                        <h2 className="title">There are no feedbacks yet</h2>
-                     )}
-                  </Box>
+               {location === 'users' && (
+                  <Box className="second-container">
+                     <Box className="feedback-container">
+                        <h1 className="title">Feedback</h1>
+                        {feedbacks.length > 0 ? (
+                           feedbacks.map((item) => (
+                              <Feedback key={item.id} {...item} />
+                           ))
+                        ) : (
+                           <h2 className="title">There are no feedbacks yet</h2>
+                        )}
+                     </Box>
 
-                  <Rating
-                     rating={rating?.rating || 0}
-                     toggleFeedbackModal={toggleFeedbackModal}
-                  />
-               </Box>
+                     <Rating
+                        rating={rating?.rating || 0}
+                        toggleFeedbackModal={toggleFeedbackModal}
+                     />
+                  </Box>
+               )}
             </Box>
          </StyledContainer>
 

@@ -30,5 +30,6 @@ const StyledContainer = styled(Box)(() => ({
 
    '& .content': {
       padding: '46px 40px',
+      backgroundColor: '#F7F7F7',
    },
 }))
