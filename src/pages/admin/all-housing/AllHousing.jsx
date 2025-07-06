@@ -137,6 +137,6 @@ const StyledCardBox = styled(Box)(() => ({
    flexWrap: 'wrap',
    justifyContent: 'start',
    alignItems: 'center',
-   gap: '20px',
+   gap: '10px',
    marginTop: '40px',
 }))

@@ -88,7 +88,7 @@ const UserHeader = ({
                      {isAuth ? 'SUBMIT AN AD' : 'JOIN US'}
                   </Button>
 
-                  {!isAuth && (
+                  {isAuth && (
                      <>
                         <Typography>FAVORITE({favoriteCount})</Typography>
 

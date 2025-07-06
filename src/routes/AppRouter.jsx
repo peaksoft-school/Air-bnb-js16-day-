@@ -21,6 +21,9 @@ import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
 
+import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
+import Application from '../pages/admin/user-page/Application'
+
 const AppRouter = () => (
    <Routes>
       <Route
@@ -100,9 +103,28 @@ const AppRouter = () => (
             index
             path={ROUTES.ADMIN.APPLICATION}
             element={
-               <div>
-                  <h1>application</h1>
-               </div>
+               <Suspense fallback={<Loading />}>
+                  <Application />
+               </Suspense>
+            }
+         />
+
+         <Route
+            index
+            path={ROUTES.ADMIN.APPLICATION_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementHouse />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USEER_ANNOUNCMENT_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementHouse />
+               </Suspense>
             }
          />
 
@@ -114,20 +136,21 @@ const AppRouter = () => (
                </Suspense>
             }
          />
-         <Route
-            path={ROUTES.ADMIN.ALLHOUSING}
-            element={
-               <Suspense fallback={<Loading />}>
-                  <AllHousing />
-               </Suspense>
-            }
-         />
 
          <Route
             path={ROUTES.ADMIN.USER_DETAIL}
             element={
                <Suspense fallback={<Loading />}>
                   <UserDetail />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.ALLHOUSING}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AllHousing />
                </Suspense>
             }
          />
