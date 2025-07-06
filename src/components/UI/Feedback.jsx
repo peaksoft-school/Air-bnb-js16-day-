@@ -9,6 +9,7 @@ import {
 import LikeIcon from '../../assets/icons/LikeIcon.svg'
 import DisLike from '../../assets/icons/DisLike.svg'
 import IconButton from '../UI/IconButton'
+import Meatballs from './Meatballs'
 
 const Feedback = ({
    text,
@@ -18,10 +19,12 @@ const Feedback = ({
    dislikeCount = 0,
    userFeedbackResponse,
    createdAt,
+   id,
+   onDelete,
 }) => {
    const [showFullText, setShowFullText] = useState(false)
    const [likes, setLikes] = useState(likeCount)
-   const [dislikes, setDislikes] = useState(dislikeCount)
+   const [dislikes, setDislikes] = useState(dislikeCount)``
    const [liked, setLiked] = useState(false)
    const [disliked, setDisliked] = useState(false)
 
@@ -79,6 +82,15 @@ const Feedback = ({
                <Typography component="span" sx={{ ml: 0.5 }}>
                   ({rating})
                </Typography>
+               {onDelete && (
+                  <Meatballs
+                     options={[{ label: 'Удалить', value: 'delete' }]}
+                     onSelect={(option) => {
+                        if (option.value === 'delete') onDelete(id)
+                     }}
+                     color
+                  />
+               )}
             </Box>
          </Box>
 

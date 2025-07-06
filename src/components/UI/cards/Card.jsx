@@ -26,7 +26,7 @@ const Card = ({
    title,
    location,
    guests,
-   favorite,
+   onClick,
 }) => {
    const [isLiked, setIsLiked] = useState(false)
    const [hovered, setHovered] = useState(false)
@@ -59,12 +59,12 @@ const Card = ({
    )
 
    const settings = {
-      dots: imageUrls?.length > 1,
+      dots: imageUrls.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls?.length > 1,
+      arrows: imageUrls.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -76,29 +76,27 @@ const Card = ({
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            <Slider {...settings}>
-               {imageUrls?.length > 1 ? (
-                  <Slider {...settings}>
-                     {imageUrls?.map((url, i) => (
-                        <Box key={i}>
-                           <CardMedia
-                              component="img"
-                              height="140"
-                              image={url}
-                              alt={title}
-                           />
-                        </Box>
-                     ))}
-                  </Slider>
-               ) : (
-                  <CardMedia
-                     component="img"
-                     height="140"
-                     image={imageUrls}
-                     alt={title}
-                  />
-               )}
-            </Slider>
+            {imageUrls.length > 1 ? (
+               <Slider {...settings}>
+                  {imageUrls.map((url, i) => (
+                     <Box key={i}>
+                        <CardMedia
+                           component="img"
+                           height="140"
+                           image={url}
+                           alt={title}
+                        />
+                     </Box>
+                  ))}
+               </Slider>
+            ) : (
+               <CardMedia
+                  component="img"
+                  height="140"
+                  image={imageUrls[0]}
+                  alt={title}
+               />
+            )}
          </Box>
 
          <CardContent>
@@ -137,7 +135,7 @@ const Card = ({
                <Button width={100}>BOOK</Button>
 
                <IconButton aria-label="like" onClick={handleLike}>
-                  {favorite ? (
+                  {isLiked ? (
                      <FavoriteIcon color="warning" />
                   ) : (
                      <FavoriteBorderIcon color="warning" />

@@ -1,7 +1,9 @@
 import { Box, styled, Typography } from '@mui/material'
 import GeoIcon from '../../assets/icons/geo.svg'
-import StarIcon from '../../assets/icons/FullStar.svg'
-import { HOUSES } from '../../utils/constants/Index'
+import StarIcon from '../../assets/icons/star.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLandingPageReguest } from '../../store/slices/user/Landing/LandingThunk'
+import { useEffect } from 'react'
 
 const PopularHouse = () => {
    const dispatch = useDispatch()

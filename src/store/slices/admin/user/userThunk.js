@@ -42,6 +42,18 @@ export const getAnnouncementFeedback = createAsyncThunk(
    }
 )
 
+export const deleteFeedback = createAsyncThunk(
+   'feedback/deleteFeedback',
+   async (id, { rejectWithValue }) => {
+      try {
+         await axiosInstance.delete(`/api/feedback/delete/${id}`)
+         return id
+      } catch (error) {
+         return rejectWithValue(error.response?.data?.message || error.message)
+      }
+   }
+)
+
 export const getAnnouncementRating = createAsyncThunk(
    'announcementRating/getRating',
    async (id, { rejectWithValue }) => {
@@ -53,19 +65,6 @@ export const getAnnouncementRating = createAsyncThunk(
          return data
       } catch (error) {
          return rejectWithValue(error)
-      }
-   }
-)
-
-export const getAllFavorites = createAsyncThunk(
-   'user/getAllFavorites',
-   async (id, { rejectWithValue }) => {
-      try {
-         const { data } = await axiosInstance.get(`/api/favorite/getById/${id}`)
-
-         return data
-      } catch (error) {
-         return rejectWithValue(error.response.message)
       }
    }
 )

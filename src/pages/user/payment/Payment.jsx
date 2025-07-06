@@ -6,8 +6,11 @@ import 'react-calendar/dist/Calendar.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { createPayment } from '../../../store/slices/user/payment/paymentThunk'
 import StripePaymentForm from './PaymentForm'
+import HeartIconButton from '../../../components/UI/HeartIconButton'
+
 const Payment = ({ pricePerDay, userId, houseId }) => {
    const dispatch = useDispatch()
+   const [liked, setLiked] = useState(false)
    const [checkIn, setCheckIn] = useState(null)
    const [checkOut, setCheckOut] = useState(null)
    const [showCalendar, setShowCalendar] = useState(false)
@@ -98,16 +101,18 @@ const Payment = ({ pricePerDay, userId, houseId }) => {
             </Box>
          </DateGrid>
          <Message>You have to be signed in to book a listing!</Message>
-         <MainButton
-            onClick={() => setShowPayment(true)}
-            disabled={!checkIn || !checkOut}
-         >
-            REQUEST TO BOOK
-         </MainButton>
-         <SecondaryButton onClick={() => setShowHistory(true)}>
-            View Past Payments
-         </SecondaryButton>
-         <Heart />
+         <StyledBox>
+            <MainButton
+               onClick={() => setShowPayment(true)}
+               disabled={!checkIn || !checkOut}
+            >
+               REQUEST TO BOOK
+            </MainButton>
+            <HeartIconButton
+               active={liked}
+               onClick={() => setLiked((prev) => !prev)}
+            />
+         </StyledBox>
          <Modal open={showCalendar} handleClose={() => setShowCalendar(false)}>
             <CalendarWrapper>
                <Typography variant="h6" mb={2}>
@@ -127,7 +132,11 @@ const Payment = ({ pricePerDay, userId, houseId }) => {
                />
             </CalendarWrapper>
          </Modal>
-         <Modal open={showPayment} handleClose={() => setShowPayment(false)}>
+         <Modal
+            width={'500px'}
+            open={showPayment}
+            handleClose={() => setShowPayment(false)}
+         >
             {bookingComplete ? (
                <PaymentContainer>
                   <Typography variant="h5" fontWeight={600}>
@@ -184,6 +193,7 @@ const Payment = ({ pricePerDay, userId, houseId }) => {
             )}
          </Modal>
          <Modal
+            width={'500px'}
             open={showChangeDate}
             handleClose={() => setShowChangeDate(false)}
          >
@@ -226,8 +236,8 @@ export default Payment
 const Container = styled(Box)(() => ({
    border: '1px solid #ddd',
    padding: '20px',
-   borderRadius: '8px',
-   maxWidth: '420px',
+   borderRadius: '2px',
+   maxWidth: '494px',
    margin: '0 auto',
    position: 'relative',
 }))
@@ -250,9 +260,10 @@ const Label = styled(Typography)(() => ({
    fontSize: '14px',
 }))
 const DateBox = styled(Box)(() => ({
+   width: '217px',
    border: '1px solid #ccc',
    padding: '12px',
-   borderRadius: '6px',
+   borderRadius: '2px',
    cursor: 'pointer',
    display: 'flex',
    alignItems: 'center',
@@ -268,35 +279,24 @@ const MainButton = styled('button')(() => ({
    backgroundColor: '#FF8A00',
    color: 'white',
    border: 'none',
-   width: '100%',
+   width: '423px',
+   height: '37px',
    padding: '14px',
    fontWeight: 500,
-   borderRadius: '6px',
+   borderRadius: '2px',
    cursor: 'pointer',
    '&:disabled': {
-      backgroundColor: '#ccc',
+      backgroundColor: '#ff8a00',
       cursor: 'not-allowed',
    },
 }))
-const SecondaryButton = styled(MainButton)(() => ({
-   backgroundColor: '#fff',
-   color: '#FF8A00',
-   border: '1px solid #FF8A00',
-   marginTop: '12px',
-}))
-const Heart = styled('div')(() => ({
-   position: 'absolute',
-   bottom: '20px',
-   right: '20px',
-   width: '42px',
-   height: '42px',
-   border: '1px solid #FF8A00',
-   borderRadius: '6px',
+
+const StyledBox = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'center',
-   justifyContent: 'center',
-   color: '#FF8A00',
-   fontSize: '20px',
+   justifyContent: 'space-between',
+   marginTop: '20px',
+   gap: '16px',
 }))
 const CalendarWrapper = styled(Box)(() => ({
    padding: '24px',
@@ -305,15 +305,4 @@ const PaymentContainer = styled(Box)(() => ({
    padding: '24px',
    width: '100%',
    maxWidth: '400px',
-}))
-const Input = styled('input')(() => ({
-   width: '100%',
-   padding: '12px',
-   marginBottom: '16px',
-   border: '1px solid #ccc',
-   borderRadius: '6px',
-}))
-const InputRow = styled(Box)(() => ({
-   display: 'flex',
-   gap: '12px',
 }))

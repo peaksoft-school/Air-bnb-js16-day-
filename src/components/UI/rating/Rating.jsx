@@ -35,7 +35,7 @@ const Rating = ({ rating = {}, toggleFeedbackModal }) => {
          </RatingChart>
 
          {role !== 'ADMIN' && (
-            <Button variant="outlined" onClick={toggleFeedbackModal}>
+            <Button variant="second" width={"424px"} onClick={toggleFeedbackModal}>
                Leave Feedback
             </Button>
          )}
@@ -55,7 +55,7 @@ const RatingChart = styled(Box)(() => ({
    border: '1px solid #C4C4C4',
    borderRadius: '16px',
    padding: '21px 40px',
-   width: 'fit-content',
+   width: '424px',
    marginBottom: '20px',
 }))
 

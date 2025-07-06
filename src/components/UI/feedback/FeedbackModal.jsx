@@ -14,7 +14,7 @@ import Button from '../Button'
 import { axiosInstance } from '../../../configs/axiosInstance'
 import { getAnnouncementById } from '../../../store/slices/user/house/houseThunk'
 
-const FeedbackModal = ({ open, onClose, houseId }) => {
+const FeedbackModal = ({ open, onClose, houseId, onAddFeedback }) => {
    const images = useSelector((state) => state.addHouseSlice.images)
    const dispatch = useDispatch()
    const imageRef = useRef(null)
@@ -31,15 +31,32 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
 
    const postFeedback = async () => {
       try {
-         await axiosInstance.post(`/api/feedback/save?houseId=${houseId}`, {
+         await axiosInstance.post(`/api/feedback/save/${houseId}`, {
             images,
             rating,
             feedback,
          })
+
+         const newFeedback = {
+            id: Date.now(), 
+            rating,
+            text: feedback,
+            images,
+            createdAt: new Date().toISOString(),
+            userFeedbackResponse: {
+               fullName: 'You',
+               image: 'none',
+            },
+         }
+
          onClose()
          setFeedback('')
          dispatch(getAnnouncementById(houseId))
          dispatch(clearImage())
+
+         if (typeof onAddFeedback === 'function') {
+            onAddFeedback(newFeedback)
+         }
       } catch (error) {
          console.error(error)
       }
@@ -111,10 +128,19 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
             </Box>
 
             <Box className="btn-container">
-               <Button className="cancel" variant="cancel" onClick={onClose}>
+               <Button
+                  className="cancel"
+                  width={'194px'}
+                  variant="second"
+                  onClick={onClose}
+               >
                   Cancel
                </Button>
-               <Button className="public" onClick={postFeedback}>
+               <Button
+                  className="public"
+                  width={'194px'}
+                  onClick={postFeedback}
+               >
                   Public
                </Button>
             </Box>
@@ -227,13 +253,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
    '& .btn-container': {
       display: 'flex',
       justifyContent: 'flex-end',
-
-      '& .cancel': {
-         width: '150px',
-      },
-
-      '& .public': {
-         width: '200px',
-      },
+      gap: '1rem',
+      alignItems: 'center',
    },
 }))
