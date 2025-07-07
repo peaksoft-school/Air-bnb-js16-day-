@@ -20,6 +20,7 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
    const imageRef = useRef(null)
    const [rating, setRating] = useState(0)
    const [feedback, setFeedback] = useState('')
+   const [isLoading, setIsLoading] = useState(false)
 
    const handleDeleteImage = (index) => dispatch(deleteImage(index))
    const handleClick = () => imageRef.current.click()
@@ -30,6 +31,11 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
    }
 
    const postFeedback = async () => {
+      if (!rating || !feedback.trim()) {
+         alert('Please provide both a rating and feedback.')
+         return
+      }
+
       try {
          const resultAction = await dispatch(
             saveFeedback({ houseId, feedback, rating, images })
@@ -49,7 +55,7 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
    }
 
    return (
-      <Modal open={open} onClose={onClose}>
+      <Modal open={open} onClose={onClose} width="720px">
          <StyledContainer>
             <Typography variant="h4" className="title">
                Leave feedback
@@ -144,9 +150,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
       '& .delete-icon': {
          position: 'absolute',
          top: '0.2rem',
-         display: 'none',
          right: '0.2rem',
-         cursor: 'pointer',
          width: '1.5rem',
          height: '1.5rem',
       },
@@ -177,10 +181,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
          alignItems: 'center',
          borderRadius: '0.5rem',
          '& #photo': {
-            cursor: 'pointer',
             display: 'none',
-            width: '8.438rem',
-            height: '8.438rem',
          },
       },
       '& .add-photo:hover': {

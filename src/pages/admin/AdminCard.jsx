@@ -30,6 +30,17 @@ const AdminCard = ({
 
    const [hovered, setHovered] = useState(false)
 
+   const imagesToShow =
+      images && images.length > 0
+         ? images
+         : imageUrls && imageUrls.length > 0
+           ? imageUrls
+           : []
+
+   console.log(imagesToShow)
+
+   const hasImages = imagesToShow.length > 0
+
    const CustomPrevArrow = ({ onClick }) => (
       <ArrowButton onClick={onClick} direction="left">
          <ArrowBackIosNewIcon />
@@ -43,12 +54,12 @@ const AdminCard = ({
    )
 
    const settings = {
-      dots: images && imageUrls.length > 1,
+      dots: hasImages && imagesToShow.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: images && imageUrls.length > 1,
+      arrows: hasImages && imagesToShow.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -59,9 +70,9 @@ const AdminCard = ({
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            {images?.length > 1 ? (
+            {hasImages ? (
                <Slider {...settings}>
-                  {images?.map((url, index) => (
+                  {imagesToShow.map((url, index) => (
                      <div key={index}>
                         <CardMedia
                            component="img"
@@ -76,7 +87,7 @@ const AdminCard = ({
                <CardMedia
                   component="img"
                   height="136"
-                  image={images && imageUrls[0]}
+                  image="/src/assets/images/empty-house.jpg"
                   alt={description}
                />
             )}
@@ -122,7 +133,10 @@ const AdminCard = ({
                         onAccept(house.id)
                      }
                      if (option.action === 'reject') {
-                        onReject(house.id, 'Причина отклонения')
+                        onReject(
+                           house.id,
+                           'Ваш дом отклонён. Не соответствует требованиям публикации'
+                        )
                      }
                      if (option.action === 'delete') {
                         onDelete(house.id)

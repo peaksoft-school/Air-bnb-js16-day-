@@ -8,8 +8,10 @@ import Header from '../../layout/Header'
 import SignUpModal from '../../pages/sing-up/SignUpModal'
 import SignInModal from '../../pages/sign-in/SignInModal'
 import ForgotPassword from '../../pages/forgot-password/ForgotPassword'
+import { useNavigate } from 'react-router'
 
 const Intro = () => {
+   const navigate = useNavigate()
    const isAuthenticated = useSelector((state) => state.auth.isAuth)
 
    const [openSignIn, setOpenSignIn] = useState(false)
@@ -17,6 +19,9 @@ const Intro = () => {
    const [openForgotPassword, setOpenForgotPassword] = useState(false)
 
    const handleOpenSignUp = () => setOpenSignUp(true)
+   const handleOpenCreate = () => {
+      navigate('/user/create-house')
+   }
 
    return (
       <>
@@ -25,6 +30,7 @@ const Intro = () => {
                <Header
                   isAuthenticated={isAuthenticated}
                   onJoinUs={handleOpenSignUp}
+                  onAddLeave={handleOpenCreate}
                />
 
                <StyledSearch>

@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import {
    AppBar,
@@ -19,19 +19,22 @@ import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
 import { useState } from 'react'
 import { USER_OPTIONS } from '../../utils/helpers'
 import { REGION_ACTIONS } from '../../store/slices/user/region/regionSlice'
+import { ROUTES } from '../../routes/routes'
 
 const UserHeader = ({
    isAuth,
    onJoinUs,
    onProfileClick,
    onAddLeave,
-   favoriteCount = 9,
    handleLeaveAddClick,
 }) => {
    const [searchValue, setSearchValue] = useState('')
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
+   const favoriteCount = useSelector(
+      (state) => state.favorite?.favorites?.length || 0
+   )
 
    const handleMenuSelect = (option) => {
       if (option.action === 'my-profile') {
@@ -44,8 +47,11 @@ const UserHeader = ({
 
    const handleSearchChange = (e) => {
       setSearchValue(e.target.value)
-
       dispatch(REGION_ACTIONS.setSearch(e.target.value))
+   }
+
+   const goToFavorites = () => {
+      navigate(ROUTES.USER.FAVORITE)
    }
 
    return (
@@ -69,7 +75,6 @@ const UserHeader = ({
                <Box className="search-container">
                   <Box className="checkbox-container">
                      <Checkbox />
-
                      <Typography className="search-text">
                         Search nearby
                      </Typography>
@@ -84,13 +89,24 @@ const UserHeader = ({
                </Box>
 
                <Box className="favorites-container">
-                  <Button onClick={isAuth ? onAddLeave : onJoinUs} width={196}>
-                     {isAuth ? 'SUBMIT AN AD' : 'JOIN US'}
-                  </Button>
+                  {isAuth ? (
+                     <Button width={196} onClick={handleLeaveAddClick}>
+                        SUBMIT AN AD
+                     </Button>
+                  ) : (
+                     <Button
+                        onClick={isAuth ? onAddLeave : onJoinUs}
+                        width={196}
+                     >
+                        JOIN US
+                     </Button>
+                  )}
 
                   {isAuth && (
                      <>
-                        <Typography>FAVORITE({favoriteCount})</Typography>
+                        <Typography onClick={goToFavorites}>
+                           FAVORITE({favoriteCount})
+                        </Typography>
 
                         <Box className="avatar-container">
                            <Avatar

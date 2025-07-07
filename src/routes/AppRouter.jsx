@@ -13,15 +13,22 @@ const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 const Region = lazy(() => import('../pages/user/region/Region'))
 const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
+const CreateHouseForm = lazy(() => import('../pages/user/CreateHouse'))
+const Favorites = lazy(() => import('../pages/user/favorite/Favorites'))
 const UserAnnouncement = lazy(
-   () => import('../pages/user/anouncement/UserAnnouncement')
+   () => import('../pages/user/announcement/UserAnnouncement')
 )
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
+import AnnouncementDetailPage from '../pages/user/announcement/AnnouncementDetailPage'
 
-const AppRouter = () => (
+import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
+import Application from '../pages/admin/user-page/Application'
+import AppicationHouse from '../pages/admin/user-page/AppicationHouse'
+
+const AppRoutes = () => (
    <Routes>
       <Route
          path="/"
@@ -52,6 +59,15 @@ const AppRouter = () => (
             />
          }
       >
+         <Route
+            path={ROUTES.USER.CREATE_HOUSE}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <CreateHouseForm />
+               </Suspense>
+            }
+         />
+
          <Route index element={<Navigate to="region" />} />
 
          <Route
@@ -64,10 +80,10 @@ const AppRouter = () => (
          />
 
          <Route
-            path="profile"
+            path="favorites"
             element={
                <Suspense fallback={<Loading />}>
-                  <UserProfile />
+                  <Favorites />
                </Suspense>
             }
          />
@@ -77,6 +93,23 @@ const AppRouter = () => (
             element={
                <Suspense fallback={<Loading />}>
                   <UserAnnouncement />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path="/user/profile"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserProfile />
+               </Suspense>
+            }
+         />
+         <Route
+            path="/user/profile/announcement/:id"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementDetailPage />
                </Suspense>
             }
          />
@@ -100,9 +133,28 @@ const AppRouter = () => (
             index
             path={ROUTES.ADMIN.APPLICATION}
             element={
-               <div>
-                  <h1>application</h1>
-               </div>
+               <Suspense fallback={<Loading />}>
+                  <Application />
+               </Suspense>
+            }
+         />
+
+         <Route
+            index
+            path={ROUTES.ADMIN.APPLICATION_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AppicationHouse />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path={ROUTES.ADMIN.USEER_ANNOUNCMENT_BY_ID}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementHouse />
+               </Suspense>
             }
          />
 
@@ -153,4 +205,4 @@ const AppRouter = () => (
    </Routes>
 )
 
-export default AppRouter
+export default AppRoutes

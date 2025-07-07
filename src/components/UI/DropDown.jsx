@@ -16,7 +16,7 @@ const DropDown = ({ label, value, onChange, options, disabled = false }) => {
             className="select"
          >
             {options.map(({ value, label }) => (
-               <MenuItem key={value} value={value}>
+               <MenuItem key={value} value={value} className='Menu-item'>
                   {label}
                </MenuItem>
             ))}
@@ -37,6 +37,7 @@ const StyledSelectBox = styled(Box)(() => ({
    width: '271px',
    height: '42px',
    backgroundColor: 'white',
+   cursor:'pointer',
 
    '&:hover': {
       backgroundColor: '#F3F3F3',
@@ -44,15 +45,19 @@ const StyledSelectBox = styled(Box)(() => ({
 
    '& .select': {
       color: 'black',
-
+      cursor:'pointer',
       '& .MuiSelect-select': {
-         paddingRight: '24px',
+         paddingRight: '24px',cursor:'pointer',
       },
 
       '& svg': {
          right: 0,
+         cursor:'pointer',
       },
    },
+   '& .Menu-item':{
+      cursor:'pointer',
+   }
 }))
 
 const StyledLabel = styled(Typography)(() => ({
@@ -61,4 +66,5 @@ const StyledLabel = styled(Typography)(() => ({
    lineHeight: '100%',
    letterSpacing: '0%',
    color: '#828282',
+   cursor:'pointer',
 }))

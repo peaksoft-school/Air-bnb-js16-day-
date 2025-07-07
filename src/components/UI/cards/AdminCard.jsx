@@ -18,12 +18,27 @@ import Meatballs from '../Meatballs'
 import EmptyHouseImage from '../../../assets/images/empty-house.jpg'
 import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
 
-const AdminCard = ({ house }) => {
+const AdminCard = ({
+   house,
+   isBlocked,
+   options,
+   onDelete,
+   onNavigate,
+   onAccept,
+   onReject,
+}) => {
    const [hovered, setHovered] = useState(false)
 
-   const { imageUrls, price, rating, description, address, maxGuests } =
+   const { images, imageUrls, price, rating, description, address, maxGuests } =
       house
-      
+
+   const imagesToShow =
+      images && images.length > 0
+         ? images
+         : imageUrls && imageUrls.length > 0
+           ? imageUrls
+           : []
+   const hasImages = imagesToShow.length > 0
 
    const CustomPrevArrow = ({ onClick }) => (
       <ArrowButton onClick={onClick} direction="left">
@@ -38,25 +53,36 @@ const AdminCard = ({ house }) => {
    )
 
    const settings = {
-      dots: imageUrls?.length > 1,
+      dots: hasImages && imagesToShow.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls?.length > 1,
+      arrows: hasImages && imagesToShow.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
 
    return (
-      <StyledCard>
+      <StyledCard
+         onClick={isBlocked ? undefined : onNavigate}
+         className={isBlocked ? 'blocked' : ''}
+      >
+         {isBlocked && (
+            <div className="blocked-overlay">
+               <span>
+                  Your application has been blocked, please contact the
+                  administrator
+               </span>
+            </div>
+         )}
          <ImageContainer
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            {imageUrls?.length > 1 ? (
+            {hasImages ? (
                <Slider {...settings}>
-                  {imageUrls?.map((url, i) => (
+                  {imagesToShow.map((url, i) => (
                      <Box key={i}>
                         <CardMedia
                            component="img"
@@ -71,11 +97,7 @@ const AdminCard = ({ house }) => {
                <CardMedia
                   component="img"
                   height="140"
-                  image={
-                     imageUrls?.length === 0
-                        ? `${EmptyHouseImage}`
-                        : imageUrls
-                  }
+                  image={EmptyHouseImage}
                   alt={description}
                />
             )}
@@ -90,7 +112,6 @@ const AdminCard = ({ house }) => {
                <StyledRating>
                   <Typography className="rating-number">
                      <StarIcon className="rating-icon" />
-
                      {rating}
                   </Typography>
                </StyledRating>
@@ -101,7 +122,6 @@ const AdminCard = ({ house }) => {
 
                <Box className="location-content">
                   <LocationOnIcon fontSize="small" color="action" />
-
                   <Typography className="location-name">{address}</Typography>
                </Box>
             </Box>
@@ -110,8 +130,11 @@ const AdminCard = ({ house }) => {
                <Typography fontSize={14} variant="body2" color="text.secondary">
                   {maxGuests} guests
                </Typography>
-
-               <Meatballs options={ADMIN_CARD_OPTIONS} />
+               {isBlocked ? (
+                  <BlockedBtn disabled>BLOCKED</BlockedBtn>
+               ) : (
+                  <Meatballs options={ADMIN_CARD_OPTIONS} />
+               )}
             </ActionRow>
          </CardContent>
       </StyledCard>
@@ -120,74 +143,45 @@ const AdminCard = ({ house }) => {
 
 export default AdminCard
 
-const StyledCard = styled(Box)(() => ({
+const StyledCard = styled(Box)(({ theme }) => ({
    maxWidth: '230px',
    width: '100%',
    borderRadius: '4px',
    transition: 'all 0.3s',
-
-   '& .images-content': {
-      position: 'relative',
-
-      '& .image': {
-         borderRadius: '4px 4px 0 0',
-      },
+   position: 'relative',
+   background: '#fff',
+   '&.blocked': {
+      filter: 'grayscale(1) brightness(0.85)',
+      pointerEvents: 'none',
+      opacity: 0.7,
    },
-
-   '& .content': {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '0.5rem',
-      padding: '12px',
-      marginTop: '12px',
-
-      '& .first-block': {
-         display: 'flex',
-         justifyContent: 'space-between',
-         alignItems: 'center',
-
-         '& .price': {
-            fontWeight: 300,
-         },
-
-         '& .word': {
-            color: 'gray',
-            fontWeight: 300,
-         },
-      },
-
-      '& .location-content': {
-         display: 'flex',
-         alignItems: 'start',
-         gap: '5px',
-         color: '#828282',
-
-         '& .location-name': {
-            fontWeight: 300,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-         },
-      },
-
-      '& .second-block': {
-         display: 'flex',
-         justifyContent: 'space-between',
-         alignItems: 'center',
-
-         '& .guest': {
-            fontWeight: 300,
-            color: '#939393',
-            width: '110px',
-         },
-      },
+   '.blocked-overlay': {
+      position: 'absolute',
+      top: 20,
+      left: 10,
+      right: 10,
+      zIndex: 2,
+      background: 'rgba(60,60,60,0.85)',
+      color: '#fff',
+      padding: '12px 16px',
+      borderRadius: 8,
+      fontSize: 16,
+      textAlign: 'center',
    },
+}))
 
-   '&:hover': {
-      backgroundColor: 'white',
-      cursor: 'pointer',
-      boxShadow: '0 4px 12px #69696914',
-   },
+const BlockedBtn = styled('button')(() => ({
+   width: '100%',
+   marginTop: 12,
+   background: '#ccc',
+   color: '#888',
+   border: 'none',
+   borderRadius: 4,
+   padding: '8px 0',
+   fontWeight: 600,
+   fontSize: 18,
+   pointerEvents: 'none',
+   letterSpacing: 1,
 }))
 
 const StyledRating = styled(Box)(() => ({

@@ -88,6 +88,9 @@ export default function Application() {
    }
 
    const handleNavigate = (id) => navigate(`/admin/application/${id}`)
+
+   console.log('1')
+
    return (
       <StyledBox>
          <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>

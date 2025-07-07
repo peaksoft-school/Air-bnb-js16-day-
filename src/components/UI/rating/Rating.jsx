@@ -1,10 +1,11 @@
 import { Box, Typography, styled } from '@mui/material'
 import { useSelector } from 'react-redux'
-import FullStarIcon from '../../../assets/icons/star.svg'
+import FullStarIcon from '../../../assets/icons/FullStar.svg'
 import Button from '../Button'
 
-const Rating = ({ rating = {}, toggleFeedbackModal }) => {
+const Rating = ({ toggleFeedbackModal }) => {
    const { role } = useSelector((state) => state.auth)
+   const rating = useSelector((state) => state.userInfo.rating) || {}
 
    const counts = rating.ratingCount || {}
    const total = Object.values(counts).reduce((acc, num) => acc + num, 0)
@@ -62,6 +63,7 @@ const RatingChart = styled(Box)(() => ({
    borderRadius: '16px',
    padding: '21px 40px',
    width: '424px',
+   width: '424px',
    marginBottom: '20px',
 }))
 
@@ -84,6 +86,9 @@ const RatingCont = styled(Box)(() => ({
 
 const RatingChartBarContainer = styled(Box)(() => ({
    color: '#363636',
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '8px',
 }))
 
 const RatingChartBar = styled(Box)(() => ({

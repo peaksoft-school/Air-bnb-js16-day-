@@ -8,12 +8,18 @@ import Chip from '../../../components/UI/Chip'
 import Select from '../../../components/UI/DropDown'
 import Card from '../../../components/UI/cards/Card'
 import { REGION_THUNK } from '../../../store/slices/user/region/regionThunk'
+import {
+   addFavorite,
+   getFavorites,
+} from '../../../store/slices/user/favorite/favoriteThunk'
 import Loading from '../../Loading'
-import Pagination from '@mui/material/Pagination'
-import Stack from '@mui/material/Stack'
 
 const Region = () => {
    const { allHouses, isLoading, search } = useSelector((state) => state.region)
+   const favoriteState = useSelector((state) => state.favorite)
+   const favorites = favoriteState?.favorites || []
+   const selectedRegion = useSelector((state) => state.region.selectedRegion)
+
    const [filters, setFilters] = useState({
       region: '',
       popularity: '',
@@ -26,11 +32,11 @@ const Region = () => {
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
+
    const pageSize = 16
 
    const total = allHouses?.length || 0
    const totalCount = total || allHouses?.length || 0
-   const totalPages = Math.ceil(totalCount / pageSize)
 
    useEffect(() => {
       dispatch(REGION_THUNK.getHouses({ page: 1, size: 16 }))
@@ -38,6 +44,19 @@ const Region = () => {
 
    useEffect(() => {
       const hasFilters = Object.values(filters).some((v) => v) || search
+
+      const timeoutId = setTimeout(() => {
+         if (hasFilters) {
+            const params = { ...filters, search, page, size: pageSize }
+            console.log('Dispatching with params:', params)
+            dispatch(REGION_THUNK.getHouses(params))
+         } else {
+            console.log('Dispatching without filters')
+            dispatch(REGION_THUNK.getHouses({ page, size: pageSize }))
+         }
+      }, 100)
+
+      return () => clearTimeout(timeoutId)
       if (hasFilters) {
          dispatch(
             REGION_THUNK.getHouses({ ...filters, search, page, size: pageSize })
@@ -48,7 +67,7 @@ const Region = () => {
    }, [filters, search, page, dispatch])
 
    const handleFilterChange = (type, value) => {
-      if (value && value !== 'all') {
+      if (value && value !== 'All') {
          const newChip = {
             type,
             label: value,
@@ -79,14 +98,17 @@ const Region = () => {
       })
    }
 
-   const handlePageChange = (e, value) => {
-      setPage(value)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+   const handlePrevPage = () => {
+      if (page > 1) setPage((prev) => prev - 1)
+   }
+   const handleNextPage = () => {
+      if (!isLastPage) setPage((prev) => prev + 1)
    }
 
    if (isLoading) return <Loading />
 
    const isNothingFound = allHouses?.length === 0 && search
+   const isLastPage = allHouses.length < pageSize
 
    const links = [
       { href: ROUTES.USER.INDEX, label: 'Main' },
@@ -99,9 +121,9 @@ const Region = () => {
 
    const optionRegion = [
       { value: 'NARYN', label: 'Naryn' },
-      { value: 'bishkek', label: 'Bishkek' },
-      { value: 'batken', label: 'Batken' },
-      { value: 'jalalabat', label: 'Jalalabat' },
+      { value: 'BISHKEK', label: 'Bishkek' },
+      { value: 'BATKEN', label: 'Batken' },
+      { value: 'JALALABAT', label: 'Jalal-Abad' },
       { value: 'YSYKKOL', label: 'Issyk-Kul' },
       { value: 'talas', label: 'Talas' },
       { value: 'CHUY', label: 'Chui' },
@@ -143,7 +165,7 @@ const Region = () => {
                <NothingFoundTitle>Results for "{search}"</NothingFoundTitle>
                <NothingFoundText>
                   It appears that no listings have yet been created for
-                  <Typography variant="span">"{search}"</Typography>.
+                  <Typography variant="span">"{search}"</Typography>
                   <br />
                   Be the first person to create a{' '}
                   <a href="#">listing in this area!</a>
@@ -205,45 +227,62 @@ const Region = () => {
                </FilterSection>
 
                <CardsContainer>
-                  {allHouses?.map((house) => (
-                     <Card
-                        key={house.id}
-                        imageUrls={house.imageUrls}
-                        price={house.price}
-                        rating={house.averageRating}
-                        title={house.description}
-                        location={house.address}
-                        guests={house.maxGuests}
-                        onClick={() =>
-                           navigate(
-                              ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
-                                 ':id',
-                                 house.id
-                              )
-                           )
+                  {allHouses?.map((house) => {
+                     const isFavorite = favorites.some(
+                        (fav) => fav.id === house.id
+                     )
+
+                     const handleLike = async () => {
+                        if (isFavorite) {
+                           await dispatch(deleteFavorite(house.id))
+                        } else {
+                           await dispatch(addFavorite(house.id))
                         }
-                     />
-                  ))}
+                        dispatch(getFavorites())
+                        dispatch(
+                           REGION_THUNK.getHouses({
+                              ...filters,
+                              search,
+                              page,
+                              size: pageSize,
+                           })
+                        )
+                     }
+
+                     return (
+                        <Card
+                           key={house.id}
+                           imageUrls={house.imageUrls}
+                           price={house.price}
+                           rating={house.averageRating}
+                           title={house.description}
+                           location={house.address}
+                           guests={house.maxGuests}
+                           isLiked={isFavorite}
+                           onLike={handleLike}
+                           onClick={() =>
+                              navigate(
+                                 ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
+                                    ':id',
+                                    house.id
+                                 )
+                              )
+                           }
+                           Favorite={house.favorite}
+                        />
+                     )
+                  })}
                </CardsContainer>
 
-               {totalPages > 1 && (
-                  <StyledPaginationWrapper>
-                     <StyledPagination
-                        count={totalPages}
-                        page={page}
-                        onChange={handlePageChange}
-                        color="primary"
-                        shape="rounded"
-                        siblingCount={1}
-                        boundaryCount={1}
-                        showFirstButton
-                        showLastButton
-                        renderItem={(item) => (
-                           <StyledPaginationItem {...item} />
-                        )}
-                     />
-                  </StyledPaginationWrapper>
-               )}
+               <StyledPaginationWrapper>
+                  <PageButton onClick={handlePrevPage} disabled={page === 1}>
+                     {'<'}
+                  </PageButton>
+                  <PageNumber>{page}</PageNumber>
+                  <PageButton onClick={handleNextPage} disabled={isLastPage}>
+                     {'>'}
+                  </PageButton>
+               </StyledPaginationWrapper>
             </>
          )}
       </StyledContainer>
@@ -252,34 +291,38 @@ const Region = () => {
 
 export default Region
 
-const StyledPaginationWrapper = styled(Stack)(() => ({
+const StyledPaginationWrapper = styled(Box)(() => ({
    marginTop: '40px',
    display: 'flex',
    justifyContent: 'center',
    alignItems: 'center',
+   gap: '16px',
 }))
 
-const StyledPagination = styled(Pagination)(() => ({
-   '& .MuiPagination-ul': {
-      gap: '8px',
-   },
-}))
-
-const StyledPaginationItem = styled(PaginationItem)(() => ({
-   '&.Mui-selected': {
-      color: '#DD8A08',
-      background: 'none',
-      fontWeight: 600,
-      borderRadius: '4px',
-   },
-
-   '& .MuiPaginationItem-icon': {
-      color: '#DD8A08',
-   },
-
-   '&:not(.Mui-selected)': {
+const PageButton = styled('button')(() => ({
+   background: 'none',
+   border: 'none',
+   color: '#DD8A08',
+   fontSize: '24px',
+   cursor: 'pointer',
+   padding: '4px 12px',
+   borderRadius: '4px',
+   transition: 'background 0.2s',
+   '&:disabled': {
       color: '#B0B0B0',
+      cursor: 'not-allowed',
    },
+   '&:hover:not(:disabled)': {
+      background: '#fafafa',
+   },
+}))
+
+const PageNumber = styled('span')(() => ({
+   fontWeight: 600,
+   fontSize: '20px',
+   color: '#222',
+   minWidth: '32px',
+   textAlign: 'center',
 }))
 
 const StyledContainer = styled(Box)(() => ({

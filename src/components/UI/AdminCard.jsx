@@ -31,6 +31,12 @@ const AdminCard = ({ house, options, onDelete }) => {
 
    const [hovered, setHovered] = useState(false)
 
+   // Выбираем, что показывать
+   const imagesToShow =
+      imageUrls?.length > 0 ? imageUrls : images?.length > 0 ? images : []
+
+   const hasMultipleImages = imagesToShow.length > 1
+
    const handleSelect = (option) => {
       if (option.action === 'delete' && typeof onDelete === 'function') {
          onDelete(house.id)
@@ -50,12 +56,12 @@ const AdminCard = ({ house, options, onDelete }) => {
    )
 
    const settings = {
-      dots: images && imageUrls.length > 1,
+      dots: hasMultipleImages,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: images && imageUrls.length > 1,
+      arrows: hasMultipleImages,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -66,31 +72,32 @@ const AdminCard = ({ house, options, onDelete }) => {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            {images && imageUrls.length > 1 ? (
+            {hasMultipleImages ? (
                <Slider {...settings}>
-                  {images &&
-                     imageUrls.map((url, index) => (
-                        <div key={index}>
-                           <CardMedia
-                              component="img"
-                              height="136"
-                              image={url}
-                              alt={description}
-                           />
-                        </div>
-                     ))}
+                  {imagesToShow.map((url, index) => (
+                     <div key={index}>
+                        <CardMedia
+                           component="img"
+                           height="136"
+                           image={url}
+                           alt={description}
+                        />
+                     </div>
+                  ))}
                </Slider>
             ) : (
                <CardMedia
                   component="img"
                   height="136"
-                  image={images && imageUrls[0]}
+                  image={
+                     imagesToShow[0] || '/src/assets/images/empty-house.jpg'
+                  }
                   alt={description}
                />
             )}
          </ImageContainer>
 
-         <CardContent sx={{ padding: '12px 12px 12px 12px' }}>
+         <CardContent sx={{ padding: '12px' }}>
             <Row>
                <Typography variant="h6" component="div">
                   ${price}
@@ -119,6 +126,7 @@ const AdminCard = ({ house, options, onDelete }) => {
                   {address}
                </Typography>
             </Row>
+
             <ActionRow>
                <Typography fontSize={14} variant="body2" color="text.secondary">
                   {maxGuests} guests
@@ -134,8 +142,10 @@ const AdminCard = ({ house, options, onDelete }) => {
       </StyledCard>
    )
 }
+
 export default AdminCard
 
+// Стили
 const StyledCard = styled(MuiCard)(() => ({
    width: '210px',
    maxHeight: '290px',
@@ -153,6 +163,7 @@ const StyledCard = styled(MuiCard)(() => ({
 const ImageContainer = styled(Box)(() => ({
    position: 'relative',
 }))
+
 const ArrowButton = styled(IconButton, {
    shouldForwardProp: (prop) => prop !== 'direction',
 })(({ direction }) => ({

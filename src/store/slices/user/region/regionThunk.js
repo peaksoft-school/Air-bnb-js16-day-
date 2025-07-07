@@ -6,7 +6,6 @@ const getHouses = createAsyncThunk(
 
    async (params, { rejectWithValue }) => {
       try {
-
          const requestParams = {
             region: params.region || undefined,
             popularity: params.popularity || undefined,
@@ -19,7 +18,6 @@ const getHouses = createAsyncThunk(
             lng: 0,
             radius: 1000,
          }
-
 
          const { data } = await axiosInstance.get('/api/house/for-users', {
             params: {

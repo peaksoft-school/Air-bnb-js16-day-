@@ -22,7 +22,7 @@ const HouseImageSlider = ({ images }) => {
                '--swiper-navigation-color': '#fff',
                '--swiper-pagination-color': '#fff',
             }}
-            loop={slideCount > 1}
+            loop={slideCount > 1} 
             spaceBetween={10}
             navigation
             {...(thumbsSwiper ? { thumbs: { swiper: thumbsSwiper } } : {})}
@@ -37,9 +37,9 @@ const HouseImageSlider = ({ images }) => {
          </Swiper>
          <Swiper
             onSwiper={setThumbsSwiper}
-            loop={slideCount > 4}
+            loop={slideCount > 4} 
             spaceBetween={10}
-            slidesPerView={Math.min(4, slideCount)}
+            slidesPerView={Math.min(4, slideCount)} 
             freeMode
             watchSlidesProgress
             modules={[FreeMode, Navigation, Thumbs]}

@@ -19,6 +19,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Button from '../Button'
 
+import emptyhouse from '../../../assets/images/empty-house.jpg'
+
 const Card = ({
    imageUrls,
    price,
@@ -27,20 +29,21 @@ const Card = ({
    location,
    guests,
    onClick,
+   onLike,
+   isFavorite,
 }) => {
-   const [isLiked, setIsLiked] = useState(false)
    const [hovered, setHovered] = useState(false)
 
    const handleLike = (e) => {
       e.stopPropagation()
-      setIsLiked(!isLiked)
+      onLike()
    }
 
    const CustomPrevArrow = ({ onClick }) => (
       <StyledIconButtonBack
          onClick={(e) => {
             e.stopPropagation()
-            if (onClick) onClick(e)
+            onClick?.(e)
          }}
       >
          <ArrowBackIosNewIcon />
@@ -51,20 +54,22 @@ const Card = ({
       <StyledIconButtonForward
          onClick={(e) => {
             e.stopPropagation()
-            if (onClick) onClick(e)
+            onClick?.(e)
          }}
       >
          <ArrowForwardIosIcon />
       </StyledIconButtonForward>
    )
 
+   const imagesToShow = imageUrls.length > 0 ? imageUrls : [emptyhouse]
+
    const settings = {
-      dots: imageUrls.length > 1,
+      dots: imagesToShow.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls.length > 1,
+      arrows: imagesToShow.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -135,7 +140,7 @@ const Card = ({
                <Button width={100}>BOOK</Button>
 
                <IconButton aria-label="like" onClick={handleLike}>
-                  {isLiked ? (
+                  {isFavorite ? (
                      <FavoriteIcon color="warning" />
                   ) : (
                      <FavoriteBorderIcon color="warning" />
@@ -151,6 +156,8 @@ export default Card
 
 const StyledMuiCard = styled(MuiCard)(() => ({
    maxWidth: '300px',
+   height: '350px',
+
    cursor: 'pointer',
    transition: 'transform 0.2s ease-in-out',
 

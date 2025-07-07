@@ -2,32 +2,75 @@ import React, { useState } from 'react'
 import { Avatar, Box, styled, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
-import Feedback from '../UI/Feedback'
 import HouseImageSlider from './HouseImageSlider'
 import Button from '../UI/Button'
-import Rating from '../UI/rating/Rating'
 import {
    blockedHouses,
    deleteHouseAsync,
 } from '../../store/slices/admin/user/userThunk'
 import FeedbackModal from '../UI/feedback/FeedbackModal'
 import { showToast } from '../../utils/helpers/showToast'
-import Loading from '../../pages/Loading'
+import {
+   acceptOrDeleteHouse,
+   acceptOrRejectHouse,
+} from '../../store/slices/admin/assept/asseptInRejectThunk'
+import { ROUTES } from '../../routes/routes'
 
-const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
+const ApplicationInner = ({ houseInfo }) => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
-
    const { role } = useSelector((state) => state.auth)
-
    const { houseId, id } = useParams()
-
    const [openFeedback, setOpenFeedback] = useState(false)
 
    const toggleFeedbackModal = () => setOpenFeedback((prev) => !prev)
 
    const deleteHouse = () => {
       dispatch(deleteHouseAsync({ id: houseInfo.id, showToast, navigate }))
+   }
+
+   const handleAccept = async (houseId) => {
+      try {
+         await dispatch(
+            acceptOrRejectHouse({ houseId, isAccepted: true, rejectInfo: '' })
+         ).unwrap?.()
+         showToast({
+            title: 'Успешно!',
+            message: 'Заявка одобрена',
+            type: 'success',
+         })
+         navigate(ROUTES.ADMIN.APPLICATION)
+      } catch (error) {
+         showToast({
+            title: 'Ошибка',
+            message: error?.message || 'Не удалось одобрить заявку',
+            type: 'error',
+         })
+      }
+   }
+
+   const handleReject = async (houseId, reason) => {
+      try {
+         await dispatch(
+            acceptOrRejectHouse({
+               houseId,
+               isAccepted: false,
+               rejectInfo: reason,
+            })
+         ).unwrap?.()
+         showToast({
+            title: 'Успешно!',
+            message: 'Заявка отклонена',
+            type: 'success',
+         })
+         navigate(ROUTES.ADMIN.APPLICATION)
+      } catch (error) {
+         showToast({
+            title: 'Ошибка',
+            message: error?.message || 'Не удалось отклонить заявку',
+            type: 'error',
+         })
+      }
    }
 
    const blocked = houseInfo?.isBlocked
@@ -41,7 +84,7 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
       )
    }
 
-   if (!houseInfo) return <Loading/>
+   if (!houseInfo) return <div>Loading...</div>
 
    const location = window.location.pathname.split('/')[2]
 
@@ -110,11 +153,24 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
                         ) : (
                            <>
                               <Box className="button-container">
-                                 <Button variant="second" onClick={deleteHouse}>
+                                 <Button
+                                    variant="second"
+                                    onClick={() => {
+                                       const reason =
+                                          'Ваш дом отклонён. Не соответствует требованиям публикации'
+
+                                       if (reason)
+                                          handleReject(houseInfo.id, reason)
+                                    }}
+                                 >
                                     Reject
                                  </Button>
 
-                                 <Button onClick={blockHouse}>Accept</Button>
+                                 <Button
+                                    onClick={() => handleAccept(houseInfo.id)}
+                                 >
+                                    Accept
+                                 </Button>
                               </Box>
                            </>
                         )
@@ -123,26 +179,6 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
                      )}
                   </Box>
                </Box>
-
-               {location === 'users' && (
-                  <Box className="second-container">
-                     <Box className="feedback-container">
-                        <h1 className="title">Feedback</h1>
-                        {feedbacks.length > 0 ? (
-                           feedbacks.map((item) => (
-                              <Feedback key={item.id} {...item} />
-                           ))
-                        ) : (
-                           <h2 className="title">There are no feedbacks yet</h2>
-                        )}
-                     </Box>
-
-                     <Rating
-                        rating={rating?.rating || 0}
-                        toggleFeedbackModal={toggleFeedbackModal}
-                     />
-                  </Box>
-               )}
             </Box>
          </StyledContainer>
 
@@ -155,7 +191,7 @@ const HouseInner = ({ houseInfo, feedbacks = [], rating }) => {
    )
 }
 
-export default HouseInner
+export default ApplicationInner
 
 const StyledContainer = styled(Box)(() => ({
    padding: '0 0 40px 0',
