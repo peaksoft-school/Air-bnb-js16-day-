@@ -94,14 +94,9 @@ const CreateHouseForm = () => {
          return
       }
 
-      const MAX_FILE_SIZE = 3 * 1024 * 1024
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
 
       for (let file of files) {
-         if (file.size > MAX_FILE_SIZE) {
-            setImageError('Размер каждого файла должен быть не более 3MB')
-            return
-         }
          if (!allowedTypes.includes(file.type)) {
             setImageError('Разрешены только файлы JPEG, JPG или PNG')
             return
