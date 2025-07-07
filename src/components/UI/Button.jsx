@@ -46,7 +46,7 @@ const Button = ({
 export default Button
 
 const FirstButton = styled(MuiButtonBase)(({ width }) => ({
-   width: width || '195px',
+   width: width,
    height: '37px',
    borderRadius: '2px',
    cursor: 'pointer',
@@ -69,9 +69,9 @@ const FirstButton = styled(MuiButtonBase)(({ width }) => ({
 }))
 
 const SecondButton = styled(MuiButtonBase)(({ width }) => ({
-   width: width || '195px',
+   width: width,
    height: '35px',
-   border: '1px solid #DD8A08',
+   border: '1px solid grey',
    borderRadius: '2px',
    cursor: 'pointer',
 
@@ -84,8 +84,9 @@ const SecondButton = styled(MuiButtonBase)(({ width }) => ({
    fontFamily: 'Arial',
    fontWeight: '500',
    fontSize: '16px',
-   color: '#DD8A08',
-   '&:hover': { border: '2px solid #DD8A08' },
+   color: '#737272',
+
+   '&:hover': { border: '1.5px solid black' },
    '&:active': { backgroundColor: '#DD8A08', color: '#FFF' },
    '&:disabled': { backgroundColor: '#C4C4C4' },
 }))

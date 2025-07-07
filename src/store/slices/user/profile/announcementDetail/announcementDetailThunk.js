@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../../../configs/axiosInstance'
-// Получить детали дома
 export const fetchHouseById = createAsyncThunk(
    'announcementDetail/fetchHouseById',
    async (id, { rejectWithValue }) => {
@@ -13,7 +12,6 @@ export const fetchHouseById = createAsyncThunk(
    }
 )
 
-// Получить отзывы
 export const fetchFeedbackByHouseId = createAsyncThunk(
    'announcementDetail/fetchFeedbackByHouseId',
    async (houseId, { rejectWithValue }) => {
@@ -28,7 +26,6 @@ export const fetchFeedbackByHouseId = createAsyncThunk(
    }
 )
 
-// Получить избранное
 export const fetchFavoritesByHouseId = createAsyncThunk(
    'announcementDetail/fetchFavoritesByHouseId',
    async (houseId, { rejectWithValue }) => {
@@ -43,7 +40,6 @@ export const fetchFavoritesByHouseId = createAsyncThunk(
    }
 )
 
-// Получить бронирования
 export const fetchBookingsByHouseId = createAsyncThunk(
    'announcementDetail/fetchBookingsByHouseId',
    async (houseId, { rejectWithValue }) => {
@@ -58,7 +54,6 @@ export const fetchBookingsByHouseId = createAsyncThunk(
    }
 )
 
-// Удалить дом
 export const deleteHouseById = createAsyncThunk(
    'announcementDetail/deleteHouseById',
    async (id, { rejectWithValue }) => {
@@ -71,7 +66,6 @@ export const deleteHouseById = createAsyncThunk(
    }
 )
 
-// Обновить дом
 export const updateHouseById = createAsyncThunk(
    'announcementDetail/updateHouseById',
    async (payload, { rejectWithValue }) => {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Box, styled, Typography, PaginationItem } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import { ROUTES } from '../../../routes/routes'
 import Chip from '../../../components/UI/Chip'
 import Select from '../../../components/UI/DropDown'
@@ -11,8 +13,6 @@ import {
    getFavorites,
 } from '../../../store/slices/user/favorite/favoriteThunk'
 import Loading from '../../Loading'
-import { useNavigate } from 'react-router'
-import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const Region = () => {
    const { allHouses, isLoading, search } = useSelector((state) => state.region)
@@ -39,19 +39,8 @@ const Region = () => {
    const totalCount = total || allHouses?.length || 0
 
    useEffect(() => {
-      if (selectedRegion) {
-         console.log('Setting selected region:', selectedRegion)
-         setFilters((prev) => ({ ...prev, region: selectedRegion }))
-
-         const regionChip = {
-            type: 'region',
-            label: selectedRegion,
-            displayLabel:
-               selectedRegion.charAt(0).toUpperCase() + selectedRegion.slice(1),
-         }
-         setChips([regionChip])
-      }
-   }, [selectedRegion])
+      dispatch(REGION_THUNK.getHouses({ page: 1, size: 16 }))
+   }, [dispatch])
 
    useEffect(() => {
       const hasFilters = Object.values(filters).some((v) => v) || search
@@ -68,6 +57,13 @@ const Region = () => {
       }, 100)
 
       return () => clearTimeout(timeoutId)
+      if (hasFilters) {
+         dispatch(
+            REGION_THUNK.getHouses({ ...filters, search, page, size: pageSize })
+         )
+      } else {
+         dispatch(REGION_THUNK.getHouses({ page, size: pageSize }))
+      }
    }, [filters, search, page, dispatch])
 
    const handleFilterChange = (type, value) => {
@@ -77,7 +73,6 @@ const Region = () => {
             label: value,
             displayLabel: value.charAt(0).toUpperCase() + value.slice(1),
          }
-
          setChips((prev) => [
             ...prev.filter((chip) => chip.type !== type),
             newChip,
@@ -85,33 +80,22 @@ const Region = () => {
       } else {
          setChips((prev) => prev.filter((chip) => chip.type !== type))
       }
-
       setFilters((prev) => ({ ...prev, [type]: value }))
    }
 
    const handleChipDelete = (chipToDelete) => {
       setChips((prev) => prev.filter((chip) => chip.type !== chipToDelete.type))
-
       setFilters((prev) => ({ ...prev, [chipToDelete.type]: '' }))
-
-      if (chipToDelete.type === 'region') {
-         dispatch(REGION_ACTIONS.setSelectedRegion(''))
-         localStorage.removeItem('selectedRegion')
-      }
    }
 
    const handleClearAll = () => {
       setChips([])
-
       setFilters({
          region: '',
          popularity: '',
          houseType: '',
          priceSort: '',
       })
-
-      dispatch(REGION_ACTIONS.setSelectedRegion(''))
-      localStorage.removeItem('selectedRegion')
    }
 
    const handlePrevPage = () => {
@@ -141,47 +125,49 @@ const Region = () => {
       { value: 'BATKEN', label: 'Batken' },
       { value: 'JALALABAT', label: 'Jalal-Abad' },
       { value: 'YSYKKOL', label: 'Issyk-Kul' },
-      { value: 'TALAS', label: 'Talas' },
+      { value: 'talas', label: 'Talas' },
       { value: 'CHUY', label: 'Chui' },
-      { value: 'OSH', label: 'Osh' },
+      { value: 'Osh', label: 'Osh' },
    ]
 
    const optionPopularity = [
+      { value: 'all', label: 'All' },
       { value: 'popular', label: 'Popular' },
-      { value: 'the_lastest', label: 'The latest' },
+      { value: 'latest', label: 'The latest' },
    ]
 
    const optionHouseType = [
-      { value: 'APARTMENT', label: 'Apartment' },
-      { value: 'HOUSE', label: 'House' },
+      { value: 'all', label: 'All' },
+      { value: 'apartment', label: 'Apartment' },
+      { value: 'house', label: 'House' },
    ]
 
-   const oprionPrice = [
-      { value: 'low_to_high', label: 'Low to high' },
-      { value: 'high_to_low', label: 'High to low' },
+   const optionPrice = [
+      { value: 'all', label: 'All' },
+      { value: 'low', label: 'Low to high' },
+      { value: 'high', label: 'High to low' },
    ]
 
    return (
       <StyledContainer>
          <BreadCrumbs links={links} />
 
-         {search ? (
+         {search && (
             <SearchTitle>
                Search for:{' '}
                <Typography variant="span">"{search.toUpperCase()}"</Typography>
                {total > 0 && <Typography variant="span"> ({total})</Typography>}
             </SearchTitle>
-         ) : null}
+         )}
 
          {isNothingFound ? (
             <NothingFoundWrapper>
                <NothingFoundTitle>Results for "{search}"</NothingFoundTitle>
-
                <NothingFoundText>
                   It appears that no listings have yet been created for
                   <Typography variant="span">"{search}"</Typography>
                   <br />
-                  Be the first person to create a
+                  Be the first person to create a{' '}
                   <a href="#">listing in this area!</a>
                </NothingFoundText>
             </NothingFoundWrapper>
@@ -204,25 +190,22 @@ const Region = () => {
                         options={optionRegion}
                         label="Region"
                      />
-
                      <Select
                         value={filters.popularity}
                         onChange={(e) => handleFilterChange('popularity', e)}
                         options={optionPopularity}
                         label="Sort by"
                      />
-
                      <Select
                         value={filters.houseType}
                         onChange={(e) => handleFilterChange('houseType', e)}
                         options={optionHouseType}
                         label="Filter by home type"
                      />
-
                      <Select
                         value={filters.priceSort}
                         onChange={(e) => handleFilterChange('priceSort', e)}
-                        options={oprionPrice}
+                        options={optionPrice}
                         label="Filter by price"
                      />
                   </FilterContainer>

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { Avatar, Box, styled, Typography } from '@mui/material'
 
 import Feedback from '../../../../components/UI/Feedback'
@@ -6,12 +7,34 @@ import HouseImageSlider from '../../../../components/house/HouseImageSlider'
 import Rating from '../../../../components/UI/rating/Rating'
 import FeedbackModal from '../../../../components/UI/feedback/FeedbackModal'
 import Loading from '../../../Loading'
+import Payment from '../../payment/Payment'
+
+import { deleteFeedback } from '../../../../store/slices/admin/user/userThunk'
 
 const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
+   const dispatch = useDispatch()
    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
+   const [localFeedbacks, setLocalFeedbacks] = useState(feedbacks)
+
+   useEffect(() => {
+      setLocalFeedbacks(feedbacks)
+   }, [feedbacks])
 
    const toggleFeedbackModal = () => {
       setIsFeedbackOpen((prev) => !prev)
+   }
+
+   const handleDeleteFeedback = async (feedbackId) => {
+      try {
+         await dispatch(deleteFeedback(feedbackId)).unwrap()
+         setLocalFeedbacks((prev) => prev.filter((f) => f.id !== feedbackId))
+      } catch (error) {
+         console.error('Failed to delete feedback:', error)
+      }
+   }
+
+   const handleAddFeedback = (newFeedback) => {
+      setLocalFeedbacks((prev) => [newFeedback, ...prev])
    }
 
    if (!houseInfo) return <Loading />
@@ -48,31 +71,48 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
                      </Box>
                   </Box>
 
-                  <h1>Payment component will be here</h1>
+                  <Payment
+                     houseId={houseInfo.id}
+                     key={houseInfo.id}
+                     pricePerDay={houseInfo.price}
+                     userId={houseInfo.userId}
+                  />
                </Box>
             </Box>
 
             <Box className="second-container">
                <Box className="feedback-container">
                   <h1 className="title">Feedback</h1>
-                  {feedbacks.length > 0 ? (
-                     feedbacks.map((item) => (
-                        <Feedback key={item.id} {...item} />
+                  {localFeedbacks.length > 0 ? (
+                     localFeedbacks.map((feedback) => (
+                        <Feedback
+                           key={feedback.id}
+                           text={feedback.text}
+                           rating={feedback.rating}
+                           images={feedback.images}
+                           likeCount={feedback.likeCount}
+                           dislikeCount={feedback.dislikeCount}
+                           userFeedbackResponse={feedback.userFeedbackResponse}
+                           createdAt={feedback.createdAt}
+                           id={feedback.id}
+                           onDelete={handleDeleteFeedback}
+                        />
                      ))
                   ) : (
                      <h2 className="title">There are no feedbacks yet</h2>
                   )}
                </Box>
                <Rating
-                  rating={rating || 0}
+                  rating={rating}
                   toggleFeedbackModal={toggleFeedbackModal}
                />
 
                <FeedbackModal
-                  width="500px"
+                  width={'720px'}
                   open={isFeedbackOpen}
                   onClose={() => setIsFeedbackOpen(false)}
                   houseId={houseInfo.id}
+                  onAddFeedback={handleAddFeedback}
                />
             </Box>
          </Box>
@@ -130,18 +170,6 @@ const StyledContainer = styled(Box)(() => ({
             color: '#828282',
             fontSize: 14,
          },
-      },
-      '& .button-container': {
-         display: 'flex',
-         gap: '20px',
-         margin: '0 0 20px 0',
-         '.MuiButtonBase-root': {
-            width: '200px',
-         },
-      },
-      '& .blocked-text': {
-         textAlign: 'center',
-         color: '#f00',
       },
    },
    '& .second-container': {

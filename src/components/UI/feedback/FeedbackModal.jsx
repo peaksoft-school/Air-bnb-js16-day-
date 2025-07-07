@@ -11,12 +11,11 @@ import {
 import { postImageFile } from '../../../store/slices/user/addHouse/addHouseThunk'
 import Input from '../Input'
 import Button from '../Button'
-import { axiosInstance } from '../../../configs/axiosInstance'
-import { getAnnouncementById } from '../../../store/slices/user/house/houseThunk'
-import { getAnnouncementFeedback } from '../../../store/slices/admin/user/userThunk'
+import { saveFeedback } from '../../../store/slices/admin/user/userThunk'
 
 const FeedbackModal = ({ open, onClose, houseId }) => {
    const images = useSelector((state) => state.addHouseSlice.images)
+   const feedbackStatus = useSelector((state) => state.userInfo.feedbackStatus)
    const dispatch = useDispatch()
    const imageRef = useRef(null)
    const [rating, setRating] = useState(0)
@@ -38,22 +37,20 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
       }
 
       try {
-         setIsLoading(true)
-         await axiosInstance.post(`/api/feedback/save/${houseId}`, {
-            images,
-            rating,
-            feedback,
-         })
-         onClose()
-         setFeedback('')
-         setRating(0)
-         dispatch(getAnnouncementById(houseId))
-         dispatch(getAnnouncementFeedback(houseId))
-         dispatch(clearImage())
+         const resultAction = await dispatch(
+            saveFeedback({ houseId, feedback, rating, images })
+         )
+
+         if (saveFeedback.fulfilled.match(resultAction)) {
+            dispatch(clearImage())
+            setFeedback('')
+            setRating(0)
+            onClose()
+
+            window.location.reload()
+         }
       } catch (error) {
-         console.error('Error posting feedback:', error)
-      } finally {
-         setIsLoading(false)
+         console.error('Error saving feedback:', error)
       }
    }
 
@@ -63,27 +60,27 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
             <Typography variant="h4" className="title">
                Leave feedback
             </Typography>
+
             <Box className="container">
                <Box className="images-box">
                   {images.map((image, index) => (
-                     <Box key={image} className="image-container">
+                     <Box key={index} className="image-container">
                         <img
                            src={image}
-                           alt="uploaded"
+                           alt={`img-${index}`}
                            className="added-image"
                         />
                         <img
                            src={CloseIcon}
                            className="delete-icon"
                            onClick={() => handleDeleteImage(index)}
-                           alt="remove"
+                           alt="delete"
                         />
                      </Box>
                   ))}
-
                   {images.length < 4 && (
                      <Box onClick={handleClick} className="add-photo">
-                        <img src={CameraIcon} alt="camera" />
+                        <img src={CameraIcon} alt="Add" />
                         <input
                            ref={imageRef}
                            id="photo"
@@ -93,20 +90,9 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
                         />
                      </Box>
                   )}
-
-                  {images.length < 1 && (
-                     <Box className="images-description">
-                        <label htmlFor="photo" className="add-photos-text">
-                           Add photos to the review
-                        </label>
-                        <Typography className="add-photos-description">
-                           It will become more noticeable and even more useful.
-                           You can upload up to 4 photos.
-                        </Typography>
-                     </Box>
-                  )}
                </Box>
             </Box>
+
             <Box className="rating">
                <Typography variant="h6">Rate</Typography>
                <Rating
@@ -128,19 +114,19 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
             <Box className="btn-container">
                <Button
                   className="cancel"
+                  width={'194px'}
                   variant="second"
                   onClick={onClose}
-                  width="200px"
                >
                   Cancel
                </Button>
                <Button
                   className="public"
+                  width={'194px'}
                   onClick={postFeedback}
-                  disabled={isLoading}
-                  width="200px"
+                  disabled={feedbackStatus === 'loading'}
                >
-                  {isLoading ? 'Publishing...' : 'Public'}
+                  {feedbackStatus === 'loading' ? 'Sending...' : 'Public'}
                </Button>
             </Box>
          </StyledContainer>
@@ -154,45 +140,37 @@ const StyledContainer = styled(Box)(({ theme }) => ({
    '& .title': {
       textAlign: 'center',
    },
-
    '& .container': {
       marginBottom: '1.75rem',
    },
-
    '& .image-container': {
       width: '8.438rem',
       height: '8.438rem',
       position: 'relative',
-
       '& .delete-icon': {
          position: 'absolute',
          top: '0.2rem',
          right: '0.2rem',
          width: '1.5rem',
          height: '1.5rem',
-         cursor: 'pointer',
-         display: 'none',
       },
-
       '&:hover .delete-icon': {
          display: 'block',
       },
    },
-
    '& .images-box': {
       display: 'flex',
       marginTop: '0.875rem',
       height: '8.438rem',
       alignItems: 'center',
       gap: '1rem',
-
+      position: 'relative',
       '& .added-image': {
          width: '8.438rem',
          height: '8.438rem',
          objectFit: 'cover',
-         borderRadius: '4px',
+         borderRadius: '0.5rem',
       },
-
       '& .add-photo': {
          width: '8.438rem',
          height: '8.438rem',
@@ -201,50 +179,27 @@ const StyledContainer = styled(Box)(({ theme }) => ({
          display: 'flex',
          justifyContent: 'center',
          alignItems: 'center',
-         borderRadius: '4px',
-
+         borderRadius: '0.5rem',
          '& #photo': {
             display: 'none',
          },
       },
-
       '& .add-photo:hover': {
          border: `1px solid ${theme.palette.tertiary.lightGray}`,
       },
-
-      '& .images-description': {
-         width: '23rem',
-
-         '& .add-photos-text': {
-            fontFamily: 'Inter',
-            fontSize: '1rem',
-            fontWeight: '500',
-            lineHeight: '1.188rem',
-            color: theme.palette.tertiary.blue,
-            cursor: 'pointer',
-         },
-
-         '& .add-photos-description': {
-            fontSize: '0.875rem',
-            color: theme.palette.tertiary.middleGray,
-            marginTop: '0.5rem',
-         },
-      },
    },
-
    '& .rating': {
       margin: '0 0 20px 0',
       color: '#363636',
    },
-
    '& .input': {
       margin: '0 0 20px 0',
       color: '#363636',
    },
-
    '& .btn-container': {
       display: 'flex',
       justifyContent: 'flex-end',
-      gap: '20px',
+      gap: '1rem',
+      alignItems: 'center',
    },
 }))

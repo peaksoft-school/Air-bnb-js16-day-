@@ -7,37 +7,31 @@ const Rating = ({ toggleFeedbackModal }) => {
    const { role } = useSelector((state) => state.auth)
    const rating = useSelector((state) => state.userInfo.rating) || {}
 
-   const total = rating.total_feedback || 1
+   const counts = rating.ratingCount || {}
+   const total = Object.values(counts).reduce((acc, num) => acc + num, 0)
 
-   const RATINGS = [
-      { label: 5, count: rating.rating_5_count || 0 },
-      { label: 4, count: rating.rating_4_count || 0 },
-      { label: 3, count: rating.rating_3_count || 0 },
-      { label: 2, count: rating.rating_2_count || 0 },
-      { label: 1, count: rating.rating_1_count || 0 },
-   ].map(({ label, count }) => ({
-      label,
-      count,
-      progress: Math.round((count / total) * 100),
-   }))
+   const RATINGS = [5, 4, 3, 2, 1].map((label) => {
+      const count = counts[label] || 0
+      const percent = total ? Math.round((count / total) * 100) : 0
+      return { label, percent }
+   })
 
    return (
       <StyledContainer>
          <RatingChart>
             <RatingCont>
-               <p>{rating.total_feedback || 0}</p>
+               <p>{total}</p>
                <img src={FullStarIcon} alt="fullStarIcon" />
             </RatingCont>
+
             <RatingChartBarContainer>
-               {RATINGS.map(({ label, progress, count }) => (
+               {RATINGS.map(({ label, percent }) => (
                   <RatingChartBar key={label}>
                      <RatingLabel>{label}</RatingLabel>
                      <RatingProgressCont>
-                        <RatingProgress progress={progress} />
+                        <RatingProgress progress={percent} />
                      </RatingProgressCont>
-                     <RatingLabel>
-                        {progress}% ({count})
-                     </RatingLabel>
+                     <RatingLabel>{percent}%</RatingLabel>
                   </RatingChartBar>
                ))}
             </RatingChartBarContainer>
@@ -69,6 +63,7 @@ const RatingChart = styled(Box)(() => ({
    borderRadius: '16px',
    padding: '21px 40px',
    width: '424px',
+   width: '424px',
    marginBottom: '20px',
 }))
 
@@ -80,6 +75,7 @@ const RatingCont = styled(Box)(() => ({
 
    '& p': {
       fontSize: '24px',
+      margin: 0,
    },
 
    '& img': {
@@ -100,29 +96,27 @@ const RatingChartBar = styled(Box)(() => ({
    alignItems: 'center',
    justifyContent: 'space-between',
    gap: '14px',
+   marginBottom: '8px',
 }))
 
 const RatingLabel = styled(Typography)(() => ({
-   minWidth: '60px',
-   textAlign: 'right',
-   fontSize: '14px',
+   width: '10px',
+   userSelect: 'none',
 }))
 
 const RatingProgressCont = styled(Box)(() => ({
-   width: '20vw',
+   flexGrow: 1,
    backgroundColor: '#d4cdd3',
    overflow: 'hidden',
    display: 'flex',
    flexDirection: 'column',
-   height: '3px',
+   height: '6px',
+   borderRadius: '3px',
 }))
 
 const RatingProgress = styled(Box)(({ progress }) => ({
    width: `${progress}%`,
-   display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
-   transition: '0.4s ease-out',
-   height: '10px',
+   transition: 'width 0.4s ease-out',
+   height: '100%',
    backgroundColor: '#4F7755',
 }))

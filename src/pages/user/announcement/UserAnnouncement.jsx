@@ -7,17 +7,17 @@ import {
    getHouseById,
    getAnnouncementFeedback,
 } from '../../../store/slices/admin/user/userThunk'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import InnerPage from './inner/InnerPage'
 import Loading from '../../Loading'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 
 const UserAnnouncement = () => {
    const dispatch = useDispatch()
    const { id } = useParams()
 
-   const announcement = useSelector((state) => state.userInfo?.announcement)
-   const feedbacks = useSelector((state) => state.userInfo?.feedbacks)
-   const rating = useSelector((state) => state.userInfo?.rating)
+   const announcement = useSelector((state) => state.userInfo.announcement)
+   const feedbacks = useSelector((state) => state.userInfo.feedbacks)
+   const rating = useSelector((state) => state.userInfo.rating)
 
    useEffect(() => {
       if (id) {

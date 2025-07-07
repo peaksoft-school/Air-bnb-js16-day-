@@ -34,7 +34,7 @@ const getHouses = createAsyncThunk(
             },
          })
 
-         return data
+         return data  
       } catch (error) {
          return rejectWithValue(error.message)
       }

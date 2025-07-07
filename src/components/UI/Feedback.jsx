@@ -9,15 +9,18 @@ import {
 import LikeIcon from '../../assets/icons/LikeIcon.svg'
 import DisLike from '../../assets/icons/DisLike.svg'
 import IconButton from '../UI/IconButton'
+import Meatballs from './Meatballs'
 
 const Feedback = ({
    text,
    rating,
-   images,
+   images = [],
    likeCount = 0,
    dislikeCount = 0,
    userFeedbackResponse,
    createdAt,
+   id,
+   onDelete,
 }) => {
    const [showFullText, setShowFullText] = useState(false)
    const [likes, setLikes] = useState(likeCount)
@@ -79,6 +82,15 @@ const Feedback = ({
                <Typography component="span" sx={{ ml: 0.5 }}>
                   ({rating})
                </Typography>
+               {onDelete && (
+                  <Meatballs
+                     options={[{ label: 'Удалить', value: 'delete' }]}
+                     onSelect={(option) => {
+                        if (option.value === 'delete') onDelete(id)
+                     }}
+                     color
+                  />
+               )}
             </Box>
          </Box>
 
@@ -107,11 +119,27 @@ const Feedback = ({
             </Typography>
             <Box className="action-cont">
                <IconButton className="like" onClick={handleLike}>
-                  <img src={LikeIcon} alt="like" width={20} />
+                  <img
+                     src={LikeIcon}
+                     alt="like"
+                     width={20}
+                     style={{
+                        filter: liked ? 'brightness(0) saturate(100%)' : 'none',
+                     }}
+                  />
                   {likes}
                </IconButton>
                <IconButton className="like" onClick={handleDislike}>
-                  <img src={DisLike} alt="dislike" width={20} />
+                  <img
+                     src={DisLike}
+                     alt="dislike"
+                     width={20}
+                     style={{
+                        filter: disliked
+                           ? 'brightness(0) saturate(100%)'
+                           : 'none',
+                     }}
+                  />
                   {dislikes}
                </IconButton>
             </Box>

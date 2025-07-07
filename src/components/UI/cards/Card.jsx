@@ -30,7 +30,7 @@ const Card = ({
    guests,
    onClick,
    onLike,
-   Favorite,
+   isFavorite,
 }) => {
    const [hovered, setHovered] = useState(false)
 
@@ -125,7 +125,6 @@ const Card = ({
 
             <Box className="location-text">
                <LocationOnIcon fontSize="small" color="action" />
-
                <Typography color="text.secondary">{location}</Typography>
             </Box>
          </CardContent>
@@ -141,7 +140,7 @@ const Card = ({
                <Button width={100}>BOOK</Button>
 
                <IconButton aria-label="like" onClick={handleLike}>
-                  {Favorite ? (
+                  {isFavorite ? (
                      <FavoriteIcon color="warning" />
                   ) : (
                      <FavoriteBorderIcon color="warning" />
@@ -174,7 +173,6 @@ const StyledMuiCard = styled(MuiCard)(() => ({
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-
       '& .day-word': {
          color: 'gray',
       },
