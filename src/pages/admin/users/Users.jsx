@@ -39,7 +39,13 @@ const Users = () => {
    }
 
    const handleNavigate = (id) => {
-      dispatch(USERS_THUNKS.getUserProfile({ choice: 'booking', id, navigate }))
+      dispatch(USERS_THUNKS.getUserProfile({ choice: 'booking', id }))
+         .then(() => {
+            navigate(`/admin/users/${id}`)
+         })
+         .catch((error) => {
+            console.error('Error fetching user profile:', error)
+         })
    }
 
    return (

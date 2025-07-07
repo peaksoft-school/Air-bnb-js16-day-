@@ -16,13 +16,13 @@ import AdminCard from '../../../pages/admin/AdminCard'
 import BreadCrumbs from '../../UI/Breadcrumbs'
 import { USERS_THUNKS } from '../../../store/slices/admin/users/usersThunk'
 import { ADMIN_CARD_OPTIONS } from '../../../utils/helpers'
+import Loading from '../../../pages/Loading'
 
 const UserDetail = () => {
    const { userProfile, loading, error } = useSelector((state) => state.users)
 
-   console.log(userProfile.houses)
-
    const [activeTab, setActiveTab] = useState('booking')
+   const [isBlocked, setIsBlocked] = useState(false)
 
    const { id } = useParams()
 
@@ -30,26 +30,72 @@ const UserDetail = () => {
    const navigate = useNavigate()
 
    const user = userProfile?.user
+   const houses = userProfile?.houses || []
+
+   useEffect(() => {
+      if (user?.isBlocked !== undefined) {
+         setIsBlocked(user.isBlocked)
+      }
+   }, [user?.isBlocked])
 
    useEffect(() => {
       dispatch(USERS_THUNKS.getUserProfile({ choice: activeTab, id }))
    }, [dispatch, activeTab, id])
 
-   const handleBlockAll = (id) => {
-      dispatch(blockAllAnnoucement(id))
+   const handleBlockAll = async (id) => {
+      try {
+         await dispatch(USERS_THUNKS.blockAllAnnoucement(id)).unwrap()
+         setIsBlocked(!isBlocked)
+      } catch (error) {
+         console.error('Error blocking user:', error)
+      }
    }
 
    const links = [
       { href: '/admin/users', label: 'Users' },
-      { href: `/users/${id}`, label: ` ${user.fullName}` },
+      { href: `/users/${id}`, label: user?.fullName || 'User' },
    ]
 
    const handleDeleteHouse = (houseId) => {
-      dispatch(deleteHouse(houseId))
+      dispatch(USERS_THUNKS.deleteHouse(houseId))
    }
 
    const handleNavigate = (houseId) => {
-      navigate(`/admin/users/${id}/announcement/${houseId}`)
+      navigate(`/admin/users/${houseId}/announcement/${houseId}`)
+   }
+
+   if (loading) {
+      return (
+         <>
+            <Loading />
+         </>
+      )
+   }
+
+   if (error) {
+      return (
+         <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="400px"
+         >
+            <Alert severity="error">{error}</Alert>
+         </Box>
+      )
+   }
+
+   if (!userProfile) {
+      return (
+         <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="400px"
+         >
+            <Alert severity="info">No user data available</Alert>
+         </Box>
+      )
    }
 
    return (
@@ -58,7 +104,7 @@ const UserDetail = () => {
             <BreadCrumbs links={links} />
 
             <Typography variant="h4" gutterBottom>
-               {user?.fullName}
+               {user?.fullName || 'User'}
             </Typography>
 
             <ContactBox>
@@ -94,13 +140,15 @@ const UserDetail = () => {
                   </Box>
                )}
             </ContactBox>
-            <Button
-               onClick={() => handleBlockAll(user?.id)}
-               disabled={user}
-               className="block-button"
-            >
-               {user ? 'Blocked' : 'Block All Announcements'}
-            </Button>
+            {activeTab === 'announcement' && (
+               <Button
+                  onClick={() => handleBlockAll(user?.id)}
+                  disabled={!user?.id}
+                  className="block-button"
+               >
+                  {isBlocked ? 'Blocked' : 'Block All Announcements'}
+               </Button>
+            )}
          </Box>
 
          <HousesBox>
@@ -117,36 +165,22 @@ const UserDetail = () => {
                <Tab label="Announcements" value="announcement" />
             </Tabs>
 
-            {loading ? (
-               <CircularProgress />
-            ) : userProfile?.houses?.length === 0 ? (
-               <Alert severity="info">Ничего нет !</Alert>
-            ) : activeTab === 'booking' ? (
+            {houses.length === 0 ? (
+               <Alert severity="info">Ничего нет!</Alert>
+            ) : (
                <Box className="cards-container">
-                  {userProfile?.houses?.map((house, i) => (
+                  {houses.map((house, i) => (
                      <AdminCard
-                        key={i}
+                        key={house.id || i}
                         house={house}
                         options={ADMIN_CARD_OPTIONS}
                         onDelete={(houseId) => handleDeleteHouse(houseId)}
-                        onNavigate={() => handleNavigate(house.houseId)}
+                        onNavigate={() =>
+                           handleNavigate(house.houseId || house.id)
+                        }
                      />
                   ))}
                </Box>
-            ) : (
-               <>
-                  <Box className="cards-container">
-                     {userProfile?.houses.map((house, i) => (
-                        <AdminCard
-                           key={i}
-                           house={house}
-                           options={ADMIN_CARD_OPTIONS}
-                           onDelete={(houseId) => handleDeleteHouse(houseId)}
-                           onNavigate={() => handleNavigate(house.houseId)}
-                        />
-                     ))}
-                  </Box>
-               </>
             )}
          </HousesBox>
       </UsersBox>
@@ -164,6 +198,37 @@ const UsersBox = styled(Box)(() => ({
       display: 'flex',
       gap: '22px',
       flexDirection: 'column',
+   },
+
+   '& .block-button': {
+      position: 'absolute',
+      left: '137px',
+      top: '600px',
+      width: '292px',
+      height: '37px',
+      borderRadius: '2px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '10px',
+      textTransform: 'uppercase',
+      fontFamily: 'Arial',
+      fontWeight: '500',
+      fontSize: '14px',
+      color: '#F7F7F7',
+      backgroundColor: '#DD8A08',
+
+      '&:hover': {
+         backgroundColor: '#BB7200',
+      },
+
+      '&:active': {
+         backgroundColor: '#F2B75B',
+      },
+
+      '&:disabled': {
+         backgroundColor: '#C4C4C4',
+      },
    },
 }))
 
@@ -229,37 +294,6 @@ const HousesBox = styled(Box)(() => ({
 
       '& .MuiTabs-indicator': {
          backgroundColor: '#000',
-      },
-   },
-
-   '& .block-button': {
-      position: 'absolute',
-      left: '137px',
-      top: '670px',
-      width: '292px',
-      height: '37px',
-      borderRadius: '2px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '10px',
-      textTransform: 'uppercase',
-      fontFamily: 'Arial',
-      fontWeight: '500',
-      fontSize: '14px',
-      color: '#F7F7F7',
-      backgroundColor: '#DD8A08',
-
-      '&:hover': {
-         backgroundColor: '#BB7200',
-      },
-
-      '&:active': {
-         backgroundColor: '#F2B75B',
-      },
-
-      '&:disabled': {
-         backgroundColor: '#C4C4C4',
       },
    },
 

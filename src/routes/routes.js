@@ -32,6 +32,10 @@ export const ROUTES = {
       FAVORITE: '/user/favorites',
       ANNOUNCEMENT_DETAIL: '/user/announcement/:id',
    },
+
+   ANNOUNCEMENT: {
+      DETAIL: '/announcement/:id',
+   },
 }
 
 export const ROLES = {

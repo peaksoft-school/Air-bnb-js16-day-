@@ -11,7 +11,6 @@ import {
    Alert,
    Button,
 } from '@mui/material'
-import Card from '../../../components/UI/cards/UserCard'
 import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 import DropDown from '../../../components/UI/DropDown'
 import Chip from '../../../components/UI/Chip'
@@ -99,6 +98,11 @@ const Profile = () => {
       { href: '/user', label: 'Main' },
       { href: '/user/profile', label: 'Profile' },
    ]
+
+   const handleClick = (id) => {
+      if (!id) return
+      navigate(`/user/profile/announcement/${id}`)
+   }
 
    return (
       <ProfileWrapper>
@@ -211,9 +215,15 @@ const Profile = () => {
                      {filteredHouses.length === 0 ? (
                         <Box className="empty-message">No houses found</Box>
                      ) : (
-                        filteredHouses.map((house) => (
-                           <AdminCard key={house.id || house.title} house={house} />
-                        ))
+                        filteredHouses
+                           .filter((house) => !!house.houseId)
+                           .map((house) => (
+                              <AdminCard
+                                 key={house.houseId}
+                                 house={house}
+                                 onNavigate={() => handleClick(house.houseId)}
+                              />
+                           ))
                      )}
                   </Box>
                )}

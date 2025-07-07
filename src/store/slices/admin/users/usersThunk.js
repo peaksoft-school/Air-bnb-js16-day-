@@ -18,13 +18,13 @@ const getAllUsers = createAsyncThunk(
 const getUserProfile = createAsyncThunk(
    'user/getUserProfile',
 
-   async ({ choice, id, navigate }, { rejectWithValue }) => {
+   async ({ choice, id }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get(
-            `/api/user/profile/${id}?choice=${choice}`
-         )
-
-         navigate(`/admin/users/${id}`)
+         const response = await axiosInstance.get(`/api/user/profile/${id}`, {
+            params: {
+               choice,
+            },
+         })
 
          return { data: response.data, choice }
       } catch (err) {
@@ -69,7 +69,7 @@ const blockAllAnnoucement = createAsyncThunk(
 
          return userId
       } catch (error) {
-         return rejectWithValue(err.response?.data || error.message)
+         return rejectWithValue(error.response?.data || error.message)
       }
    }
 )

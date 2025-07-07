@@ -11,6 +11,7 @@ import createHouseReducer from '../store/slices/user/createHouseSlice'
 import { LandingSlice } from './slices/user/Landing/landingSlice'
 import { regionSlice } from './slices/user/region/regionSlice'
 import { profileSlice } from './slices/user/profile/profileSlice'
+import announcementDetailReducer from './slices/user/profile/announcementDetail/announcementDetailSlice'
 import houseApplicationsReducer from './slices/admin/houseApplicationsSlice'
 import { usersSlice } from './slices/admin/users/usersSlice'
 import { authSlice } from './slices/auth/authSlice'
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
    landing: LandingSlice.reducer,
    [profileSlice.name]: profileSlice.reducer,
    [regionSlice.name]: regionSlice.reducer,
+   announcementDetail: announcementDetailReducer,
    houseApplications: houseApplicationsReducer,
    [usersSlice.name]: usersSlice.reducer,
    [favoriteSlice.name]: favoriteSlice.reducer,

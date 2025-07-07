@@ -22,9 +22,11 @@ const UserAnnouncement = lazy(
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
 import { ROLES, ROUTES } from './routes'
+import AnnouncementDetailPage from '../pages/user/announcement/AnnouncementDetailPage'
 
 import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
 import Application from '../pages/admin/user-page/Application'
+import AppicationHouse from '../pages/admin/user-page/AppicationHouse'
 
 const AppRoutes = () => (
    <Routes>
@@ -103,6 +105,14 @@ const AppRoutes = () => (
                </Suspense>
             }
          />
+         <Route
+            path="/user/profile/announcement/:id"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AnnouncementDetailPage />
+               </Suspense>
+            }
+         />
       </Route>
 
       <Route
@@ -134,7 +144,7 @@ const AppRoutes = () => (
             path={ROUTES.ADMIN.APPLICATION_BY_ID}
             element={
                <Suspense fallback={<Loading />}>
-                  <AnnouncementHouse />
+                  <AppicationHouse />
                </Suspense>
             }
          />

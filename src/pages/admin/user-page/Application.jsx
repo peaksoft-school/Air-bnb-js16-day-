@@ -75,6 +75,8 @@ export default function Application() {
       navigate(`/admin/application/${id}`)
    }
 
+   console.log(1)
+
    return (
       <>
          <Box
