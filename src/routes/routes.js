@@ -27,7 +27,10 @@ export const ROUTES = {
       CART: '/user/cart',
       CHECKOUT: '/user/checkout',
       PAYMENT: '/user/payment',
+      CREATE_HOUSE: '/user/create-house',
       REGION_PAGE: '/user/region',
+      FAVORITE: '/user/favorites',
+      ANNOUNCEMENT_DETAIL: '/user/announcement/:id',
    },
 
    ANNOUNCEMENT: {

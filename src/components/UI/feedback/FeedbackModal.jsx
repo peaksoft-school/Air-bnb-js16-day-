@@ -13,6 +13,7 @@ import Input from '../Input'
 import Button from '../Button'
 import { axiosInstance } from '../../../configs/axiosInstance'
 import { getAnnouncementById } from '../../../store/slices/user/house/houseThunk'
+import { getAnnouncementFeedback } from '../../../store/slices/admin/user/userThunk'
 
 const FeedbackModal = ({ open, onClose, houseId }) => {
    const images = useSelector((state) => state.addHouseSlice.images)
@@ -20,6 +21,7 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
    const imageRef = useRef(null)
    const [rating, setRating] = useState(0)
    const [feedback, setFeedback] = useState('')
+   const [isLoading, setIsLoading] = useState(false)
 
    const handleDeleteImage = (index) => dispatch(deleteImage(index))
    const handleClick = () => imageRef.current.click()
@@ -30,23 +32,33 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
    }
 
    const postFeedback = async () => {
+      if (!rating || !feedback.trim()) {
+         alert('Please provide both a rating and feedback.')
+         return
+      }
+
       try {
-         await axiosInstance.post(`/api/feedbacks?houseId=${houseId}`, {
+         setIsLoading(true)
+         await axiosInstance.post(`/api/feedback/save/${houseId}`, {
             images,
             rating,
             feedback,
          })
          onClose()
          setFeedback('')
+         setRating(0)
          dispatch(getAnnouncementById(houseId))
+         dispatch(getAnnouncementFeedback(houseId))
          dispatch(clearImage())
       } catch (error) {
-         console.error(error)
+         console.error('Error posting feedback:', error)
+      } finally {
+         setIsLoading(false)
       }
    }
 
    return (
-      <Modal open={open} onClose={onClose}>
+      <Modal open={open} onClose={onClose} width="720px">
          <StyledContainer>
             <Typography variant="h4" className="title">
                Leave feedback
@@ -55,18 +67,23 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
                <Box className="images-box">
                   {images.map((image, index) => (
                      <Box key={image} className="image-container">
-                        <img src={image} alt="images" className="added-image" />
+                        <img
+                           src={image}
+                           alt="uploaded"
+                           className="added-image"
+                        />
                         <img
                            src={CloseIcon}
                            className="delete-icon"
                            onClick={() => handleDeleteImage(index)}
+                           alt="remove"
                         />
                      </Box>
                   ))}
 
                   {images.length < 4 && (
                      <Box onClick={handleClick} className="add-photo">
-                        <img src={CameraIcon} alt="cameraIcon" />
+                        <img src={CameraIcon} alt="camera" />
                         <input
                            ref={imageRef}
                            id="photo"
@@ -95,18 +112,13 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
                <Rating
                   size="large"
                   value={rating}
-                  onChange={(event, newValue) => {
-                     setRating(newValue)
-                  }}
+                  onChange={(event, newValue) => setRating(newValue)}
                />
             </Box>
 
             <Box className="input">
                <Typography variant="h6">Feedback</Typography>
                <Input
-                  multiline
-                  minRows={3}
-                  maxRows={6}
                   placeholder="Share your impressions about this place"
                   onChange={(e) => setFeedback(e.target.value)}
                   value={feedback}
@@ -114,11 +126,21 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
             </Box>
 
             <Box className="btn-container">
-               <Button className="cancel" variant="cancel" onClick={onClose}>
+               <Button
+                  className="cancel"
+                  variant="second"
+                  onClick={onClose}
+                  width="200px"
+               >
                   Cancel
                </Button>
-               <Button className="public" onClick={postFeedback}>
-                  Public
+               <Button
+                  className="public"
+                  onClick={postFeedback}
+                  disabled={isLoading}
+                  width="200px"
+               >
+                  {isLoading ? 'Publishing...' : 'Public'}
                </Button>
             </Box>
          </StyledContainer>
@@ -145,21 +167,15 @@ const StyledContainer = styled(Box)(({ theme }) => ({
       '& .delete-icon': {
          position: 'absolute',
          top: '0.2rem',
-         display: 'none',
          right: '0.2rem',
-         cursor: 'pointer',
          width: '1.5rem',
          height: '1.5rem',
-
-         '& path': {
-            fill: 'black',
-         },
+         cursor: 'pointer',
+         display: 'none',
       },
 
-      '&:hover': {
-         '& .delete-icon': {
-            display: 'block',
-         },
+      '&:hover .delete-icon': {
+         display: 'block',
       },
    },
 
@@ -169,11 +185,12 @@ const StyledContainer = styled(Box)(({ theme }) => ({
       height: '8.438rem',
       alignItems: 'center',
       gap: '1rem',
-      position: 'relative',
 
       '& .added-image': {
          width: '8.438rem',
          height: '8.438rem',
+         objectFit: 'cover',
+         borderRadius: '4px',
       },
 
       '& .add-photo': {
@@ -184,12 +201,10 @@ const StyledContainer = styled(Box)(({ theme }) => ({
          display: 'flex',
          justifyContent: 'center',
          alignItems: 'center',
+         borderRadius: '4px',
 
          '& #photo': {
-            cursor: 'pointer',
             display: 'none',
-            width: '8.438rem',
-            height: '8.438rem',
          },
       },
 
@@ -230,13 +245,6 @@ const StyledContainer = styled(Box)(({ theme }) => ({
    '& .btn-container': {
       display: 'flex',
       justifyContent: 'flex-end',
-
-      '& .cancel': {
-         width: '150px',
-      },
-
-      '& .public': {
-         width: '200px',
-      },
+      gap: '20px',
    },
 }))

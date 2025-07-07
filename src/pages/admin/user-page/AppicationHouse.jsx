@@ -70,11 +70,7 @@ const AppicationHouse = () => {
             }
          />
 
-         <ApplicationInner
-            houseInfo={announcement}
-          
-            isMyAnnouncement={false}
-         />
+         <ApplicationInner houseInfo={announcement} isMyAnnouncement={false} />
       </StyledContainer>
    )
 }

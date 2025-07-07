@@ -37,6 +37,8 @@ const AdminCard = ({
            ? imageUrls
            : []
 
+   console.log(imagesToShow)
+
    const hasImages = imagesToShow.length > 0
 
    const CustomPrevArrow = ({ onClick }) => (
