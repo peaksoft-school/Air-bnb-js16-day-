@@ -42,6 +42,26 @@ export const getAnnouncementFeedback = createAsyncThunk(
    }
 )
 
+export const saveFeedback = createAsyncThunk(
+   'user/saveFeedback',
+   async ({ houseId, feedback, rating, images }, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.post(
+            `/api/feedback/save/${houseId}`,
+            {
+               text: feedback,
+               rating,
+               images,
+            }
+         )
+
+         return response.data
+      } catch (error) {
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
+
 export const deleteFeedback = createAsyncThunk(
    'feedback/deleteFeedback',
    async (id, { rejectWithValue }) => {

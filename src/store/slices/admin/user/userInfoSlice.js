@@ -3,6 +3,7 @@ import {
    getHouseById,
    getAnnouncementFeedback,
    getAnnouncementRating,
+   saveFeedback,
 } from './userThunk'
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
    feedbacks: [],
    rating: 0,
    user: null,
+   feedbackStatus: null,
 }
 
 const userInfoSlice = createSlice({
@@ -27,6 +29,19 @@ const userInfoSlice = createSlice({
          })
          .addCase(getAnnouncementRating.fulfilled, (state, action) => {
             state.rating = action.payload.rating
+         })
+
+         .addCase(saveFeedback.pending, (state) => {
+            state.feedbackStatus = 'loading'
+         })
+         .addCase(saveFeedback.fulfilled, (state, action) => {
+            state.feedbackStatus = 'succeeded'
+            if (action.payload) {
+               state.feedbacks.unshift(action.payload)
+            }
+         })
+         .addCase(saveFeedback.rejected, (state) => {
+            state.feedbackStatus = 'failed'
          })
    },
 })

@@ -87,7 +87,14 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
                      localFeedbacks.map((feedback) => (
                         <Feedback
                            key={feedback.id}
-                           {...feedback}
+                           text={feedback.text}
+                           rating={feedback.rating}
+                           images={feedback.images}
+                           likeCount={feedback.likeCount}
+                           dislikeCount={feedback.dislikeCount}
+                           userFeedbackResponse={feedback.userFeedbackResponse}
+                           createdAt={feedback.createdAt}
+                           id={feedback.id}
                            onDelete={handleDeleteFeedback}
                         />
                      ))
@@ -96,16 +103,16 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
                   )}
                </Box>
                <Rating
-                  rating={rating || 0}
+                  rating={rating}
                   toggleFeedbackModal={toggleFeedbackModal}
                />
 
                <FeedbackModal
-                  width="720px"
+                  width={'720px'}
                   open={isFeedbackOpen}
                   onClose={() => setIsFeedbackOpen(false)}
                   houseId={houseInfo.id}
-                  onAddFeedback={handleAddFeedback} // 🔥 Добавляем коллбэк
+                  onAddFeedback={handleAddFeedback}
                />
             </Box>
          </Box>

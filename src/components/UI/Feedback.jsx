@@ -14,7 +14,7 @@ import Meatballs from './Meatballs'
 const Feedback = ({
    text,
    rating,
-   images,
+   images = [],
    likeCount = 0,
    dislikeCount = 0,
    userFeedbackResponse,
@@ -24,7 +24,7 @@ const Feedback = ({
 }) => {
    const [showFullText, setShowFullText] = useState(false)
    const [likes, setLikes] = useState(likeCount)
-   const [dislikes, setDislikes] = useState(dislikeCount)``
+   const [dislikes, setDislikes] = useState(dislikeCount)
    const [liked, setLiked] = useState(false)
    const [disliked, setDisliked] = useState(false)
 

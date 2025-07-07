@@ -18,9 +18,20 @@ export const addHouseSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder.addCase(postImageFile.fulfilled, (state, { payload }) => {
-         state.images.push(payload.Link)
+         const imageUrl =
+            payload?.Link || payload?.imageUrl || payload?.url || payload
+
+         if (typeof imageUrl === 'string') {
+            state.images.push(imageUrl)
+         } else {
+            console.warn(
+               'Не удалось добавить изображение: неверный формат payload',
+               payload
+            )
+         }
       })
    },
 })
 
 export const { clearImage, deleteImage } = addHouseSlice.actions
+export const addHouseReducer = addHouseSlice.reducer

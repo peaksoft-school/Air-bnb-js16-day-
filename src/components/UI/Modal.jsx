@@ -18,9 +18,9 @@ const Modal = ({ open, handleClose, children, width }) => (
 
 export default Modal
 
-const StyledBox = styled(Box)(({ width, height }) => ({
+const StyledBox = styled(Box)(({ width }) => ({
    width: width,
-   maxWidth: '100%',
+   maxWidth: '800px',
    position: 'absolute',
    top: '50%',
    left: '50%',

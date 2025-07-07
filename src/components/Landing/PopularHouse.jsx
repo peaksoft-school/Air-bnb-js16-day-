@@ -1,6 +1,6 @@
 import { Box, styled, Typography } from '@mui/material'
-import GeoIcon from '../../assets/icons/geo.svg'
-import StarIcon from '../../assets/icons/star.svg'
+import GeoIcon from '../../assets/icons/Geo.svg'
+import StarIcon from '../../assets/icons/Sign.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLandingPageReguest } from '../../store/slices/user/Landing/LandingThunk'
 import { useEffect } from 'react'
