@@ -15,9 +15,9 @@ const UserAnnouncement = () => {
    const dispatch = useDispatch()
    const { id } = useParams()
 
-   const announcement = useSelector((state) => state.userInfo?.announcement)
-   const feedbacks = useSelector((state) => state.userInfo?.feedbacks)
-   const rating = useSelector((state) => state.userInfo?.rating)
+   const announcement = useSelector((state) => state.userInfo.announcement)
+   const feedbacks = useSelector((state) => state.userInfo.feedbacks)
+   const rating = useSelector((state) => state.userInfo.rating)
 
    useEffect(() => {
       if (id) {

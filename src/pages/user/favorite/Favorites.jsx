@@ -1,57 +1,74 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { styled, Typography, Box } from '@mui/material'
-import { Link, useNavigate } from 'react-router'
-import { getFavorites } from '../../../store/slices/user/favorite/favoriteThunk'
+import { useNavigate } from 'react-router'
+import {
+   addFavorite,
+   getFavorites,
+} from '../../../store/slices/user/favorite/favoriteThunk'
 import nodata from '../../../assets/images/no-data.png'
 import Card from '../../../components/UI/cards/Card'
 import { ROUTES } from '../../../routes/routes'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 
 const Favorites = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
-
+   const [refresh, setRefresh] = useState(false)
+   const [localFavorites, setLocalFavorites] = useState([])
    const { favorites, isLoading } = useSelector((state) => state.favorite)
 
    useEffect(() => {
-      dispatch(getFavorites())
-   }, [dispatch])
+      dispatch(getFavorites()).then((res) => {
+         setLocalFavorites(res.payload)
+      })
+   }, [dispatch, refresh])
 
    if (isLoading) {
       return <StyledContainer>Loading favorites...</StyledContainer>
    }
 
+   const links = [
+      { href: ROUTES.USER.INDEX, label: 'Main' },
+
+      {
+         href: 'favorites',
+         label: 'FAVORITE',
+      },
+   ]
    return (
       <StyledContainer>
          <Box className="heading-box">
-            <StyledPath>
-               Main
-               <span className="path-favorite"> / Favorite </span>
-            </StyledPath>
+            <BreadCrumbs links={links} />
 
             <h3 className="heading">FAVORITE</h3>
          </Box>
 
          <Box className="card-box">
-            {favorites.length > 0 ? (
-               favorites.map((item) => (
-                  <Link
+            {localFavorites.length > 0 ? (
+               localFavorites.map((item) => (
+                  <Card
                      key={item.id}
-                     to={ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
-                        ':id',
-                        item.id
-                     )}
-                     style={{ textDecoration: 'none' }}
-                  >
-                     <Card
-                        imageUrls={item.images}
-                        price={item.price}
-                        rating={item.rating}
-                        title={item.description}
-                        location={item.address}
-                        guests={item.guest}
-                     />
-                  </Link>
+                     imageUrls={item.images}
+                     price={item.price}
+                     rating={item.rating}
+                     title={item.description}
+                     location={item.address}
+                     guests={item.guest}
+                     Favorite={item.isFavorite}
+                     onLike={async () => {
+                        await dispatch(addFavorite(item.id))
+                        setRefresh((prev) => !prev)
+                     }}
+                     onClick={() =>
+                        navigate(
+                           ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
+                              ':id',
+                              item.id
+                           )
+                        )
+                     }
+                  />
                ))
             ) : (
                <Box className="empty-page-box">

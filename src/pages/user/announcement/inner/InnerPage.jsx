@@ -6,7 +6,6 @@ import HouseImageSlider from '../../../../components/house/HouseImageSlider'
 import Rating from '../../../../components/UI/rating/Rating'
 import FeedbackModal from '../../../../components/UI/feedback/FeedbackModal'
 import Loading from '../../../Loading'
-import Button from '../../../../components/UI/Button'
 
 const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
@@ -34,7 +33,7 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
                      {houseInfo.name}
                   </Typography>
                   <Typography className="house-location">
-                     {houseInfo.addressDetail || 'No address provided'}
+                     {houseInfo.address || 'No address provided'}
                   </Typography>
                   <Typography className="house-description">
                      {houseInfo.description}
@@ -69,7 +68,6 @@ const InnerPage = ({ houseInfo, feedbacks = [], rating }) => {
                   toggleFeedbackModal={toggleFeedbackModal}
                />
 
-               <Button />
                <FeedbackModal
                   width="500px"
                   open={isFeedbackOpen}

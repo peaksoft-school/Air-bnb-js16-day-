@@ -17,12 +17,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-
 import Button from '../Button'
-import emptyhouse from '../../../assets/images/empty-house.jpg'
 
-import { useDispatch } from 'react-redux'
-import { toggleFavorite } from '../../../store/slices/user/favorite/favoriteThunk'
+import emptyhouse from '../../../assets/images/empty-house.jpg'
 
 const Card = ({
    imageUrls,
@@ -32,27 +29,34 @@ const Card = ({
    location,
    guests,
    onClick,
-   favorite,
-   id,
+   onLike,
+   Favorite,
 }) => {
    const [hovered, setHovered] = useState(false)
-   const dispatch = useDispatch()
-
-   const isLiked = favorite
 
    const handleLike = (e) => {
       e.stopPropagation()
-      dispatch(toggleFavorite(id))
+      onLike()
    }
 
    const CustomPrevArrow = ({ onClick }) => (
-      <StyledIconButtonBack onClick={onClick}>
+      <StyledIconButtonBack
+         onClick={(e) => {
+            e.stopPropagation()
+            onClick?.(e)
+         }}
+      >
          <ArrowBackIosNewIcon />
       </StyledIconButtonBack>
    )
 
    const CustomNextArrow = ({ onClick }) => (
-      <StyledIconButtonForward onClick={onClick}>
+      <StyledIconButtonForward
+         onClick={(e) => {
+            e.stopPropagation()
+            onClick?.(e)
+         }}
+      >
          <ArrowForwardIosIcon />
       </StyledIconButtonForward>
    )
@@ -121,6 +125,7 @@ const Card = ({
 
             <Box className="location-text">
                <LocationOnIcon fontSize="small" color="action" />
+
                <Typography color="text.secondary">{location}</Typography>
             </Box>
          </CardContent>
@@ -134,8 +139,9 @@ const Card = ({
 
             <Box className="buttons-content">
                <Button width={100}>BOOK</Button>
+
                <IconButton aria-label="like" onClick={handleLike}>
-                  {isLiked ? (
+                  {Favorite ? (
                      <FavoriteIcon color="warning" />
                   ) : (
                      <FavoriteBorderIcon color="warning" />
@@ -152,6 +158,7 @@ export default Card
 const StyledMuiCard = styled(MuiCard)(() => ({
    maxWidth: '300px',
    height: '350px',
+
    cursor: 'pointer',
    transition: 'transform 0.2s ease-in-out',
 

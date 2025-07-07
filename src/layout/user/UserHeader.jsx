@@ -26,14 +26,15 @@ const UserHeader = ({
    onJoinUs,
    onProfileClick,
    onAddLeave,
-   // favoriteCount = 9,
    handleLeaveAddClick,
 }) => {
    const [searchValue, setSearchValue] = useState('')
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const favoriteCount = useSelector((state) => state.favorite.favorites.length)
+   const favoriteCount = useSelector(
+      (state) => state.favorite?.favorites?.length || 0
+   )
 
    const handleMenuSelect = (option) => {
       if (option.action === 'my-profile') {
