@@ -14,7 +14,7 @@ import Loading from '../../Loading'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
 import { useNavigate } from 'react-router'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const Region = () => {
    const { allHouses, isLoading, search } = useSelector((state) => state.region)
@@ -74,7 +74,7 @@ const Region = () => {
    }, [filters, search, page, dispatch])
 
    const handleFilterChange = (type, value) => {
-      if (value && value !== 'all') {
+      if (value && value !== 'All') {
          const newChip = {
             type,
             label: value,

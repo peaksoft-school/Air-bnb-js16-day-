@@ -19,7 +19,7 @@ const HOUSE_TYPE_OPTIONS = [
 const PRICE_FILTER_OPTIONS = [
    { id: 1, value: 'All', label: 'All' },
    { id: 2, value: 'LOW TO HIGH', label: 'Low to high' },
-   { id: 3, value: 'HIGH TO LOW', label: 'High to low' },
+   { id: 3, value: 'HIGH TO   LOW', label: 'High to low' },
 ]
 
 export {

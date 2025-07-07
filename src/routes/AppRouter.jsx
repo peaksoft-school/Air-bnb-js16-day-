@@ -13,6 +13,7 @@ const NotFound = lazy(() => import('../pages/NotFound'))
 const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 const Region = lazy(() => import('../pages/user/region/Region'))
 const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
+const CreateHouseForm = lazy(() => import('../pages/user/CreateHouse'))
 const Favorites = lazy(() => import('../pages/user/favorite/Favorites'))
 const UserAnnouncement = lazy(
    () => import('../pages/user/announcement/UserAnnouncement')
@@ -56,6 +57,15 @@ const AppRoutes = () => (
             />
          }
       >
+         <Route
+            path={ROUTES.USER.CREATE_HOUSE}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <CreateHouseForm />
+               </Suspense>
+            }
+         />
+
          <Route index element={<Navigate to="region" />} />
 
          <Route
