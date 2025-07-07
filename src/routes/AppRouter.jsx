@@ -14,6 +14,10 @@ const LandingPage = lazy(() => import('../pages/home/LandingPage'))
 const Region = lazy(() => import('../pages/user/region/Region'))
 const UserProfile = lazy(() => import('../pages/user/profile/Profile'))
 const CreateHouseForm = lazy(() => import('../pages/user/CreateHouse'))
+const Favorites = lazy(() => import('../pages/user/favorite/Favorites'))
+const UserAnnouncement = lazy(
+   () => import('../pages/user/announcement/UserAnnouncement')
+)
 
 import PrivateRoute from './PrivateRoute'
 import Loading from '../pages/Loading'
@@ -69,6 +73,24 @@ const AppRoutes = () => (
             element={
                <Suspense fallback={<Loading />}>
                   <Region />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path="favorites"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <Favorites />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path="announcement/:id"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <UserAnnouncement />
                </Suspense>
             }
          />

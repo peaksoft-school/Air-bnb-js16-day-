@@ -1,15 +1,22 @@
-import { Link, Breadcrumbs as MuiBreadCrumbs, styled } from '@mui/material'
+import {
+   Breadcrumbs as MuiBreadCrumbs,
+   styled,
+   Link as MuiLink,
+} from '@mui/material'
+import { Link as RouterLink } from 'react-router-dom'
 
 const BreadCrumbs = ({ links }) => (
    <StyledMuiBreadCrumbs>
       {links?.map(({ href, label }, index) => (
-         <Link
+         <MuiLink
             key={`${href}-${label}-${index}`}
-            href={href}
+            component={RouterLink}
+            to={href}
             className={index === links.length - 1 ? 'active' : ''}
+            underline="hover"
          >
             {label}
-         </Link>
+         </MuiLink>
       ))}
    </StyledMuiBreadCrumbs>
 )
@@ -25,5 +32,7 @@ const StyledMuiBreadCrumbs = styled(MuiBreadCrumbs)(() => ({
 
    '& .active': {
       color: '#222',
+      pointerEvents: 'none',
+      fontWeight: 500,
    },
 }))

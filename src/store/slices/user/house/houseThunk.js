@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../../configs/axiosInstance'
-import { routes } from '../../../../utils/constants/routes'
+import { ROUTES } from '../../../../routes/routes'
 
 export const getBookings = createAsyncThunk(
    'house/getBookings',
@@ -78,8 +78,8 @@ export const globalSearchAsync = createAsyncThunk(
 
          navigate(
             data.houseResponses.length > 0
-               ? routes.USER.innerRegion
-               : routes.USER.innerRegionNotFound,
+               ? ROUTES.USER.innerRegion
+               : ROUTES.USER.innerRegionNotFound,
             { state: { text: searchInput, houseData: data.houseResponses } }
          )
          return data.houseResponses

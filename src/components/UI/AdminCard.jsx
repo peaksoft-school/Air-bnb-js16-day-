@@ -19,8 +19,15 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Meatballs from '../../components/UI/Meatballs'
 
 const AdminCard = ({ house, options, onDelete }) => {
-   const { price, rating, address, guests, description, images, imageUrls } =
-      house
+   const {
+      price,
+      averageRating,
+      address,
+      maxGuests,
+      description,
+      images,
+      imageUrls,
+   } = house
 
    const [hovered, setHovered] = useState(false)
 
@@ -97,7 +104,7 @@ const AdminCard = ({ house, options, onDelete }) => {
                      sx={{ color: '#F7D212', fontSize: '13px', mr: 0.3 }}
                   />
                   <Typography variant="body2" color="white">
-                     {rating}
+                     {averageRating}
                   </Typography>
                </StyledRating>
             </Row>
@@ -114,7 +121,7 @@ const AdminCard = ({ house, options, onDelete }) => {
             </Row>
             <ActionRow>
                <Typography fontSize={14} variant="body2" color="text.secondary">
-                  {guests} guests
+                  {maxGuests} guests
                </Typography>
                <Meatballs
                   color={true}

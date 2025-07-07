@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import {
    Card as MuiCard,
    CardMedia,
@@ -18,16 +17,18 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Meatballs from '../../components/UI/Meatballs'
 
-const AdminCard = ({ house, options, onDelete, onNavigate }) => {
-   const { price, rating, address, guests, description, images } = house
+const AdminCard = ({
+   house,
+   options,
+   onDelete,
+   onNavigate,
+   onAccept,
+   onReject,
+}) => {
+   const { price, rating, address, maxGuests, description, images, imageUrls } =
+      house
 
    const [hovered, setHovered] = useState(false)
-
-   const handleSelect = (option) => {
-      if (option.action === 'delete' && typeof onDelete === 'function') {
-         onDelete(house.id)
-      }
-   }
 
    const CustomPrevArrow = ({ onClick }) => (
       <ArrowButton onClick={onClick} direction="left">
@@ -42,12 +43,12 @@ const AdminCard = ({ house, options, onDelete, onNavigate }) => {
    )
 
    const settings = {
-      dots: images?.length > 1,
+      dots: images && imageUrls.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: images?.length > 1,
+      arrows: images && imageUrls.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -75,7 +76,7 @@ const AdminCard = ({ house, options, onDelete, onNavigate }) => {
                <CardMedia
                   component="img"
                   height="136"
-                  image={images[0]}
+                  image={images && imageUrls[0]}
                   alt={description}
                />
             )}
@@ -112,13 +113,21 @@ const AdminCard = ({ house, options, onDelete, onNavigate }) => {
             </Row>
             <ActionRow>
                <Typography fontSize={14} variant="body2" color="text.secondary">
-                  {guests} guests
+                  {maxGuests} guests
                </Typography>
                <Meatballs
-                  color={true}
-                  icon={<MoreHorizIcon />}
                   options={options}
-                  onSelect={handleSelect}
+                  onSelect={(option) => {
+                     if (option.action === 'accept') {
+                        onAccept(house.id)
+                     }
+                     if (option.action === 'reject') {
+                        onReject(house.id, 'Причина отклонения')
+                     }
+                     if (option.action === 'delete') {
+                        onDelete(house.id)
+                     }
+                  }}
                />
             </ActionRow>
          </CardContent>
