@@ -17,7 +17,12 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+
 import Button from '../Button'
+import emptyhouse from '../../../assets/images/empty-house.jpg'
+
+import { useDispatch } from 'react-redux'
+import { toggleFavorite } from '../../../store/slices/user/favorite/favoriteThunk'
 
 const Card = ({
    imageUrls,
@@ -26,14 +31,18 @@ const Card = ({
    title,
    location,
    guests,
+   onClick,
    favorite,
+   id,
 }) => {
-   const [isLiked, setIsLiked] = useState(false)
    const [hovered, setHovered] = useState(false)
+   const dispatch = useDispatch()
+
+   const isLiked = favorite
 
    const handleLike = (e) => {
       e.stopPropagation()
-      setIsLiked(!isLiked)
+      dispatch(toggleFavorite(id))
    }
 
    const CustomPrevArrow = ({ onClick }) => (
@@ -51,12 +60,12 @@ const Card = ({
    const imagesToShow = imageUrls.length > 0 ? imageUrls : [emptyhouse]
 
    const settings = {
-      dots: imageUrls?.length > 1,
+      dots: imagesToShow.length > 1,
       infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: imageUrls?.length > 1,
+      arrows: imagesToShow.length > 1,
       prevArrow: hovered ? <CustomPrevArrow /> : null,
       nextArrow: hovered ? <CustomNextArrow /> : null,
    }
@@ -68,29 +77,27 @@ const Card = ({
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
          >
-            <Slider {...settings}>
-               {imageUrls?.length > 1 ? (
-                  <Slider {...settings}>
-                     {imageUrls?.map((url, i) => (
-                        <Box key={i}>
-                           <CardMedia
-                              component="img"
-                              height="140"
-                              image={url}
-                              alt={title}
-                           />
-                        </Box>
-                     ))}
-                  </Slider>
-               ) : (
-                  <CardMedia
-                     component="img"
-                     height="140"
-                     image={imageUrls}
-                     alt={title}
-                  />
-               )}
-            </Slider>
+            {imageUrls.length > 1 ? (
+               <Slider {...settings}>
+                  {imageUrls.map((url, i) => (
+                     <Box key={i}>
+                        <CardMedia
+                           component="img"
+                           height="140"
+                           image={url}
+                           alt={title}
+                        />
+                     </Box>
+                  ))}
+               </Slider>
+            ) : (
+               <CardMedia
+                  component="img"
+                  height="140"
+                  image={imageUrls[0]}
+                  alt={title}
+               />
+            )}
          </Box>
 
          <CardContent>
@@ -114,7 +121,6 @@ const Card = ({
 
             <Box className="location-text">
                <LocationOnIcon fontSize="small" color="action" />
-
                <Typography color="text.secondary">{location}</Typography>
             </Box>
          </CardContent>
@@ -128,9 +134,8 @@ const Card = ({
 
             <Box className="buttons-content">
                <Button width={100}>BOOK</Button>
-
                <IconButton aria-label="like" onClick={handleLike}>
-                  {favorite ? (
+                  {isLiked ? (
                      <FavoriteIcon color="warning" />
                   ) : (
                      <FavoriteBorderIcon color="warning" />
@@ -147,7 +152,6 @@ export default Card
 const StyledMuiCard = styled(MuiCard)(() => ({
    maxWidth: '300px',
    height: '350px',
-
    cursor: 'pointer',
    transition: 'transform 0.2s ease-in-out',
 

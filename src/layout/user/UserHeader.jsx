@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import {
    AppBar,
@@ -26,13 +26,14 @@ const UserHeader = ({
    onJoinUs,
    onProfileClick,
    onAddLeave,
-   favoriteCount = 9,
+   // favoriteCount = 9,
    handleLeaveAddClick,
 }) => {
    const [searchValue, setSearchValue] = useState('')
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
+   const favoriteCount = useSelector((state) => state.favorite.favorites.length)
 
    const handleMenuSelect = (option) => {
       if (option.action === 'my-profile') {
@@ -93,11 +94,8 @@ const UserHeader = ({
 
                   {isAuth && (
                      <>
-                        <Typography
-                           onClick={goToFavorites}
-                           sx={{ cursor: 'pointer', fontWeight: 500 }}
-                        >
-                           FAVORITE
+                        <Typography onClick={goToFavorites}>
+                           FAVORITE({favoriteCount})
                         </Typography>
 
                         <Box className="avatar-container">

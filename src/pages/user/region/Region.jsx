@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Box, styled, Typography, PaginationItem } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import { ROUTES } from '../../../routes/routes'
 import Chip from '../../../components/UI/Chip'
 import Select from '../../../components/UI/DropDown'
@@ -12,6 +11,7 @@ import Loading from '../../Loading'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
 import { useNavigate } from 'react-router'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const Region = () => {
    const { allHouses, isLoading, search, selectedRegion } = useSelector(
@@ -245,6 +245,7 @@ const Region = () => {
                   {allHouses?.map((house) => (
                      <Card
                         key={house.id}
+                        id={house.id}
                         imageUrls={house.imageUrls}
                         price={house.price}
                         rating={house.averageRating}
