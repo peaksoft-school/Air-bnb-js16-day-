@@ -11,7 +11,6 @@ import {
    Alert,
    Button,
 } from '@mui/material'
-import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 import DropDown from '../../../components/UI/DropDown'
 import Chip from '../../../components/UI/Chip'
 import { AUTH_ACTIONS } from '../../../store/slices/auth/authSlice'
@@ -24,6 +23,7 @@ import {
    PROFILE_TYPE_OPTIONS,
 } from '../../../utils/helpers'
 import AdminCard from '../../../components/UI/cards/AdminCard'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 
 const Profile = () => {
    const { userProfile, loading, error } = useSelector((state) => state.profile)
