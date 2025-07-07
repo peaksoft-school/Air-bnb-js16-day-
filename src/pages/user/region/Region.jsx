@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Box, styled, Typography, PaginationItem } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import { ROUTES } from '../../../routes/routes'
 import Chip from '../../../components/UI/Chip'
 import Select from '../../../components/UI/DropDown'
@@ -11,6 +10,7 @@ import { REGION_ACTIONS } from '../../../store/slices/user/region/regionSlice'
 import Loading from '../../Loading'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const Region = () => {
    const { allHouses, isLoading, search, selectedRegion } = useSelector(
@@ -33,7 +33,6 @@ const Region = () => {
 
    const total = allHouses?.length || 0
    const totalCount = total || allHouses?.length || 0
-   const totalPages = Math.ceil(totalCount / pageSize)
 
    useEffect(() => {
       if (selectedRegion) {
@@ -112,15 +111,17 @@ const Region = () => {
       localStorage.removeItem('selectedRegion')
    }
 
-   const handlePageChange = (e, value) => {
-      setPage(value)
-
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+   const handlePrevPage = () => {
+      if (page > 1) setPage((prev) => prev - 1)
+   }
+   const handleNextPage = () => {
+      if (!isLastPage) setPage((prev) => prev + 1)
    }
 
    if (isLoading) return <Loading />
 
    const isNothingFound = allHouses?.length === 0 && search
+   const isLastPage = allHouses.length < pageSize
 
    const links = [
       { href: ROUTES.USER.INDEX, label: 'Main' },
@@ -135,7 +136,7 @@ const Region = () => {
       { value: 'NARYN', label: 'Naryn' },
       { value: 'BISHKEK', label: 'Bishkek' },
       { value: 'BATKEN', label: 'Batken' },
-      { value: 'jalalabat', label: 'Jalal-Abad' },
+      { value: 'JALALABAT', label: 'Jalal-Abad' },
       { value: 'YSYKKOL', label: 'Issyk-Kul' },
       { value: 'TALAS', label: 'Talas' },
       { value: 'CHUY', label: 'Chui' },
@@ -254,24 +255,15 @@ const Region = () => {
                   ))}
                </CardsContainer>
 
-               {totalPages > 1 && (
-                  <StyledPaginationWrapper>
-                     <StyledPagination
-                        count={totalPages}
-                        page={page}
-                        onChange={handlePageChange}
-                        color="primary"
-                        shape="rounded"
-                        siblingCount={1}
-                        boundaryCount={1}
-                        showFirstButton
-                        showLastButton
-                        renderItem={(item) => (
-                           <StyledPaginationItem {...item} />
-                        )}
-                     />
-                  </StyledPaginationWrapper>
-               )}
+               <StyledPaginationWrapper>
+                  <PageButton onClick={handlePrevPage} disabled={page === 1}>
+                     {'<'}
+                  </PageButton>
+                  <PageNumber>{page}</PageNumber>
+                  <PageButton onClick={handleNextPage} disabled={isLastPage}>
+                     {'>'}
+                  </PageButton>
+               </StyledPaginationWrapper>
             </>
          )}
       </StyledContainer>
@@ -280,34 +272,38 @@ const Region = () => {
 
 export default Region
 
-const StyledPaginationWrapper = styled(Stack)(() => ({
+const StyledPaginationWrapper = styled(Box)(() => ({
    marginTop: '40px',
    display: 'flex',
    justifyContent: 'center',
    alignItems: 'center',
+   gap: '16px',
 }))
 
-const StyledPagination = styled(Pagination)(() => ({
-   '& .MuiPagination-ul': {
-      gap: '8px',
-   },
-}))
-
-const StyledPaginationItem = styled(PaginationItem)(() => ({
-   '&.Mui-selected': {
-      color: '#DD8A08',
-      background: 'none',
-      fontWeight: 600,
-      borderRadius: '4px',
-   },
-
-   '& .MuiPaginationItem-icon': {
-      color: '#DD8A08',
-   },
-
-   '&:not(.Mui-selected)': {
+const PageButton = styled('button')(() => ({
+   background: 'none',
+   border: 'none',
+   color: '#DD8A08',
+   fontSize: '24px',
+   cursor: 'pointer',
+   padding: '4px 12px',
+   borderRadius: '4px',
+   transition: 'background 0.2s',
+   '&:disabled': {
       color: '#B0B0B0',
+      cursor: 'not-allowed',
    },
+   '&:hover:not(:disabled)': {
+      background: '#fafafa',
+   },
+}))
+
+const PageNumber = styled('span')(() => ({
+   fontWeight: 600,
+   fontSize: '20px',
+   color: '#222',
+   minWidth: '32px',
+   textAlign: 'center',
 }))
 
 const StyledContainer = styled(Box)(() => ({

@@ -20,12 +20,12 @@ import {
 import { styled } from '@mui/material/styles'
 
 import EditHouseForm from './EditHouseForm'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import HouseImageSlider from '../../../components/house/HouseImageSlider'
 import Feedback from '../../../components/UI/Feedback'
 import Rating from '../../../components/UI/rating/Rating'
 import Button from '../../../components/UI/Button'
 import Loading from '../../Loading'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const AnnouncementDetailPage = () => {
    const dispatch = useDispatch()
