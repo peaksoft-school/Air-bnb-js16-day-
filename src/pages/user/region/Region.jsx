@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react'
 import { Box, styled, Typography, PaginationItem } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import { ROUTES } from '../../../routes/routes'
 import Chip from '../../../components/UI/Chip'
 import Select from '../../../components/UI/DropDown'
 import Card from '../../../components/UI/cards/Card'
 import { REGION_THUNK } from '../../../store/slices/user/region/regionThunk'
-import { REGION_ACTIONS } from '../../../store/slices/user/region/regionSlice'
+import {
+   addFavorite,
+   getFavorites,
+} from '../../../store/slices/user/favorite/favoriteThunk'
 import Loading from '../../Loading'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
+import { useNavigate } from 'react-router'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 
 const Region = () => {
-   const { allHouses, isLoading, search, selectedRegion } = useSelector(
-      (state) => state.region
-   )
+   const { allHouses, isLoading, search } = useSelector((state) => state.region)
+   const favoriteState = useSelector((state) => state.favorite)
+   const favorites = favoriteState?.favorites || []
+   const selectedRegion = useSelector((state) => state.region.selectedRegion)
 
    const [filters, setFilters] = useState({
       region: '',
@@ -28,6 +33,7 @@ const Region = () => {
    const [page, setPage] = useState(1)
 
    const dispatch = useDispatch()
+   const navigate = useNavigate()
 
    const pageSize = 16
 
@@ -52,7 +58,6 @@ const Region = () => {
 
    useEffect(() => {
       const hasFilters = Object.values(filters).some((v) => v) || search
-      console.log('Loading houses with filters:', filters, 'search:', search)
 
       const timeoutId = setTimeout(() => {
          if (hasFilters) {
@@ -175,7 +180,7 @@ const Region = () => {
 
                <NothingFoundText>
                   It appears that no listings have yet been created for
-                  <Typography variant="span">"{search}"</Typography>.
+                  <Typography variant="span">"{search}"</Typography>
                   <br />
                   Be the first person to create a
                   <a href="#">listing in this area!</a>
@@ -240,18 +245,51 @@ const Region = () => {
                </FilterSection>
 
                <CardsContainer>
-                  {allHouses?.map((house) => (
-                     <Card
-                        key={house.id}
-                        imageUrls={house.imageUrls}
-                        price={house.price}
-                        rating={house.averageRating}
-                        title={house.description}
-                        location={house.address}
-                        guests={house.maxGuests}
-                        favorite={house.favorite}
-                     />
-                  ))}
+                  {allHouses?.map((house) => {
+                     const isFavorite = favorites.some(
+                        (fav) => fav.id === house.id
+                     )
+
+                     const handleLike = async () => {
+                        if (isFavorite) {
+                           await dispatch(deleteFavorite(house.id))
+                        } else {
+                           await dispatch(addFavorite(house.id))
+                        }
+                        dispatch(getFavorites())
+                        dispatch(
+                           REGION_THUNK.getHouses({
+                              ...filters,
+                              search,
+                              page,
+                              size: pageSize,
+                           })
+                        )
+                     }
+
+                     return (
+                        <Card
+                           key={house.id}
+                           imageUrls={house.imageUrls}
+                           price={house.price}
+                           rating={house.averageRating}
+                           title={house.description}
+                           location={house.address}
+                           guests={house.maxGuests}
+                           isLiked={isFavorite}
+                           onLike={handleLike}
+                           onClick={() =>
+                              navigate(
+                                 ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
+                                    ':id',
+                                    house.id
+                                 )
+                              )
+                           }
+                           Favorite={house.favorite}
+                        />
+                     )
+                  })}
                </CardsContainer>
 
                {totalPages > 1 && (

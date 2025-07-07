@@ -28,6 +28,8 @@ export const ROUTES = {
       CHECKOUT: '/user/checkout',
       PAYMENT: '/user/payment',
       REGION_PAGE: '/user/region',
+      FAVORITE: '/user/favorites',
+      ANNOUNCEMENT_DETAIL: '/user/announcement/:id',
    },
 }
 

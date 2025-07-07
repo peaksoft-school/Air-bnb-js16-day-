@@ -7,12 +7,13 @@ import persistStore from 'redux-persist/es/persistStore'
 import persistReducer from 'redux-persist/es/persistReducer'
 import storage from 'redux-persist/lib/storage'
 import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
-import { LandingSlice } from './slices/user/Landing/landingSlice'
 import { regionSlice } from './slices/user/region/regionSlice'
 import { profileSlice } from './slices/user/profile/profileSlice'
 import houseApplicationsReducer from './slices/admin/houseApplicationsSlice'
 import { usersSlice } from './slices/admin/users/usersSlice'
 import { authSlice } from './slices/auth/authSlice'
+import { LandingSlice } from './slices/user/Landing/LandingSlice'
+import { favoriteSlice } from './slices/user/favorite/favoriteSlise'
 
 const rootReducer = combineReducers({
    userInfo: userInfoReducer,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
    [profileSlice.name]: profileSlice.reducer,
    [regionSlice.name]: regionSlice.reducer,
    houseApplications: houseApplicationsReducer,
-   [usersSlice.name]:usersSlice.reducer
+   [usersSlice.name]: usersSlice.reducer,
+   [favoriteSlice.name]: favoriteSlice.reducer,
 })
 
 const persistConfig = {
