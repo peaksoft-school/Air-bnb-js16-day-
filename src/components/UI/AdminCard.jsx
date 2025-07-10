@@ -18,7 +18,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Meatballs from '../../components/UI/Meatballs'
 
-const AdminCard = ({ house, options, onDelete }) => {
+const AdminCardAll = ({ house, options, onDelete, onClick }) => {
    const {
       price,
       averageRating,
@@ -31,7 +31,6 @@ const AdminCard = ({ house, options, onDelete }) => {
 
    const [hovered, setHovered] = useState(false)
 
-   // Выбираем, что показывать
    const imagesToShow =
       imageUrls?.length > 0 ? imageUrls : images?.length > 0 ? images : []
 
@@ -67,7 +66,7 @@ const AdminCard = ({ house, options, onDelete }) => {
    }
 
    return (
-      <StyledCard>
+      <StyledCard onClick={onClick}>
          <ImageContainer
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
@@ -143,9 +142,8 @@ const AdminCard = ({ house, options, onDelete }) => {
    )
 }
 
-export default AdminCard
+export default AdminCardAll
 
-// Стили
 const StyledCard = styled(MuiCard)(() => ({
    width: '210px',
    maxHeight: '290px',
@@ -186,7 +184,7 @@ const StyledRating = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'center',
-   borderRadius: '4px',
+   borderRadius: '2px',
 }))
 
 const Title = styled(Typography)(() => ({

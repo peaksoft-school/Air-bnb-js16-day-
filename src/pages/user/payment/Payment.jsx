@@ -100,19 +100,21 @@ const Payment = ({ pricePerDay, userId, houseId }) => {
                </DateBox>
             </Box>
          </DateGrid>
-         <Message>You have to be signed in to book a listing!</Message>
-         <StyledBox>
-            <MainButton
-               onClick={() => setShowPayment(true)}
-               disabled={!checkIn || !checkOut}
-            >
-               REQUEST TO BOOK
-            </MainButton>
-            <HeartIconButton
-               active={liked}
-               onClick={() => setLiked((prev) => !prev)}
-            />
-         </StyledBox>
+         {!bookingComplete && (
+            <StyledBox>
+               <MainButton
+                  onClick={() => setShowPayment(true)}
+                  disabled={!checkIn || !checkOut}
+               >
+                  REQUEST TO BOOK
+               </MainButton>
+               {/* <HeartIconButton
+                  active={liked}
+                  onClick={() => setLiked((prev) => !prev)}
+               /> */}
+            </StyledBox>
+         )}
+
          <Modal open={showCalendar} handleClose={() => setShowCalendar(false)}>
             <CalendarWrapper>
                <Typography variant="h6" mb={2}>
@@ -279,7 +281,7 @@ const MainButton = styled('button')(() => ({
    backgroundColor: '#FF8A00',
    color: 'white',
    border: 'none',
-   width: '423px',
+   width: '444px',
    height: '37px',
    padding: '14px',
    fontWeight: 500,
@@ -294,7 +296,7 @@ const MainButton = styled('button')(() => ({
 const StyledBox = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'center',
-   justifyContent: 'space-between',
+   justifyContent: 'center',
    marginTop: '20px',
    gap: '16px',
 }))

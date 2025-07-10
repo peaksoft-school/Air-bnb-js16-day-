@@ -8,7 +8,7 @@ import {
    clearImage,
    deleteImage,
 } from '../../../store/slices/user/addHouse/addHouseSlice'
-import { postImageFile } from '../../../store/slices/user/addHouse/addHouseThunk'
+import { uploadImagesToS3 } from '../../../store/slices/user/createHouseThunk'
 import Input from '../Input'
 import Button from '../Button'
 import { saveFeedback } from '../../../store/slices/admin/user/userThunk'
@@ -27,7 +27,7 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
 
    const handleFileChange = (e) => {
       const file = e.target.files[0]
-      if (file) dispatch(postImageFile({ file }))
+      if (file) dispatch(uploadImagesToS3({ file }))
    }
 
    const postFeedback = async () => {

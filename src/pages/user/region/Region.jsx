@@ -125,27 +125,24 @@ const Region = () => {
       { value: 'BATKEN', label: 'Batken' },
       { value: 'JALALABAT', label: 'Jalal-Abad' },
       { value: 'YSYKKOL', label: 'Issyk-Kul' },
-      { value: 'talas', label: 'Talas' },
+      { value: 'TALAS', label: 'Talas' },
       { value: 'CHUY', label: 'Chui' },
-      { value: 'Osh', label: 'Osh' },
+      { value: 'OSH', label: 'Osh' },
    ]
 
    const optionPopularity = [
-      { value: 'all', label: 'All' },
       { value: 'popular', label: 'Popular' },
       { value: 'latest', label: 'The latest' },
    ]
 
    const optionHouseType = [
-      { value: 'all', label: 'All' },
-      { value: 'apartment', label: 'Apartment' },
-      { value: 'house', label: 'House' },
+      { value: 'APARTMENT', label: 'Apartment' },
+      { value: 'HOUSE', label: 'House' },
    ]
 
    const optionPrice = [
-      { value: 'all', label: 'All' },
-      { value: 'low', label: 'Low to high' },
-      { value: 'high', label: 'High to low' },
+      { value: 'low_to_high', label: 'Low to high' },
+      { value: 'high_to_low', label: 'High to low' },
    ]
 
    return (
@@ -260,6 +257,7 @@ const Region = () => {
                            guests={house.maxGuests}
                            isLiked={isFavorite}
                            onLike={handleLike}
+                           isFavorite={house.favorite}
                            onClick={() =>
                               navigate(
                                  ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
@@ -268,7 +266,6 @@ const Region = () => {
                                  )
                               )
                            }
-                           Favorite={house.favorite}
                         />
                      )
                   })}

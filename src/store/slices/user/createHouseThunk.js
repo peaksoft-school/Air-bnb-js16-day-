@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosInstance'
 
-const uploadImageToS3 = async (file) => {
+const uploadImagesToS3 = async (files) => {
    const formData = new FormData()
-   formData.append('file', file)
+   files.forEach((file) => formData.append('files', file))
 
    try {
       const response = await axiosInstance.post('/api/s3/upload', formData, {
@@ -11,19 +11,10 @@ const uploadImageToS3 = async (file) => {
             'Content-Type': 'multipart/form-data',
          },
       })
-
-      if (response.data && response.data.url) {
-         return response.data.url
-      } else if (response.data && response.data.imageUrl) {
-         return response.data.imageUrl
-      } else if (response.data && typeof response.data === 'string') {
+      if (response.data && Array.isArray(response.data)) {
          return response.data
-      } else if (
-         response.data &&
-         Array.isArray(response.data) &&
-         response.data.length > 0
-      ) {
-         return response.data[0]
+      } else if (response.data && typeof response.data === 'string') {
+         return [response.data]
       } else {
          throw new Error('Invalid S3 response structure')
       }
@@ -37,9 +28,7 @@ export const createHouseBase = createAsyncThunk(
    async (formData, { rejectWithValue }) => {
       try {
          const files = formData.getAll('images')
-
-         const uploadPromises = files.map((file) => uploadImageToS3(file))
-         const uploadedUrls = await Promise.all(uploadPromises)
+         const uploadedUrls = await uploadImagesToS3(files)
 
          const requestData = {
             imageUrls: uploadedUrls,
@@ -75,3 +64,4 @@ export const createHouseBase = createAsyncThunk(
       }
    }
 )
+export { uploadImagesToS3 }
