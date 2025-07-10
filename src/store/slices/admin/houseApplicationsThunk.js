@@ -1,41 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosInstance'
-import { AUTH_ACTIONS } from '../auth/authSlice'
 
 export const fetchApplications = createAsyncThunk(
    'houseApplications/fetchApplications',
-   async ({ page = 1, size = 18 }, { dispatch, rejectWithValue }) => {
+   async ({ page, size }, { dispatch, rejectWithValue }) => {
+      console.log(page, size)
       try {
-         const response = await axiosInstance.get('/api/house/applications', {
-            params: { page, size },
-         })
+         const response = await axiosInstance.get(
+            `/api/house/applications?page=${page}&size=${size}`
+         )
 
          const responseData = response.data
-
-         if (Array.isArray(responseData)) {
-            return {
-               data: responseData,
-               totalPages: Math.ceil(responseData.length / size),
-               currentPage: page,
-            }
-         }
-
-         if (responseData && responseData.content) {
-            return {
-               data: responseData.content,
-               totalPages: responseData.totalPages || 1,
-               currentPage: page,
-            }
-         }
-
          return {
-            data: responseData.data || responseData || [],
-            totalPages: responseData.totalPages || 1,
-            currentPage: page,
+            data: responseData.data || responseData.content,
+            totalPages: responseData.totalPages,
+            currentPage: responseData.currentPage || responseData.page || page,
          }
       } catch (error) {
-         console.error('API Error:', error.response?.data)
-
          if (error.response?.status === 401) {
             dispatch(AUTH_ACTIONS.logOut())
          }
@@ -45,4 +26,3 @@ export const fetchApplications = createAsyncThunk(
       }
    }
 )
-

@@ -1,14 +1,28 @@
+import { useEffect } from 'react'
 import { Box, styled, Typography } from '@mui/material'
 
-const Loading = () => (
-   <StyledLoaderWrapper>
-      <LoaderDots>
-         <Typography variant="span"></Typography>
-         <Typography variant="span"></Typography>
-         <Typography variant="span"></Typography>
-      </LoaderDots>
-   </StyledLoaderWrapper>
-)
+const Loading = () => {
+   useEffect(() => {
+      const originalOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+
+      return () => {
+         document.body.style.overflow = originalOverflow
+      }
+   }, [])
+
+   return (
+      <StyledLoaderWrapper>
+         <LoaderDots>
+            <Typography variant="span"></Typography>
+            <Typography variant="span"></Typography>
+            <Typography variant="span"></Typography>
+         </LoaderDots>
+      </StyledLoaderWrapper>
+   )
+}
 
 export default Loading
 
@@ -16,7 +30,6 @@ const StyledLoaderWrapper = styled(Box)(() => ({
    height: '100vh',
    width: '100vw',
    display: 'flex',
-   flexDirection: 'column',
    alignItems: 'center',
    justifyContent: 'center',
    background: 'linear-gradient(135deg, #fff 0%, #f8f8f8 100%)',
@@ -27,7 +40,7 @@ const StyledLoaderWrapper = styled(Box)(() => ({
 const LoaderDots = styled('div')(() => ({
    display: 'flex',
    gap: '8px',
-   marginTop: '8px',
+   marginTop: 0,
 
    '& span': {
       width: '15px',

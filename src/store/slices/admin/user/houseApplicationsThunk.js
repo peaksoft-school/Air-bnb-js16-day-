@@ -4,11 +4,11 @@ import { AUTH_ACTIONS } from '../../auth/authSlice'
 
 export const fetchApplications = createAsyncThunk(
    'houseApplications/fetchApplications',
-   async ({ page = 1, size = 18 }, { dispatch, rejectWithValue }) => {
+   async ({ page, size }, { dispatch, rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get('/api/house/applications', {
-            params: { page, size },
-         })
+         const response = await axiosInstance.get(
+            `/api/house/applications?page=${page}&size=${size}`
+         )
 
          const responseData = response.data
 
@@ -26,7 +26,8 @@ export const fetchApplications = createAsyncThunk(
                totalPages: responseData.totalPages || 1,
                currentPage: page,
             }
-         }a
+         }
+         a
 
          return {
             data: responseData.data || responseData || [],

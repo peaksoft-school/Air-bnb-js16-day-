@@ -9,7 +9,7 @@ import {
 } from '../../../store/slices/admin/user/userThunk'
 import InnerPage from './inner/InnerPage'
 import Loading from '../../Loading'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const UserAnnouncement = () => {
    const dispatch = useDispatch()

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Box, Typography, styled } from '@mui/material'
 import Input from '../UI/Input'
@@ -17,11 +17,48 @@ const Intro = () => {
    const [openSignIn, setOpenSignIn] = useState(false)
    const [openSignUp, setOpenSignUp] = useState(false)
    const [openForgotPassword, setOpenForgotPassword] = useState(false)
+   const [searchValue, setSearchValue] = useState('')
+   const [pendingRoute, setPendingRoute] = useState(null)
 
    const handleOpenSignUp = () => setOpenSignUp(true)
-   const handleOpenCreate = () => {
-      navigate('/user/create-house')
+
+   const handleAddLeave = () => {
+      if (!isAuthenticated) {
+         setOpenSignUp(true)
+         setPendingRoute('/user/create-house')
+      } else {
+         navigate('/user/create-house')
+      }
    }
+
+   const handleInputChange = (e) => setSearchValue(e.target.value)
+   const handleInputKeyDown = (e) => {
+      if (e.key === 'Enter') {
+         handleSearch()
+      }
+   }
+   const handleSearch = () => {
+      if (!isAuthenticated) {
+         setOpenSignUp(true)
+         localStorage.setItem('pendingSearch', searchValue)
+      } else {
+         navigate(`/user/region?search=${encodeURIComponent(searchValue)}`)
+      }
+   }
+
+   useEffect(() => {
+      if (isAuthenticated) {
+         if (pendingRoute) {
+            navigate(pendingRoute)
+            setPendingRoute(null)
+         }
+         const pendingSearch = localStorage.getItem('pendingSearch')
+         if (pendingSearch) {
+            navigate(`/user/region?search=${encodeURIComponent(pendingSearch)}`)
+            localStorage.removeItem('pendingSearch')
+         }
+      }
+   }, [isAuthenticated, navigate, pendingRoute])
 
    return (
       <>
@@ -30,41 +67,26 @@ const Intro = () => {
                <Header
                   isAuthenticated={isAuthenticated}
                   onJoinUs={handleOpenSignUp}
-                  onAddLeave={handleOpenCreate}
+                  onAddLeave={handleAddLeave}
                />
 
                <StyledSearch>
-                  {isAuthenticated ? (
-                     <>
-                        <StyledText>
-                           Find a place you'll love to stay at
-                        </StyledText>
-
-                        <Input
-                           placeholder="Region, city, apartment, house..."
-                           icon={true}
-                           sizeVariant="large"
-                        />
-                     </>
-                  ) : (
-                     <>
-                        <StyledText>
-                           Find a place you'll love to stay at
-                        </StyledText>
-
-                        <Input
-                           placeholder="Region, city, apartment, house..."
-                           icon={true}
-                           sizeVariant="large"
-                        />
-                        <StyledCheckbox>
-                           <Checkbox />
-
-                           <Typography className="search-text">
-                              Искать поблизости
-                           </Typography>
-                        </StyledCheckbox>
-                     </>
+                  <StyledText>Find a place you'll love to stay at</StyledText>
+                  <Input
+                     value={searchValue}
+                     onChange={handleInputChange}
+                     onKeyDown={handleInputKeyDown}
+                     placeholder="Region, city, apartment, house..."
+                     icon={true}
+                     sizeVariant="large"
+                  />
+                  {!isAuthenticated && (
+                     <StyledCheckbox>
+                        <Checkbox />
+                        <Typography className="search-text">
+                           Искать поблизости
+                        </Typography>
+                     </StyledCheckbox>
                   )}
                </StyledSearch>
 

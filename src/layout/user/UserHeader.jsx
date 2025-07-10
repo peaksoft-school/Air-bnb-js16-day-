@@ -53,6 +53,9 @@ const UserHeader = ({
    const goToFavorites = () => {
       navigate(ROUTES.USER.FAVORITE)
    }
+   const handleLocation = () => {
+
+   }
 
    return (
       <StyledAppBar position="static">
@@ -73,9 +76,9 @@ const UserHeader = ({
 
             <Box className="right-box">
                <Box className="search-container">
-                  <Box className="checkbox-container">
-                     <Checkbox />
-                     <Typography className="search-text">
+                  <Box className="checkbox-container" onClick={handleLocation}>
+                     <Checkbox onChange={handleLocation} />
+                     <Typography className="search-text" onClick={handleLocation}>
                         Search nearby
                      </Typography>
                   </Box>
@@ -104,7 +107,7 @@ const UserHeader = ({
 
                   {isAuth && (
                      <>
-                        <Typography onClick={goToFavorites}>
+                        <Typography onClick={goToFavorites} sx={{cursor:"pointer"}}>
                            FAVORITE({favoriteCount})
                         </Typography>
 

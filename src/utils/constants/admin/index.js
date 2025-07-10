@@ -1,13 +1,13 @@
 const BOOKING_FILTER_OPTIONS = [
    { id: 1, value: 'All', label: 'All' },
-   { id: 2, value: 'true', label: 'Booked' },
-   { id: 3, value: 'false', label: 'Not booked' },
+   { id: 2, value: 'booked', label: 'Booked' },
+   { id: 3, value: 'not_booked', label: 'Not booked' },
 ]
 
 const POPULAR_SORT_OPTIONS = [
    { id: 1, value: 'All', label: 'All' },
-   { id: 2, value: 'POPULAR', label: 'Popular' },
-   { id: 3, value: 'THE LASTEST', label: 'The lastest' },
+   { id: 2, value: 'popular', label: 'Popular' },
+   { id: 3, value: 'the_lastest', label: 'The lastest' },
 ]
 
 const HOUSE_TYPE_OPTIONS = [
@@ -18,8 +18,8 @@ const HOUSE_TYPE_OPTIONS = [
 
 const PRICE_FILTER_OPTIONS = [
    { id: 1, value: 'All', label: 'All' },
-   { id: 2, value: 'LOW TO HIGH', label: 'Low to high' },
-   { id: 3, value: 'HIGH TO   LOW', label: 'High to low' },
+   { id: 2, value: 'low_to_high', label: 'Low to high' },
+   { id: 3, value: 'high_to_low', label: 'High to low' },
 ]
 
 export {

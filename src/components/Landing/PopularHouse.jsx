@@ -1,57 +1,133 @@
 import { Box, styled, Typography } from '@mui/material'
 import GeoIcon from '../../assets/icons/geo.svg'
-import StarIcon from '../../assets/icons/FullStar.svg'
-import { HOUSES } from '../../utils/constants/index'
+import StarIcon from '../../assets/icons/star.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLandingPageReguest } from '../../store/slices/user/Landing/LandingThunk'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
+import SignUpModal from '../../pages/sing-up/SignUpModal'
 
-const PopularHouse = () => (
-   <StyledMainBox>
-      <StyledSecondBox>
-         <StyledDiv>
-            <Box>
-               <Typography variant="h2">Popular House</Typography>
+const PopularHouse = () => {
+   const dispatch = useDispatch()
+   const { landing, error } = useSelector((state) => state.landing)
+   const isAuthenticated = useSelector((state) => state.auth.isAuth)
+   const navigate = useNavigate()
+   const [openSignUp, setOpenSignUp] = useState(false)
+   const [pendingId, setPendingId] = useState(null)
 
-               <Typography>
-                  Helping you make the best decisions in buying, selling, &
-                  renting your last minute locations.
-               </Typography>
-            </Box>
+   useEffect(() => {
+      dispatch(getLandingPageReguest({ houseStatus: 'popular' }))
+   }, [dispatch])
 
-            <Box>
-               <StyledTypography>View all</StyledTypography>
-            </Box>
-         </StyledDiv>
+   useEffect(() => {
+      if (isAuthenticated) {
+         const id = localStorage.getItem('pendingAnnouncementId')
+         if (id) {
+            navigate(`/user/announcement/${id}`)
+            localStorage.removeItem('pendingAnnouncementId')
+         }
+      }
+   }, [isAuthenticated, navigate])
 
-         <StyledBox>
-            {HOUSES.map(({ id, image, title, rating, address, price }) => (
-               <StyledCardBox key={id}>
-                  <ImageWrapper>
-                     <StyledImg src={image} alt={title} />
+   const handleViewAll = () => {
+      if (!isAuthenticated) {
+         setOpenSignUp(true)
+         localStorage.setItem(
+            'pendingRegionFiltersHouse',
+            JSON.stringify({
+               popularity: 'popular',
+               houseType: 'HOUSE',
+            })
+         )
+      } else {
+         navigate('/user/region?popularity=popular&houseType=HOUSE')
+      }
+   }
 
-                     <RatingTag>
-                        <img src={StarIcon} alt="star" />
+   const handleCardClick = (id) => {
+      if (!isAuthenticated) {
+         setOpenSignUp(true)
+         setPendingId(id)
+         localStorage.setItem('pendingAnnouncementId', id)
+      } else {
+         navigate(`/user/announcement/${id}`)
+      }
+   }
 
-                        <Typography variant="span">{rating}</Typography>
-                     </RatingTag>
-                  </ImageWrapper>
+   if (error) return <div>{error}</div>
 
-                  <Box className="card-content">
-                     <Typography variant="h3">{title}</Typography>
-
-                     <Typography>
-                        <StyledSecondImg src={GeoIcon} alt="geo" />
-                        {address}
-                     </Typography>
-                  </Box>
+   return (
+      <StyledMainBox>
+         <StyledSecondBox>
+            <StyledDiv>
+               <Box>
+                  <Typography variant="h2">Popular House</Typography>
 
                   <Typography>
-                     <Typography variant="span">${price}</Typography> / day
+                     Helping you make the best decisions in buying, selling, &
+                     renting your last minute locations.
                   </Typography>
-               </StyledCardBox>
-            ))}
-         </StyledBox>
-      </StyledSecondBox>
-   </StyledMainBox>
-)
+               </Box>
+
+               <Box>
+                  <StyledTypography
+                     onClick={handleViewAll}
+                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                  >
+                     View all
+                  </StyledTypography>
+               </Box>
+            </StyledDiv>
+
+            <StyledBox>
+               {landing &&
+                  Array.isArray(landing) &&
+                  landing.slice(2, 5).map((apartment) => (
+                     <StyledCardBox
+                        key={apartment.id}
+                        onClick={() => handleCardClick(apartment.id)}
+                        style={{ cursor: 'pointer' }}
+                     >
+                        <ImageWrapper>
+                           <StyledImg
+                              src={apartment.imageUrls[0]}
+                              alt={apartment.name}
+                           />
+
+                           <RatingTag>
+                              <img src={StarIcon} alt="star" />
+
+                              <Typography variant="span">
+                                 {apartment.rating}
+                              </Typography>
+                           </RatingTag>
+                        </ImageWrapper>
+
+                        <Box className="card-content">
+                           <Typography variant="h3">
+                              {apartment.description}
+                           </Typography>
+
+                           <Typography>
+                              <StyledSecondImg src={GeoIcon} alt="geo" />
+                              {apartment.address}
+                           </Typography>
+                        </Box>
+
+                        <Typography>
+                           <Typography variant="span">
+                              ${apartment.price}
+                           </Typography>{' '}
+                           / day
+                        </Typography>
+                     </StyledCardBox>
+                  ))}
+            </StyledBox>
+         </StyledSecondBox>
+         <SignUpModal open={openSignUp} setOpen={setOpenSignUp} />
+      </StyledMainBox>
+   )
+}
 
 export default PopularHouse
 

@@ -24,7 +24,7 @@ export default function Application() {
       error,
       currentPage: page,
       totalPages: pageCount,
-   } = useSelector((state) => state.applicationSlice)
+   } = useSelector((state) => state.houseApplications)
 
    const [direction, setDirection] = useState(0)
    const [containerHeight, setContainerHeight] = useState(0)
@@ -75,7 +75,6 @@ export default function Application() {
       navigate(`/admin/application/${id}`)
    }
 
-   console.log(1)
 
    return (
       <>
@@ -153,6 +152,7 @@ export default function Application() {
                                     onDelete={(houseId) =>
                                        handleDeleteHouse(houseId)
                                     }
+                                    
                                  />
                               </Grid>
                            )

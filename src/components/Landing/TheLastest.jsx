@@ -2,65 +2,125 @@ import { Box, styled, Typography } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import Rectangle from '../../assets/images/Rectangle.png'
 import ImageCarousel from '../UI/ImageCarousel'
-import { IMAGES_POPULARS } from '../../utils/constants/index'
+import { IMAGES_POPULARS } from '../../utils/constants/Index'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
+import SignUpModal from '../../pages/sing-up/SignUpModal'
+import { getLandingPageReguest } from '../../store/slices/user/Landing/LandingThunk'
 
-const TheLastest = ({ handleAllClick, handleMoreClick }) => (
-   <StyledMainContainer>
-      <StyledSecondContainer>
-         <StyledTextContainer>
-            <StyledApartamentText>the lastest</StyledApartamentText>
+const TheLastest = () => {
+   const dispatch = useDispatch()
+   const { landing, error } = useSelector((state) => state.landing)
+   const isAuthenticated = useSelector((state) => state.auth.isAuth)
+   const navigate = useNavigate()
+   const [openSignUp, setOpenSignUp] = useState(false)
+   const [pendingId, setPendingId] = useState(null)
+   const [pendingRegion, setPendingRegion] = useState(false)
 
-            <StyledViewText onClick={handleAllClick}>View all</StyledViewText>
-         </StyledTextContainer>
+   useEffect(() => {
+      dispatch(getLandingPageReguest({ houseStatus: 'latest' }))
+   }, [dispatch])
 
-         <StyledHotelContainer>
-            <StyledImageContainer>
-               <img src={Rectangle} alt="hotel" />
+   useEffect(() => {
+      if (isAuthenticated) {
+         if (
+            pendingRegion ||
+            localStorage.getItem('pendingRegionFiltersLatest')
+         ) {
+            navigate('/user/region?popularity=the_lastest')
+            setPendingRegion(false)
+            localStorage.removeItem('pendingRegionFiltersLatest')
+         }
+         const id = localStorage.getItem('pendingAnnouncementId')
+         if (id) {
+            navigate(`/user/announcement/${id}`)
+            localStorage.removeItem('pendingAnnouncementId')
+         }
+      }
+   }, [isAuthenticated, navigate, pendingRegion])
 
-               <StyledDistance>
-                  <StyledDistanceTexts>
-                     <StyledHotelText>
-                        Aska Lara Resort & Spa Hotel
-                     </StyledHotelText>
+   const handleViewAll = () => {
+      if (!isAuthenticated) {
+         setOpenSignUp(true)
+         setPendingRegion(true)
+         localStorage.setItem('pendingRegionFiltersLatest', '1')
+      } else {
+         navigate('/user/region?popularity=the_lastest')
+      }
+   }
 
-                     <StyledApartamentsText>
-                        The Aska Lara Resort & Spa Hotel, which operates on an
-                        all-inclusive system, occupies 2 plots separated by a
-                        road. The hotel is located in the Lara district, 500
-                        meters from the sea...
-                     </StyledApartamentsText>
-                  </StyledDistanceTexts>
+   const handleReadMore = (id) => {
+      if (!isAuthenticated) {
+         setOpenSignUp(true)
+         setPendingId(id)
+         localStorage.setItem('pendingAnnouncementId', id)
+      } else {
+         navigate(`/user/announcement/${id}`)
+      }
+   }
 
-                  <StyledDistanceTexts>
-                     <StyledTextLocation>
-                        <LocationOnIcon
-                           fontSize="inherit"
-                           className="location-icon"
+   if (error) return <div>{error}</div>
+
+   return (
+      <StyledMainContainer>
+         <StyledSecondContainer>
+            <StyledTextContainer>
+               <StyledApartamentText>the lastest</StyledApartamentText>
+               <StyledViewText onClick={handleViewAll}>View all</StyledViewText>
+            </StyledTextContainer>
+
+            <StyledHotelContainer>
+               {landing &&
+                  Array.isArray(landing) &&
+                  landing.slice(5, 6).map((apartment) => (
+                     <StyledImageContainer key={apartment.id}>
+                        <StyledImg
+                           src={apartment.imageUrls[0] || Rectangle}
+                           alt={apartment.name}
                         />
-                        <Typography className="location-name">
-                           723510 Osh Muzurbek Alimbekov 9/7
-                        </Typography>
-                     </StyledTextLocation>
-
-                     <StyledMoreText onClick={handleMoreClick}>
-                        Read more
-                     </StyledMoreText>
-                  </StyledDistanceTexts>
-               </StyledDistance>
-            </StyledImageContainer>
-
-            <StyledSliderContainer>
-               <ImageCarousel
-                  images={IMAGES_POPULARS}
-                  isButtonBlack={true}
-                  isBlackCount="black"
-                  left="left"
-               />
-            </StyledSliderContainer>
-         </StyledHotelContainer>
-      </StyledSecondContainer>
-   </StyledMainContainer>
-)
+                        <StyledDistance>
+                           <StyledDistanceTexts>
+                              <StyledHotelText>
+                                 {apartment.name}
+                              </StyledHotelText>
+                              <StyledApartamentsText>
+                                 {apartment.description}
+                              </StyledApartamentsText>
+                           </StyledDistanceTexts>
+                           <StyledDistanceTexts>
+                              <StyledTextLocation>
+                                 <LocationOnIcon
+                                    fontSize="inherit"
+                                    className="location-icon"
+                                 />
+                                 <Typography className="location-name">
+                                    {apartment.address}
+                                 </Typography>
+                              </StyledTextLocation>
+                              <StyledMoreText
+                                 onClick={() => handleReadMore(apartment.id)}
+                              >
+                                 Read more
+                              </StyledMoreText>
+                           </StyledDistanceTexts>
+                        </StyledDistance>
+                     </StyledImageContainer>
+                  ))}
+               <StyledSliderContainer>
+                  <ImageCarousel
+                     images={IMAGES_POPULARS}
+                     isButtonBlack={true}
+                     isBlackCount="black"
+                     left="left"
+                  />
+               </StyledSliderContainer>
+            </StyledHotelContainer>
+         </StyledSecondContainer>
+         <SignUpModal open={openSignUp} setOpen={setOpenSignUp} />
+      </StyledMainContainer>
+   )
+}
 
 export default TheLastest
 
@@ -169,4 +229,10 @@ const StyledViewText = styled(Typography)(() => ({
    letterSpacing: '0%',
    cursor: 'pointer',
    textDecoration: 'underline',
+}))
+const StyledImg = styled('img')(() => ({
+   width: '525px',
+   height: '456px',
+   borderRadius: '2px',
+   objectFit: 'cover',
 }))

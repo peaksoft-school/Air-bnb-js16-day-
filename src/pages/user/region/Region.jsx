@@ -11,19 +11,29 @@ import {
    getFavorites,
 } from '../../../store/slices/user/favorite/favoriteThunk'
 import Loading from '../../Loading'
-import { useNavigate } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const Region = () => {
-   const { allHouses, isLoading, search } = useSelector((state) => state.region)
+   const {
+      allHouses,
+      isLoading,
+      search: reduxSearch,
+   } = useSelector((state) => state.region)
    const favoriteState = useSelector((state) => state.favorite)
    const favorites = favoriteState?.favorites || []
    const selectedRegion = useSelector((state) => state.region.selectedRegion)
 
+   const location = useLocation()
+   const params = new URLSearchParams(location.search)
+   const search = params.get('search') || reduxSearch || ''
+   const popularity = params.get('popularity') || ''
+   const houseType = params.get('houseType') || ''
+
    const [filters, setFilters] = useState({
       region: '',
-      popularity: '',
-      houseType: '',
+      popularity,
+      houseType,
       priceSort: '',
    })
 
@@ -69,6 +79,15 @@ const Region = () => {
 
       return () => clearTimeout(timeoutId)
    }, [filters, search, page, dispatch])
+
+   // Если query-параметры popularity или houseType изменились, обновляем фильтры
+   useEffect(() => {
+      setFilters((prev) => ({
+         ...prev,
+         popularity,
+         houseType,
+      }))
+   }, [popularity, houseType])
 
    const handleFilterChange = (type, value) => {
       if (value && value !== 'All') {
@@ -127,7 +146,7 @@ const Region = () => {
    const isLastPage = allHouses.length < pageSize
 
    const links = [
-      { href: ROUTES.USER.INDEX, label: 'Main' },
+      { href: ROUTES.GUEST.INDEX, label: 'Main' },
 
       {
          href: ROUTES.USER.REGION_PAGE,
