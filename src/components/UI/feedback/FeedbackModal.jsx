@@ -8,10 +8,11 @@ import {
    clearImage,
    deleteImage,
 } from '../../../store/slices/user/addHouse/addHouseSlice'
-import { postImageFile } from '../../../store/slices/user/addHouse/addHouseThunk'
+import { uploadImagesToS3 } from '../../../store/slices/user/createHouseThunk'
 import Input from '../Input'
 import Button from '../Button'
 import { saveFeedback } from '../../../store/slices/admin/user/userThunk'
+import { postImageFile } from '../../../store/slices/user/addHouse/addHouseThunk'
 
 const FeedbackModal = ({ open, onClose, houseId }) => {
    const images = useSelector((state) => state.addHouseSlice.images)
@@ -27,7 +28,7 @@ const FeedbackModal = ({ open, onClose, houseId }) => {
 
    const handleFileChange = (e) => {
       const file = e.target.files[0]
-      if (file) dispatch(postImageFile({ file }))
+      if (file) dispatch(postImageFile({ files: [file] }))
    }
 
    const postFeedback = async () => {

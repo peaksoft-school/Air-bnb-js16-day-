@@ -22,8 +22,8 @@ import {
    PROFILE_TABS,
    PROFILE_TYPE_OPTIONS,
 } from '../../../utils/helpers'
-import AdminCard from '../../../components/UI/cards/AdminCard'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
+import BoocedCard from '../../../components/house/cards/BoocedCard'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const Profile = () => {
    const { userProfile, loading, error } = useSelector((state) => state.profile)
@@ -101,7 +101,7 @@ const Profile = () => {
 
    const handleClick = (id) => {
       if (!id) return
-      navigate(`/user/profile/announcement/${id}`)
+      navigate(`/user/announcement/${id}`)
    }
 
    return (
@@ -218,10 +218,11 @@ const Profile = () => {
                         filteredHouses
                            .filter((house) => !!house.houseId)
                            .map((house) => (
-                              <AdminCard
+                              <BoocedCard
                                  key={house.houseId}
                                  house={house}
-                                 onNavigate={() => handleClick(house.houseId)}
+                                 onClick={() => handleClick(house.houseId)}
+                                 disabled={house.status === 'BLOCKED'}
                               />
                            ))
                      )}
@@ -316,7 +317,7 @@ const RightBox = styled(Box)(() => ({
    '& .cards-container': {
       display: 'flex',
       flexWrap: 'wrap',
-      gap: '20px',
+      gap: '10px',
    },
 
    '& .empty-message': {

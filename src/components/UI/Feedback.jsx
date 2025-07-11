@@ -6,10 +6,10 @@ import {
    Typography,
    Rating as MuiRating,
 } from '@mui/material'
-import LikeIcon from '../../assets/icons/LikeIcon.svg'
-import DisLike from '../../assets/icons/DisLike.svg'
 import IconButton from '../UI/IconButton'
 import Meatballs from './Meatballs'
+import LikeIcon from '../../assets/icons/LikeIcon.svg'
+import DisLikeIcon from '../../assets/icons/DisLike.svg'
 
 const Feedback = ({
    text,
@@ -123,21 +123,25 @@ const Feedback = ({
                      src={LikeIcon}
                      alt="like"
                      width={20}
+                     height={20}
                      style={{
-                        filter: liked ? 'brightness(0) saturate(100%)' : 'none',
+                        filter: liked
+                           ? 'brightness(0%) saturate(100%)'
+                           : 'brightness(0) saturate(0%) invert(60%)',
                      }}
                   />
                   {likes}
                </IconButton>
                <IconButton className="like" onClick={handleDislike}>
                   <img
-                     src={DisLike}
+                     src={DisLikeIcon}
                      alt="dislike"
                      width={20}
+                     height={20}
                      style={{
                         filter: disliked
-                           ? 'brightness(0) saturate(100%)'
-                           : 'none',
+                           ? 'brightness(0%) saturate(100%)'
+                           : 'brightness(0) saturate(0%) invert(60%)',
                      }}
                   />
                   {dislikes}

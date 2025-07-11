@@ -5,10 +5,11 @@ import Button from '../Button'
 
 const Rating = ({ toggleFeedbackModal }) => {
    const { role } = useSelector((state) => state.auth)
-   const rating = useSelector((state) => state.userInfo.rating) || {}
+   const ratingData = useSelector((state) => state.userInfo.rating)
 
-   const counts = rating.ratingCount || {}
+   const counts = ratingData?.ratingCount || {}
    const total = Object.values(counts).reduce((acc, num) => acc + num, 0)
+   const averageRating = ratingData?.rating || 0
 
    const RATINGS = [5, 4, 3, 2, 1].map((label) => {
       const count = counts[label] || 0
@@ -20,7 +21,7 @@ const Rating = ({ toggleFeedbackModal }) => {
       <StyledContainer>
          <RatingChart>
             <RatingCont>
-               <p>{total}</p>
+               <p>{averageRating.toFixed(1)}</p>
                <img src={FullStarIcon} alt="fullStarIcon" />
             </RatingCont>
 
@@ -52,6 +53,8 @@ const Rating = ({ toggleFeedbackModal }) => {
 
 export default Rating
 
+// ==== Стили ====
+
 const StyledContainer = styled(Box)(() => ({
    '& .MuiButton-root': {
       width: '100%',
@@ -63,7 +66,6 @@ const RatingChart = styled(Box)(() => ({
    borderRadius: '16px',
    padding: '21px 40px',
    width: '424px',
-   width: '424px',
    marginBottom: '20px',
 }))
 
@@ -72,12 +74,10 @@ const RatingCont = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'center',
    gap: '10px',
-
    '& p': {
       fontSize: '24px',
       margin: 0,
    },
-
    '& img': {
       width: '31px',
       height: '31px',

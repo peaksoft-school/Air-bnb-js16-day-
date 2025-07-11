@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, styled } from '@mui/material'
 import { ALL_HOUSING_THUNK } from '../../../store/slices/admin/all-housing/allHousingThunk'
-import AdminCard from '../../../components/UI/cards/AdminCard'
 import DropDown from '../../../components/UI/DropDown'
 import {
    BOOKING_FILTER_OPTIONS,
@@ -11,6 +10,7 @@ import {
    PRICE_FILTER_OPTIONS,
 } from '../../../utils/constants/admin'
 import Loading from '../../Loading'
+import AdminCardAll from '../../../components/UI/AdminCard'
 
 const AllHousing = () => {
    const [filterOption, setFilterOption] = useState('All')
@@ -98,7 +98,7 @@ const AllHousing = () => {
                !error &&
                housing?.length > 0 &&
                housing?.map((house) => (
-                  <AdminCard key={house.id} house={house} />
+                  <AdminCardAll key={house.id} house={house} />
                ))}
 
             {!loading && !error && housing?.length === 0 && (
@@ -135,8 +135,8 @@ const StyledSelectBox = styled(Box)(() => ({
 const StyledCardBox = styled(Box)(() => ({
    display: 'flex',
    flexWrap: 'wrap',
-   justifyContent: 'start',
+   justifyContent: 'center',
    alignItems: 'center',
-   gap: '10px',
+   gap: '25px',
    marginTop: '40px',
 }))

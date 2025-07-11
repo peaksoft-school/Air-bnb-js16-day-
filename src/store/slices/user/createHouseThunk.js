@@ -64,3 +64,4 @@ export const createHouseBase = createAsyncThunk(
       }
    }
 )
+export { uploadImagesToS3 }

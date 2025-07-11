@@ -316,6 +316,7 @@ const Region = () => {
                            guests={house.maxGuests}
                            isLiked={isFavorite}
                            onLike={handleLike}
+                           isFavorite={house.favorite}
                            onClick={() =>
                               navigate(
                                  ROUTES.USER.ANNOUNCEMENT_DETAIL.replace(
@@ -324,7 +325,6 @@ const Region = () => {
                                  )
                               )
                            }
-                           Favorite={house.favorite}
                         />
                      )
                   })}

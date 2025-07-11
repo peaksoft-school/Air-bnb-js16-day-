@@ -13,7 +13,7 @@ import {
 import { useNavigate } from 'react-router'
 import { fetchApplications } from '../../store/slices/admin/user/houseApplicationsThunk'
 
-const CARDS_PER_PAGE = 6
+const CARDS_PER_PAGE = 18
 
 export default function Application() {
    const dispatch = useDispatch()
@@ -31,8 +31,7 @@ export default function Application() {
    const gridRef = useRef(null)
 
    useEffect(() => {
-      dispatch(fetchApplications({ page: 2, size: 6 }))
-      // return () => dispatch(resetApplications())
+      dispatch(fetchApplications({ page: 1, size: CARDS_PER_PAGE }))
    }, [dispatch])
 
    useEffect(() => {
@@ -70,7 +69,7 @@ export default function Application() {
 
    const handlePageChange = (_, value) => {
       setDirection(value > page ? 1 : -1)
-      // dispatch(fetchApplications({ page: value, size: CARDS_PER_PAGE }))
+      dispatch(fetchApplications({ page: value, size: CARDS_PER_PAGE }))
    }
 
    const options = CardOptions

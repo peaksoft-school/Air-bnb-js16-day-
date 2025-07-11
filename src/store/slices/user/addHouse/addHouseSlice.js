@@ -18,16 +18,21 @@ export const addHouseSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder.addCase(postImageFile.fulfilled, (state, { payload }) => {
-         const imageUrl =
-            payload?.Link || payload?.imageUrl || payload?.url || payload
-
-         if (typeof imageUrl === 'string') {
-            state.images.push(imageUrl)
+         if (Array.isArray(payload)) {
+            // Если payload — массив ссылок, добавляем все
+            state.images.push(...payload)
          } else {
-            console.warn(
-               'Не удалось добавить изображение: неверный формат payload',
-               payload
-            )
+            const imageUrl =
+               payload?.Link || payload?.imageUrl || payload?.url || payload
+
+            if (typeof imageUrl === 'string') {
+               state.images.push(imageUrl)
+            } else {
+               console.warn(
+                  'Не удалось добавить изображение: неверный формат payload',
+                  payload
+               )
+            }
          }
       })
       builder

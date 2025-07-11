@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { authSlice } from './slices/auth/authSlice'
 import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
-import storage from 'redux-persist/lib/storage'
+import storageSession from 'redux-persist/lib/storage/session'
 import { allHousingSlice } from './slices/admin/all-housing/allHousingSlice'
 import createHouseReducer from '../store/slices/user/createHouseSlice'
 import { regionSlice } from './slices/user/region/regionSlice'
@@ -36,7 +36,7 @@ const rootReducer = combineReducers({
 
 const persistConfig = {
    key: 'AIR-BNB',
-   storage,
+   storage: storageSession,
    whitelist: ['auth'],
 }
 
