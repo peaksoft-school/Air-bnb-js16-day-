@@ -166,21 +166,20 @@ const AppRoutes = () => (
                </Suspense>
             }
          />
+         <Route
+            path={ROUTES.ADMIN.ALLHOUSING}
+            element={
+               <Suspense fallback={<Loading />}>
+                  <AllHousing />
+               </Suspense>
+            }
+         />
 
          <Route
             path={ROUTES.ADMIN.USER_DETAIL}
             element={
                <Suspense fallback={<Loading />}>
                   <UserDetail />
-               </Suspense>
-            }
-         />
-
-         <Route
-            path={ROUTES.ADMIN.ALLHOUSING}
-            element={
-               <Suspense fallback={<Loading />}>
-                  <AllHousing />
                </Suspense>
             }
          />

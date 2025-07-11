@@ -9,7 +9,7 @@ import {
 import nodata from '../../../assets/images/no-data.png'
 import Card from '../../../components/UI/cards/Card'
 import { ROUTES } from '../../../routes/routes'
-import BreadCrumbs from '../../../components/UI/Breadcrumbs'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 
 const Favorites = () => {
    const dispatch = useDispatch()

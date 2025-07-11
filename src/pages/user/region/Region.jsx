@@ -6,6 +6,7 @@ import Chip from '../../../components/UI/Chip'
 import Select from '../../../components/UI/DropDown'
 import Card from '../../../components/UI/cards/Card'
 import { REGION_THUNK } from '../../../store/slices/user/region/regionThunk'
+import { REGION_ACTIONS } from '../../../store/slices/user/region/regionSlice'
 import {
    addFavorite,
    getFavorites,
@@ -47,6 +48,14 @@ const Region = () => {
 
    const total = allHouses?.length || 0
    const totalCount = total || allHouses?.length || 0
+
+   // Инициализация selectedRegion из localStorage при загрузке
+   useEffect(() => {
+      const savedRegion = localStorage.getItem('selectedRegion')
+      if (savedRegion && !selectedRegion) {
+         dispatch(REGION_ACTIONS.setSelectedRegion(savedRegion))
+      }
+   }, [dispatch, selectedRegion])
 
    useEffect(() => {
       if (selectedRegion) {
@@ -106,6 +115,17 @@ const Region = () => {
       }
 
       setFilters((prev) => ({ ...prev, [type]: value }))
+
+      // Обновляем selectedRegion в Redux при изменении фильтра региона
+      if (type === 'region') {
+         if (value && value !== 'All') {
+            dispatch(REGION_ACTIONS.setSelectedRegion(value))
+            localStorage.setItem('selectedRegion', value)
+         } else {
+            dispatch(REGION_ACTIONS.setSelectedRegion(''))
+            localStorage.removeItem('selectedRegion')
+         }
+      }
    }
 
    const handleChipDelete = (chipToDelete) => {

@@ -32,7 +32,6 @@ const announcementDetailSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder
-         // House
          .addCase(fetchHouseById.pending, (state) => {
             state.loading = true
             state.error = null
@@ -45,23 +44,18 @@ const announcementDetailSlice = createSlice({
             state.loading = false
             state.error = action.payload
          })
-         // Feedback
          .addCase(fetchFeedbackByHouseId.fulfilled, (state, action) => {
             state.feedback = action.payload
          })
-         // Favorites
          .addCase(fetchFavoritesByHouseId.fulfilled, (state, action) => {
             state.favorites = action.payload
          })
-         // Bookings
          .addCase(fetchBookingsByHouseId.fulfilled, (state, action) => {
             state.bookings = action.payload
          })
-         // Delete
          .addCase(deleteHouseById.fulfilled, (state) => {
             state.deleteSuccess = true
          })
-         // Update
          .addCase(updateHouseById.fulfilled, (state, action) => {
             state.house = action.payload
             state.updateSuccess = true

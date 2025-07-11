@@ -25,7 +25,7 @@ import Feedback from '../../../components/UI/Feedback'
 import Rating from '../../../components/UI/rating/Rating'
 import Button from '../../../components/UI/Button'
 import Loading from '../../Loading'
-import BreadCrumbs from '../../../components/UI/Breadcrumbs'
+import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 
 const AnnouncementDetailPage = () => {
    const dispatch = useDispatch()
