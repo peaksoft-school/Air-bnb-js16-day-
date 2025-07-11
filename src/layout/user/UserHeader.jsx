@@ -16,7 +16,7 @@ import Air from '../../assets/icons/black-air.svg'
 import Checkbox from '../../components/UI/Checkbox'
 import Input from '../../components/UI/Input'
 import { AUTH_ACTIONS } from '../../store/slices/auth/authSlice'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { USER_OPTIONS } from '../../utils/helpers'
 import { REGION_ACTIONS } from '../../store/slices/user/region/regionSlice'
 import { ROUTES } from '../../routes/routes'
@@ -29,12 +29,27 @@ const UserHeader = ({
    handleLeaveAddClick,
 }) => {
    const [searchValue, setSearchValue] = useState('')
+   const [isNearbySearch, setIsNearbySearch] = useState(false)
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const favoriteCount = useSelector(
       (state) => state.favorite?.favorites?.length || 0
    )
+   const selectedRegion = useSelector((state) => state.region.selectedRegion)
+
+   // Инициализация состояния чекбокса из localStorage при загрузке
+   useEffect(() => {
+      const savedRegion = localStorage.getItem('selectedRegion')
+      if (savedRegion === 'BISHKEK') {
+         setIsNearbySearch(true)
+      }
+   }, [])
+
+   // Синхронизируем состояние чекбокса с выбранным регионом
+   useEffect(() => {
+      setIsNearbySearch(selectedRegion === 'BISHKEK')
+   }, [selectedRegion])
 
    const handleMenuSelect = (option) => {
       if (option.action === 'my-profile') {
@@ -52,6 +67,21 @@ const UserHeader = ({
 
    const goToFavorites = () => {
       navigate(ROUTES.USER.FAVORITE)
+   }
+
+   const handleLocation = () => {
+      const newNearbySearch = !isNearbySearch
+      setIsNearbySearch(newNearbySearch)
+
+      if (newNearbySearch) {
+         // Устанавливаем регион BISHKEK
+         dispatch(REGION_ACTIONS.setSelectedRegion('BISHKEK'))
+         localStorage.setItem('selectedRegion', 'BISHKEK')
+      } else {
+         // Сбрасываем регион
+         dispatch(REGION_ACTIONS.setSelectedRegion(''))
+         localStorage.removeItem('selectedRegion')
+      }
    }
 
    return (
@@ -73,9 +103,15 @@ const UserHeader = ({
 
             <Box className="right-box">
                <Box className="search-container">
-                  <Box className="checkbox-container">
-                     <Checkbox />
-                     <Typography className="search-text">
+                  <Box className="checkbox-container" onClick={handleLocation}>
+                     <Checkbox
+                        checked={isNearbySearch}
+                        onChange={handleLocation}
+                     />
+                     <Typography
+                        className="search-text"
+                        onClick={handleLocation}
+                     >
                         Search nearby
                      </Typography>
                   </Box>
@@ -104,7 +140,10 @@ const UserHeader = ({
 
                   {isAuth && (
                      <>
-                        <Typography onClick={goToFavorites}>
+                        <Typography
+                           onClick={goToFavorites}
+                           sx={{ cursor: 'pointer' }}
+                        >
                            FAVORITE({favoriteCount})
                         </Typography>
 

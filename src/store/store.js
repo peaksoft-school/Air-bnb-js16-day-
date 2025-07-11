@@ -12,11 +12,13 @@ import { addHouseSlice } from './slices/user/addHouse/addHouseSlice'
 import { paymentSlice } from './slices/user/payment/paymentSlice'
 import { LandingSlice } from './slices/user/Landing/LandingSlice'
 import announcementDetailReducer from './slices/user/profile/announcementDetail/announcementDetailSlice'
-import houseApplicationsReducer from './slices/admin/houseApplicationsSlice'
 import { usersSlice } from './slices/admin/users/usersSlice'
 import { favoriteSlice } from './slices/user/favorite/favoriteSlise'
+import houseApplicationsSlice from './slices/admin/houseApplicationsSlice'
 
 const rootReducer = combineReducers({
+   // houseSlice: houseSlice.reducer,
+   // applicationSlice: applicationSlice,
    [authSlice.name]: authSlice.reducer,
    [allHousingSlice.name]: allHousingSlice.reducer,
    createHouse: createHouseReducer,
@@ -27,7 +29,7 @@ const rootReducer = combineReducers({
    [paymentSlice.name]: paymentSlice.reducer,
    [LandingSlice.name]: LandingSlice.reducer,
    announcementDetail: announcementDetailReducer,
-   houseApplications: houseApplicationsReducer,
+   [houseApplicationsSlice.name]: houseApplicationsSlice.reducer,
    [usersSlice.name]: usersSlice.reducer,
    [favoriteSlice.name]: favoriteSlice.reducer,
 })

@@ -304,7 +304,5 @@ const CalendarWrapper = styled(Box)(() => ({
    padding: '24px',
 }))
 const PaymentContainer = styled(Box)(() => ({
-   padding: '24px',
-   width: '100%',
-   maxWidth: '400px',
+
 }))

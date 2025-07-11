@@ -22,8 +22,8 @@ import {
    PROFILE_TABS,
    PROFILE_TYPE_OPTIONS,
 } from '../../../utils/helpers'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import BoocedCard from '../../../components/house/cards/BoocedCard'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const Profile = () => {
    const { userProfile, loading, error } = useSelector((state) => state.profile)

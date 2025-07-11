@@ -1,54 +1,102 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router'
+import { useSelector } from 'react-redux'
+import SignUpModal from '../pages/sing-up/SignUpModal'
 import { Box, Link, styled, Typography } from '@mui/material'
 import AirIcon from '../assets/icons/air.svg'
 import InstagramIcon from '../assets/icons/instagram.svg'
 import TelegramIcon from '../assets/icons/telegram.svg'
 import WhatsappIcon from '../assets/icons/whatsapp.svg'
 
-const Footer = () => (
-   <StyledMainBox>
-      <StyledMainFirstBox>
-         <StyledLink href="#">Regions</StyledLink>
-         <StyledLink href="#">Leave an ad</StyledLink>
-      </StyledMainFirstBox>
+const Footer = () => {
+   const isAuthenticated = useSelector((state) => state.auth.isAuth)
+   const navigate = useNavigate()
+   const [openSignUp, setOpenSignUp] = useState(false)
+   const [pendingRoute, setPendingRoute] = useState(null)
 
-      <StyledMainSecondBox>
-         <img src={AirIcon} alt="logo" className="logo-icon"/>
-         <Typography>© Copyright PeakSoft. All Rights Reserved</Typography>
-      </StyledMainSecondBox>
+   useEffect(() => {
+      if (isAuthenticated && pendingRoute) {
+         navigate(pendingRoute)
+         setPendingRoute(null)
+      }
+   }, [isAuthenticated, navigate, pendingRoute])
 
-      <StyledMainThirdBox>
-         <StyledLink
-            href="https://instagram.com/yourprofile"
-            target="_blank"
-            rel="noopener"
-         >
-            <IconWrapper>
-               <img src={InstagramIcon} alt="instagram" />
-            </IconWrapper>
-         </StyledLink>
+   const handleRegionsClick = (e) => {
+      e.preventDefault()
+      if (!isAuthenticated) {
+         setOpenSignUp(true)
+         setPendingRoute('/user/region')
+      } else {
+         navigate('/user/region')
+      }
+   }
 
-         <StyledLink
-            href="https://t.me/yourchannel"
-            target="_blank"
-            rel="noopener"
-         >
-            <IconWrapper>
-               <img src={TelegramIcon} alt="telegram" />
-            </IconWrapper>
-         </StyledLink>
+   const handleLeaveAdClick = (e) => {
+      e.preventDefault()
+      if (!isAuthenticated) {
+         setOpenSignUp(true)
+         setPendingRoute('/user/create-house')
+      } else {
+         navigate('/user/create-house')
+      }
+   }
 
-         <StyledLink
-            href="https://wa.me/yourphonenumber"
-            target="_blank"
-            rel="noopener"
-         >
-            <IconWrapper>
-               <img src={WhatsappIcon} alt="whatsapp" />
-            </IconWrapper>
-         </StyledLink>
-      </StyledMainThirdBox>
-   </StyledMainBox>
-)
+   return (
+      <>
+         <StyledMainBox>
+            <StyledMainFirstBox>
+               <StyledLink href="#" onClick={handleRegionsClick}>
+                  Regions
+               </StyledLink>
+               <StyledLink href="#" onClick={handleLeaveAdClick}>
+                  Leave an ad
+               </StyledLink>
+            </StyledMainFirstBox>
+
+            <StyledMainSecondBox>
+               <img src={AirIcon} alt="logo" className="logo-icon" />
+               <Typography>
+                  © Copyright PeakSoft. All Rights Reserved
+               </Typography>
+            </StyledMainSecondBox>
+
+            <StyledMainThirdBox>
+               <StyledLink
+                  href="https://instagram.com/yourprofile"
+                  target="_blank"
+                  rel="noopener"
+               >
+                  <IconWrapper>
+                     <img src={InstagramIcon} alt="instagram" />
+                  </IconWrapper>
+               </StyledLink>
+
+               <StyledLink
+                  href="https://t.me/yourchannel"
+                  target="_blank"
+                  rel="noopener"
+               >
+                  <IconWrapper>
+                     <img src={TelegramIcon} alt="telegram" />
+                  </IconWrapper>
+               </StyledLink>
+
+               <StyledLink
+                  href="https://wa.me/yourphonenumber"
+                  target="_blank"
+                  rel="noopener"
+               >
+                  <IconWrapper>
+                     <img src={WhatsappIcon} alt="whatsapp" />
+                  </IconWrapper>
+               </StyledLink>
+            </StyledMainThirdBox>
+         </StyledMainBox>
+         <SignUpModal open={openSignUp} setOpen={setOpenSignUp} />
+      </>
+   )
+}
+
 
 export default Footer
 

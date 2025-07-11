@@ -13,9 +13,8 @@ const ADMIN_CARD_OPTIONS = [
 const PROFILE_TABS = [
    { label: 'Bookings', value: 'booking' },
    { label: 'My announcement', value: 'announcement' },
-   { label: 'On moderation', value: 'on moderation' },
+   { label: 'On moderation', value: 'on_moderation' }, // исправить на snake_case
 ]
-
 const PROFILE_SORT_OPTIONS = [
    { label: 'All', value: '' },
    { label: 'High to low', value: 'high' },

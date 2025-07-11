@@ -12,7 +12,7 @@ const uploadImagesToS3 = async (files) => {
          },
       })
       if (response.data && Array.isArray(response.data)) {
-         return response.data
+         return response.data 
       } else if (response.data && typeof response.data === 'string') {
          return [response.data]
       } else {

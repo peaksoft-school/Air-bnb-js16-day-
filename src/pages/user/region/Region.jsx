@@ -1,29 +1,40 @@
 import { useState, useEffect } from 'react'
 import { Box, styled, Typography, PaginationItem } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
-import BreadCrumbs from '../../../components/UI/BreadCrumbs'
 import { ROUTES } from '../../../routes/routes'
 import Chip from '../../../components/UI/Chip'
 import Select from '../../../components/UI/DropDown'
 import Card from '../../../components/UI/cards/Card'
 import { REGION_THUNK } from '../../../store/slices/user/region/regionThunk'
+import { REGION_ACTIONS } from '../../../store/slices/user/region/regionSlice'
 import {
    addFavorite,
    getFavorites,
 } from '../../../store/slices/user/favorite/favoriteThunk'
 import Loading from '../../Loading'
+import { useNavigate, useLocation } from 'react-router'
+import BreadCrumbs from '../../../components/UI/Breadcrumbs'
 
 const Region = () => {
-   const { allHouses, isLoading, search } = useSelector((state) => state.region)
+   const {
+      allHouses,
+      isLoading,
+      search: reduxSearch,
+   } = useSelector((state) => state.region)
    const favoriteState = useSelector((state) => state.favorite)
    const favorites = favoriteState?.favorites || []
    const selectedRegion = useSelector((state) => state.region.selectedRegion)
 
+   const location = useLocation()
+   const params = new URLSearchParams(location.search)
+   const search = params.get('search') || reduxSearch || ''
+   const popularity = params.get('popularity') || ''
+   const houseType = params.get('houseType') || ''
+
    const [filters, setFilters] = useState({
       region: '',
-      popularity: '',
-      houseType: '',
+      popularity,
+      houseType,
       priceSort: '',
    })
 
@@ -38,9 +49,28 @@ const Region = () => {
    const total = allHouses?.length || 0
    const totalCount = total || allHouses?.length || 0
 
+   // Инициализация selectedRegion из localStorage при загрузке
    useEffect(() => {
-      dispatch(REGION_THUNK.getHouses({ page: 1, size: 16 }))
-   }, [dispatch])
+      const savedRegion = localStorage.getItem('selectedRegion')
+      if (savedRegion && !selectedRegion) {
+         dispatch(REGION_ACTIONS.setSelectedRegion(savedRegion))
+      }
+   }, [dispatch, selectedRegion])
+
+   useEffect(() => {
+      if (selectedRegion) {
+         console.log('Setting selected region:', selectedRegion)
+         setFilters((prev) => ({ ...prev, region: selectedRegion }))
+
+         const regionChip = {
+            type: 'region',
+            label: selectedRegion,
+            displayLabel:
+               selectedRegion.charAt(0).toUpperCase() + selectedRegion.slice(1),
+         }
+         setChips([regionChip])
+      }
+   }, [selectedRegion])
 
    useEffect(() => {
       const hasFilters = Object.values(filters).some((v) => v) || search
@@ -57,14 +87,16 @@ const Region = () => {
       }, 100)
 
       return () => clearTimeout(timeoutId)
-      if (hasFilters) {
-         dispatch(
-            REGION_THUNK.getHouses({ ...filters, search, page, size: pageSize })
-         )
-      } else {
-         dispatch(REGION_THUNK.getHouses({ page, size: pageSize }))
-      }
    }, [filters, search, page, dispatch])
+
+   // Если query-параметры popularity или houseType изменились, обновляем фильтры
+   useEffect(() => {
+      setFilters((prev) => ({
+         ...prev,
+         popularity,
+         houseType,
+      }))
+   }, [popularity, houseType])
 
    const handleFilterChange = (type, value) => {
       if (value && value !== 'All') {
@@ -73,6 +105,7 @@ const Region = () => {
             label: value,
             displayLabel: value.charAt(0).toUpperCase() + value.slice(1),
          }
+
          setChips((prev) => [
             ...prev.filter((chip) => chip.type !== type),
             newChip,
@@ -80,22 +113,44 @@ const Region = () => {
       } else {
          setChips((prev) => prev.filter((chip) => chip.type !== type))
       }
+
       setFilters((prev) => ({ ...prev, [type]: value }))
+
+      // Обновляем selectedRegion в Redux при изменении фильтра региона
+      if (type === 'region') {
+         if (value && value !== 'All') {
+            dispatch(REGION_ACTIONS.setSelectedRegion(value))
+            localStorage.setItem('selectedRegion', value)
+         } else {
+            dispatch(REGION_ACTIONS.setSelectedRegion(''))
+            localStorage.removeItem('selectedRegion')
+         }
+      }
    }
 
    const handleChipDelete = (chipToDelete) => {
       setChips((prev) => prev.filter((chip) => chip.type !== chipToDelete.type))
+
       setFilters((prev) => ({ ...prev, [chipToDelete.type]: '' }))
+
+      if (chipToDelete.type === 'region') {
+         dispatch(REGION_ACTIONS.setSelectedRegion(''))
+         localStorage.removeItem('selectedRegion')
+      }
    }
 
    const handleClearAll = () => {
       setChips([])
+
       setFilters({
          region: '',
          popularity: '',
          houseType: '',
          priceSort: '',
       })
+
+      dispatch(REGION_ACTIONS.setSelectedRegion(''))
+      localStorage.removeItem('selectedRegion')
    }
 
    const handlePrevPage = () => {
@@ -111,7 +166,7 @@ const Region = () => {
    const isLastPage = allHouses.length < pageSize
 
    const links = [
-      { href: ROUTES.USER.INDEX, label: 'Main' },
+      { href: ROUTES.GUEST.INDEX, label: 'Main' },
 
       {
          href: ROUTES.USER.REGION_PAGE,
@@ -132,7 +187,7 @@ const Region = () => {
 
    const optionPopularity = [
       { value: 'popular', label: 'Popular' },
-      { value: 'latest', label: 'The latest' },
+      { value: 'the_lastest', label: 'The latest' },
    ]
 
    const optionHouseType = [
@@ -140,7 +195,7 @@ const Region = () => {
       { value: 'HOUSE', label: 'House' },
    ]
 
-   const optionPrice = [
+   const oprionPrice = [
       { value: 'low_to_high', label: 'Low to high' },
       { value: 'high_to_low', label: 'High to low' },
    ]
@@ -149,22 +204,23 @@ const Region = () => {
       <StyledContainer>
          <BreadCrumbs links={links} />
 
-         {search && (
+         {search ? (
             <SearchTitle>
                Search for:{' '}
                <Typography variant="span">"{search.toUpperCase()}"</Typography>
                {total > 0 && <Typography variant="span"> ({total})</Typography>}
             </SearchTitle>
-         )}
+         ) : null}
 
          {isNothingFound ? (
             <NothingFoundWrapper>
                <NothingFoundTitle>Results for "{search}"</NothingFoundTitle>
+
                <NothingFoundText>
                   It appears that no listings have yet been created for
                   <Typography variant="span">"{search}"</Typography>
                   <br />
-                  Be the first person to create a{' '}
+                  Be the first person to create a
                   <a href="#">listing in this area!</a>
                </NothingFoundText>
             </NothingFoundWrapper>
@@ -187,22 +243,25 @@ const Region = () => {
                         options={optionRegion}
                         label="Region"
                      />
+
                      <Select
                         value={filters.popularity}
                         onChange={(e) => handleFilterChange('popularity', e)}
                         options={optionPopularity}
                         label="Sort by"
                      />
+
                      <Select
                         value={filters.houseType}
                         onChange={(e) => handleFilterChange('houseType', e)}
                         options={optionHouseType}
                         label="Filter by home type"
                      />
+
                      <Select
                         value={filters.priceSort}
                         onChange={(e) => handleFilterChange('priceSort', e)}
-                        options={optionPrice}
+                        options={oprionPrice}
                         label="Filter by price"
                      />
                   </FilterContainer>

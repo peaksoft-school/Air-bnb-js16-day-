@@ -29,8 +29,8 @@ const Users = () => {
    }, [dispatch])
 
    if (loading) return <Loading />
-
-   if (error) return <Typography color="error">Error: {error}</Typography>
+   if (error) return <div>Ошибка: {error.message}</div>
+   if (!users || users.length === 0) return <div>Нет данных</div>
 
    const handleDelete = (e, userId) => {
       e.stopPropagation()

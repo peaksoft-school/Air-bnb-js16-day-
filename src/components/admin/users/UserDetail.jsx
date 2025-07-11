@@ -61,7 +61,7 @@ const UserDetail = () => {
    }
 
    const handleNavigate = (houseId) => {
-      navigate(`/admin/users/${houseId}/announcement/${houseId}`)
+      navigate(`/admin/users/${id}/announcement/${houseId}`)
    }
 
    if (loading) {

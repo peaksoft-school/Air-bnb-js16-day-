@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { IconButton, Menu, MenuItem, styled } from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { color } from 'framer-motion'
 
 const Meatballs = ({
    options = [],
@@ -13,9 +12,12 @@ const Meatballs = ({
 
    const open = Boolean(anchorEl)
 
-   const handleClick = (e) => setAnchorEl(e.currentTarget)
+   const handleClick = (e) => {
+      e.stopPropagation(), setAnchorEl(e.currentTarget)
+   }
 
-   const handleClose = (option) => {
+   const handleClose = (option,e) => {
+      e.stopPropagation()
       setAnchorEl(null)
 
       if (option && onSelect) {
@@ -35,7 +37,7 @@ const Meatballs = ({
             onClose={() => handleClose(null)}
          >
             {options.map((option, i) => (
-               <MenuItem key={i} onClick={() => handleClose(option)}>
+               <MenuItem key={i} onClick={(e) => handleClose(option,e)}>
                   {option.label}
                </MenuItem>
             ))}

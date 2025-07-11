@@ -4,8 +4,17 @@ import { Box, IconButton, styled, Typography } from '@mui/material'
 import Arrow from '../../assets/icons/arrow.svg'
 import BlackArrow from '../../assets/icons/black-arrow.svg'
 
-const ImageCarousel = ({ images, isButtonBlack, isBlackCount, left }) => {
-   const [currentImages, setCurrentImages] = useState([images[0], images[1]])
+const ImageCarousel = ({ images = [], isButtonBlack, isBlackCount, left }) => {
+   if (!Array.isArray(images) || images.length === 0) {
+      return (
+         <div>Нет изображений</div>
+      )
+   }
+
+   const [currentImages, setCurrentImages] = useState([
+      images[0],
+      images[1] || images[0],
+   ])
    const [currentIndex, setCurrentIndex] = useState(0)
 
    const handleNext = () => {

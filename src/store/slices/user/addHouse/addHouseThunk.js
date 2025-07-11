@@ -3,16 +3,16 @@ import { axiosInstance } from '../../../../configs/axiosInstance'
 
 export const postImageFile = createAsyncThunk(
    'post/imageFile',
-   async ({ file }, { rejectWithValue }) => {
+   async ({ files }, { rejectWithValue }) => {
       try {
          const formData = new FormData()
-         formData.append('file', file)
+         files.forEach((file) => formData.append('files', file))
 
          const response = await axiosInstance.post('/api/s3/upload', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
          })
 
-         return response.data
+         return response.data // массив ссылок
       } catch (error) {
          return rejectWithValue(error.response?.data || error.message)
       }

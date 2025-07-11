@@ -79,7 +79,7 @@ const Regions = ({ onOpenSignUpModal }) => {
                         <ImageWrapper
                            whileHover={{ scale: 1.05 }}
                            transition={{ duration: 0.5 }}
-                           onClick={() => handleRegionClick('JALAL_ABAD')}
+                           onClick={() => handleRegionClick('JALALABAT')}
                         >
                            <StyledImage src={JalalAbad} alt="Jalal-Abad" />
                            <TextOverlay>Jalal-Abad</TextOverlay>

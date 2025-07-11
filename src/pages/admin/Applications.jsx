@@ -4,8 +4,6 @@ import Pagination from '@mui/material/Pagination'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
 import Card from './AdminCard'
-import { fetchApplications } from '../../store/slices/admin/houseApplicationsThunk'
-import { resetApplications } from '../../store/slices/admin/houseApplicationsSlice'
 import { CardOptions } from '../../utils/helpers/options'
 import Loading from '../Loading'
 import {
@@ -13,6 +11,7 @@ import {
    acceptOrRejectHouse,
 } from '../../store/slices/admin/assept/asseptInRejectThunk'
 import { useNavigate } from 'react-router'
+import { fetchApplications } from '../../store/slices/admin/user/houseApplicationsThunk'
 
 const CARDS_PER_PAGE = 18
 
@@ -33,7 +32,6 @@ export default function Application() {
 
    useEffect(() => {
       dispatch(fetchApplications({ page: 1, size: CARDS_PER_PAGE }))
-      return () => dispatch(resetApplications())
    }, [dispatch])
 
    useEffect(() => {
@@ -41,6 +39,10 @@ export default function Application() {
          setContainerHeight(gridRef.current.offsetHeight)
       }
    }, [page, cards])
+
+   useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+   }, [page])
 
    const flattenedCards = Array.isArray(cards) ? cards : []
 
@@ -88,8 +90,6 @@ export default function Application() {
    }
 
    const handleNavigate = (id) => navigate(`/admin/application/${id}`)
-
-   console.log('1')
 
    return (
       <StyledBox>
@@ -146,9 +146,6 @@ export default function Application() {
                               item
                               key={house.id || index}
                               sx={{ display: 'flex', justifyContent: 'center' }}
-                              onClick={() => {
-                                 console.log('fghjkljuytg')
-                              }}
                            >
                               <Card
                                  key={index}
@@ -167,7 +164,17 @@ export default function Application() {
             </AnimatePresence>
          </Box>
 
-         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+         <Box
+            sx={{
+               display: 'flex',
+               flexDirection: 'column',
+               alignItems: 'center',
+               mt: 4,
+            }}
+         >
+            <Typography sx={{ mb: 1 }}>
+               Page {page} of {pageCount}
+            </Typography>
             <StyledPagination
                count={pageCount}
                page={page}
@@ -175,6 +182,7 @@ export default function Application() {
                shape="rounded"
                siblingCount={1}
                boundaryCount={1}
+               disabled={loading}
             />
          </Box>
       </StyledBox>

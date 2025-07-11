@@ -40,4 +40,4 @@ const houseApplicationsSlice = createSlice({
 })
 
 export const { resetApplications } = houseApplicationsSlice.actions
-export default houseApplicationsSlice.reducer
+export default houseApplicationsSlice

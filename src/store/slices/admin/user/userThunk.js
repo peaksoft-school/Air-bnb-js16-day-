@@ -96,7 +96,7 @@ export const deleteHouseAsync = createAsyncThunk(
       { rejectWithValue, dispatch }
    ) => {
       try {
-         await axiosInstance.delete(`/api/house/delete/${id}`)
+         await axiosInstance.delete(`/api/house/houses/${id}`)
 
          if (navigate) {
             navigate(-1)
@@ -129,8 +129,8 @@ export const blockedHouses = createAsyncThunk(
       { rejectWithValue, dispatch }
    ) => {
       try {
-         const { data } = await axiosInstance.post(
-            `/api/house/block/${id}?blockOrUnblock=${block}`
+         const { data } = await axiosInstance.put(
+            `/api/house/block/${id}`
          )
 
          showToast({

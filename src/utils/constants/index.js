@@ -1,11 +1,11 @@
 const IMAGES_POPULARS = [
-   'https://www.calltouch.ru/blog/wp-content/uploads/2019/08/verstka-sajta_-instrukcziya-dlya-nachinayushhih.jpg',
-   'https://sky.pro/media/wp-content/uploads/2022/12/verstka-sajta_-instrukcziya-dlya-nachinayushhih.png',
-   'https://static.insales-cdn.com/images/articles/1/2575/7268879/unnamed__84_.jpg',
-   'https://msiter.ru/sites/default/files/images/106654734_result.jpg',
-   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJSRr9T06UDbWy6fZGVRNgQWcKxMHpSrGylQ&sv',
-   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1t7RU3eSvudqTEM3Fdglg2U85lpyHkVyH-Q&s',
-   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxvz1T5qIJums7KIaA49cSaFlgpVKzes0Diw&s',
+   'https://evdom.ru/wp-content/uploads/2018/11/dizajn-chastnogo-doma-vnutri-10.jpg',
+   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnsX08C4BUkveOfEX2x6QnU0T_WxTg3ZruDw&s',
+   'https://dizlandshafta.ru/wp-content/uploads/2019/09/diz_doma_17.jpg',
+   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkJi34O6Sz7yc46jaN_FCTwnOUSYmahh0Y4w&s',
+   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiFGWdjG5VJukmQNOqSZtfy1fOjnb2f5UOlg&s',
+   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSTwlfxmBKQB-_THoU6qwjx1Y2Gv9v5twh5Q&s',
+   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6WlS7A-7gkV0kA_hAkGVVmufPvdUZJoVZBw&s',
 ]
 
 const HOUSES = [
