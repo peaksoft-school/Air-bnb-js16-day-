@@ -71,7 +71,7 @@ const FirstButton = styled(MuiButtonBase)(({ width }) => ({
 const SecondButton = styled(MuiButtonBase)(({ width }) => ({
    width: width,
    height: '35px',
-   border: '1px solid grey',
+   border: '1px solid #DD8A08',
    borderRadius: '2px',
    cursor: 'pointer',
 
@@ -84,7 +84,7 @@ const SecondButton = styled(MuiButtonBase)(({ width }) => ({
    fontFamily: 'Arial',
    fontWeight: '500',
    fontSize: '16px',
-   color: '#737272',
+   color: '#DD8A08',
 
    '&:hover': { border: '1.5px solid black' },
    '&:active': { backgroundColor: '#DD8A08', color: '#FFF' },

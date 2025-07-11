@@ -25,8 +25,9 @@ const userInfoSlice = createSlice({
          })
          .addCase(getAnnouncementFeedback.fulfilled, (state, action) => {
             state.feedbacks = action.payload.feedbackResponses
-            state.rating = action.payload.ratingResponse.rating
+            state.rating = action.payload.ratingResponse 
          })
+
          .addCase(getAnnouncementRating.fulfilled, (state, action) => {
             state.rating = action.payload.rating
          })

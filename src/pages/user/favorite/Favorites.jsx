@@ -55,7 +55,7 @@ const Favorites = () => {
                      title={item.description}
                      location={item.address}
                      guests={item.guest}
-                     Favorite={item.isFavorite}
+                     isFavorite={item.isFavorite}
                      onLike={async () => {
                         await dispatch(addFavorite(item.id))
                         setRefresh((prev) => !prev)

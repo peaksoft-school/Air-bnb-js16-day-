@@ -12,7 +12,7 @@ const Footer = () => (
       </StyledMainFirstBox>
 
       <StyledMainSecondBox>
-         <img src={AirIcon} alt="logo" className="logo-icon" />
+         <img src={AirIcon} alt="logo" className="logo-icon"/>
          <Typography>© Copyright PeakSoft. All Rights Reserved</Typography>
       </StyledMainSecondBox>
 

@@ -25,7 +25,7 @@ import { ROLES, ROUTES } from './routes'
 import AnnouncementDetailPage from '../pages/user/announcement/AnnouncementDetailPage'
 
 import AnnouncementHouse from '../pages/admin/user-page/AnnouncementHouse'
-import Application from '../pages/admin/user-page/Application'
+import Applications from '../pages/admin/Applications'
 import AppicationHouse from '../pages/admin/user-page/AppicationHouse'
 
 const AppRoutes = () => (
@@ -134,14 +134,14 @@ const AppRoutes = () => (
             path={ROUTES.ADMIN.APPLICATION}
             element={
                <Suspense fallback={<Loading />}>
-                  <Application />
+                  <Applications />
                </Suspense>
             }
          />
 
          <Route
             index
-            path={ROUTES.ADMIN.APPLICATION_BY_ID}
+            path="/admin/application/:id"
             element={
                <Suspense fallback={<Loading />}>
                   <AppicationHouse />
@@ -150,7 +150,7 @@ const AppRoutes = () => (
          />
 
          <Route
-            path={ROUTES.ADMIN.USEER_ANNOUNCMENT_BY_ID}
+            path="/admin/users/:id/announcement/:id"
             element={
                <Suspense fallback={<Loading />}>
                   <AnnouncementHouse />
